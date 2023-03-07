@@ -2,8 +2,8 @@ package community.comment.service;
 
 import community.comment.entity.Comment;
 import community.comment.repository.CommentRepository;
-import exception.BusinessLogicException;
-import exception.ExceptionCode;
+import community.exception.BusinessLogicException;
+import community.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
