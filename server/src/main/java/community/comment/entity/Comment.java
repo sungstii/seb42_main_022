@@ -2,6 +2,7 @@ package community.comment.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import community.board.entity.Board;
+import community.config.AuditingFields;
 import community.member.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,8 @@ import java.time.LocalDateTime;
 
 @Getter @Setter
 @RequiredArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @Entity
-public class Comment {
+public class Comment extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
@@ -26,11 +26,6 @@ public class Comment {
     private String contents;
     @Column(nullable = false)
     private int likeCount;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

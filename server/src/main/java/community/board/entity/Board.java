@@ -2,6 +2,7 @@ package community.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import community.comment.entity.Comment;
+import community.config.AuditingFields;
 import community.member.entity.Member;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,14 +13,14 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter @Setter
-@EntityListeners(AuditingEntityListener.class)
 @RequiredArgsConstructor
-@ToString
+@ToString(callSuper = true)
 @Table(name = "boards")
-public class Board {
+public class Board extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
@@ -45,22 +46,17 @@ public class Board {
     @OneToMany(mappedBy = "board")
     private List<Comment> commentList = new ArrayList<>();
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime modifiedAt;
+    //equals 해시코드 기능 생성 / id가 같으면 같은게시물로 취급
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return boardId!=null && boardId.equals(board.boardId);
+    }
 
-
-
-
-//    @Builder
-//    public Board(String title, String contents,Long viewCount) {
-//        this.title = title;
-//        this.contents = contents;
-//        this.viewCount = viewCount;
-//    }
-//
-//    public void updateVisit(Long viewCount){
-//        this.viewCount = viewCount;
-//    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(boardId);
+    }
 }
