@@ -20,7 +20,7 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Entity
 @Table(name = "member")
-public class Member {
+public class Member{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberId;
