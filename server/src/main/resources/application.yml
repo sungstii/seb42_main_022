@@ -13,6 +13,10 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  data: # spring data rest - 관련 설정
+    rest:
+      base-path: /api  #endpoint start path
+      detection-strategy: annotated
 mail:
   address:
     admin: admin@gmail.com

@@ -1,20 +1,21 @@
 package community.board.service;
 
 import community.board.entity.Board;
+import community.type.SearchType;
 import community.board.repository.BoardRepository;
 import community.exception.BusinessLogicException;
 import community.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
-@Service
 @RequiredArgsConstructor
+@Transactional
+@Service
 public class BoardService {
     private final BoardRepository boardRepository;
 
@@ -30,13 +31,23 @@ public class BoardService {
         Optional.ofNullable(board.getTitle()).ifPresent(findBoard::setTitle);
         Optional.ofNullable(board.getContents()).ifPresent(findBoard::setContents);
 
-        return boardRepository.save(findBoard);
+        return findBoard;
     }
 
-    /*게시글 전체조회*/
-    public Page<Board> findBoards(int page, int size) {
-        return boardRepository.findAll(PageRequest.of(page, size,
-                Sort.by("boardId").descending()));
+    /*게시글 검색 및 조회*/
+    @Transactional(readOnly = true) // 변경하지 않기때문에 readonly
+    public Page<Board> findBoards(SearchType searchType, String search_keyword, Pageable pageable) {
+        // 검색어 없이 검색하면 게시글 페이지를 반환.
+        if (search_keyword == null || search_keyword.isBlank()) {
+            return boardRepository.findAll(pageable);
+        }
+        // 항목에 따른 검색 - 조회
+        switch (searchType) {
+            case TITLE:
+                return boardRepository.findByTitleContaining(search_keyword, pageable);
+            case CONTENTS:
+                return boardRepository.findByContentsContaining(search_keyword, pageable);
+        }return null;
     }
 
     /*게시글 삭제*/
