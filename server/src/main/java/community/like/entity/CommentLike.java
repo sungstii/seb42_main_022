@@ -22,6 +22,8 @@ public class CommentLike {
     @Enumerated(EnumType.STRING)
     private CommentLikeStatus commentLikeStatus;
 
+    private boolean cLikeStatus;
+
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
@@ -30,7 +32,9 @@ public class CommentLike {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-
+    public boolean getCLikeStatus(){
+        return cLikeStatus;
+    }
     public enum CommentLikeStatus {
         UP,
         NONE,

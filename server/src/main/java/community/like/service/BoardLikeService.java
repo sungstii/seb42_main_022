@@ -30,20 +30,16 @@ public class BoardLikeService {
             boardLike = new BoardLike();
             boardLike.setBoard(board);
             boardLike.setMember(member);
-            boardLike.setBoardlikeStatus(BoardLike.BoardLikeStatus.UP);
+            boardLike.setBLikeStatus(true);
             board.setLikeCount(board.getLikeCount() + 1);
         }
-        else if (boardLike.getBoardlikeStatus() == BoardLike.BoardLikeStatus.DOWN) {
-            boardLike.setBoardlikeStatus(BoardLike.BoardLikeStatus.UP);
-            board.setLikeCount(board.getLikeCount() + 2);
+        else if (boardLike.getBLikeStatus()) {
+            boardLike.setBLikeStatus(false);
+            board.setLikeCount(board.getLikeCount() -1);
         }
-        else if (boardLike.getBoardlikeStatus() == BoardLike.BoardLikeStatus.UP) {
-            boardLike.setBoardlikeStatus(BoardLike.BoardLikeStatus.NONE);
-            board.setLikeCount(board.getLikeCount() - 1);
-        }
-        else if (boardLike.getBoardlikeStatus() == BoardLike.BoardLikeStatus.NONE) {
-            boardLike.setBoardlikeStatus(BoardLike.BoardLikeStatus.UP);
-            board.setLikeCount(board.getLikeCount() + 1);
+        else if (!boardLike.getBLikeStatus()) {
+            boardLike.setBLikeStatus(true);
+            board.setLikeCount(board.getLikeCount() +1);
         }
 
         boardLikeRepository.save(boardLike);

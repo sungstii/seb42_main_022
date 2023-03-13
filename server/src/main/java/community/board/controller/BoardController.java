@@ -67,10 +67,9 @@ public class BoardController {
 
     @GetMapping("/{board-id}")
     public ResponseEntity getBoardById(@PathVariable("board-id") @Positive long boardId){
+        boardService.updateViewCount(boardId);      // 조회수 증가
         Board board = boardService.findBoardById(boardId);
         BoardDto.Response response = boardMapper.boardToBoardResponse(board);
-
-        boardService.updateViewCount(boardId);      // 조회수 증가
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
