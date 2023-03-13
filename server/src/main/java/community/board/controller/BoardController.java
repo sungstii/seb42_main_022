@@ -3,13 +3,17 @@ package community.board.controller;
 import community.board.dto.BoardDto;
 import community.board.entity.Board;
 import community.board.mapper.BoardMapper;
+import community.board.repository.BoardRepository;
 import community.board.service.BoardService;
 import community.globaldto.MultiResponseDto;
 import community.globaldto.SingleResponseDto;
+import community.like.dto.BoardLikeDto;
+import community.like.service.BoardLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +28,8 @@ import java.util.List;
 public class BoardController {
     private final BoardService boardService;
     private final BoardMapper boardMapper;
+    private final BoardLikeService boardLikeService;
+    private final BoardRepository boardRepository;
 
     @PostMapping
     public ResponseEntity postBoard(@Valid @RequestBody BoardDto.Post boardPostDto){
@@ -60,6 +66,8 @@ public class BoardController {
         Board board = boardService.findBoardById(boardId);
         BoardDto.Response response = boardMapper.boardToBoardResponse(board);
 
+        boardService.updateViewCount(boardId);      // 조회수 증가
+
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -67,5 +75,15 @@ public class BoardController {
     public ResponseEntity deleteBoard(@PathVariable("board-id") @Positive long boardId){
         boardService.deleteBoard(boardId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/{board-id}/Like")
+    public ResponseEntity<?> upLikeBoard(@Positive @PathVariable("board-id") long boardId,
+                                         @Valid @RequestBody BoardLikeDto requestBody) {
+
+        Board likeBoard = boardLikeService.boardLikeUP(boardId, requestBody.getMemberId());
+        BoardDto.Response response = boardMapper.boardToBoardResponse(likeBoard);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 }

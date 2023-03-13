@@ -6,6 +6,9 @@ import community.comment.mapper.CommentMapper;
 import community.comment.service.CommentService;
 import community.globaldto.MultiResponseDto;
 import community.globaldto.SingleResponseDto;
+import community.like.dto.BoardLikeDto;
+import community.like.dto.CommentLikeDto;
+import community.like.service.CommentLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -24,6 +27,7 @@ import java.util.List;
 public class CommentController {
     private final CommentMapper mapper;
     private final CommentService commentService;
+    private final CommentLikeService commentLikeService;
     //post
     @PostMapping
     public ResponseEntity<?> postComment(@Valid @RequestBody CommentDto.Post commentPostDto) {
@@ -73,5 +77,15 @@ public class CommentController {
         commentService.deleteComment(commentId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{comment-id}/Like")  // 좋아요
+    public ResponseEntity<?> upLikeComment(@PathVariable("comment-id") long commentId,
+                                           @Valid @RequestBody CommentLikeDto requestBody) {
+
+        Comment likeComment = commentLikeService.commentLikeUp(commentId, requestBody.getMemberId());
+        CommentDto.Response response = mapper.commentToCommentResponse(likeComment);
+
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 }

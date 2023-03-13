@@ -4,7 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="790404dd-32ec-49db-b438-bb83838ac20d" name="변경" comment="Comment 완성" />
+    <list default="true" id="790404dd-32ec-49db-b438-bb83838ac20d" name="변경" comment="Comment 완성">
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/like/dto/BoardLikeDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/like/dto/CommentLikeDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/like/entity/BoardLike.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/like/entity/CommentLike.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/like/repository/BoardLikeRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/like/repository/CommentLikeRepository.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/like/service/BoardLikeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/like/service/CommentLikeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/jpa-buddy.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/jpa-buddy.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/controller/BoardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/controller/BoardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/dto/BoardDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/dto/BoardDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/entity/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/entity/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/mapper/BoardMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/mapper/BoardMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/repository/BoardRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/repository/BoardRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/service/BoardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/service/BoardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/comment/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/comment/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/comment/entity/Comment.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/comment/entity/Comment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/member/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/member/controller/MemberController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/member/dto/MemberDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/member/dto/MemberDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/member/entity/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/member/entity/Member.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/member/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/member/service/MemberService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -31,14 +57,41 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Class" />
+        <option value="Interface" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="serverDev" />
       </map>
+    </option>
+  </component>
+  <component name="GitToolBoxStore">
+    <option name="projectConfigVersion" value="5" />
+    <option name="recentBranches">
+      <RecentBranches>
+        <option name="branchesForRepo">
+          <list>
+            <RecentBranchesForRepo>
+              <option name="branches">
+                <list>
+                  <RecentBranch>
+                    <option name="branchName" value="sung" />
+                    <option name="lastUsedInstant" value="1678177617" />
+                  </RecentBranch>
+                  <RecentBranch>
+                    <option name="branchName" value="serverDev" />
+                    <option name="lastUsedInstant" value="1678177607" />
+                  </RecentBranch>
+                </list>
+              </option>
+              <option name="repositoryRootUrl" value="file://$PROJECT_DIR$" />
+            </RecentBranchesForRepo>
+          </list>
+        </option>
+      </RecentBranches>
     </option>
   </component>
   <component name="JpbToolWindowState">
@@ -54,14 +107,14 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "D:/intelli/seb42_pre_014"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/intelli/seb42_pre_014&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
@@ -78,8 +131,26 @@
       <option name="project" value="LOCAL" />
       <updated>1678177349321</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Comment 완성">
+      <created>1678177596165</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1678177596165</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Comment 완성" />
