@@ -41,15 +41,15 @@ public class MemberService {
         member.setPassword(encryptedPassword);
         List<String> roles=authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
-        Member savedMember=memberRepository.save(member);
+        Member savedMember = memberRepository.save(member);
 
         return savedMember;
     }
 
     public Member updateMember(Member member){
-        Member findMember=findVerifiedMember(member.getMemberId());
+        Member findMember = findVerifiedMember(member.getMemberId());
 
-        Member updatedMember =(Member) customBeanUtils.copyNonNullProperties(member, findMember);
+        Member updatedMember = (Member) customBeanUtils.copyNonNullProperties(member, findMember);
 
         return memberRepository.save(updatedMember);
     }
@@ -77,5 +77,6 @@ public class MemberService {
         Optional<Member> member= memberRepository.findByEmail(email);
         if(member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+
     }
 }

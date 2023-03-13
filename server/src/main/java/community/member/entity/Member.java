@@ -1,5 +1,8 @@
 package community.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import community.board.entity.Board;
+import community.comment.entity.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,6 +19,7 @@ import javax.persistence.Id;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "member")
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,6 +40,14 @@ public class Member {
 
     @Column
     String password;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<Board> boards = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @JsonManagedReference
+    private List<Comment> comments = new ArrayList<>();
 
     public Member(String email, String name, String phone, String password){
         this.email=email;

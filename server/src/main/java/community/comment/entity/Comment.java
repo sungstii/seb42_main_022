@@ -1,6 +1,8 @@
 package community.comment.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import community.board.entity.Board;
+import community.member.entity.Member;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -30,19 +32,12 @@ public class Comment {
     @LastModifiedDate
     private LocalDateTime modifiedAt;
 
-//    @ManyToOne
-//    @JoinColumn(name = "member_id")
-//    @JsonBackReference
-//    private Member member;
-//    @ManyToOne
-//    @JoinColumn(name = "board_id")
-//    private Board board;
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    @JsonBackReference
+    private Member member;
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
 
-    @Enumerated(value = EnumType.STRING)
-    private CommentStatus commentStatus = CommentStatus.UNACCEPTED;
-
-    private enum CommentStatus {
-        ACCEPTED,
-        UNACCEPTED
-    }
 }

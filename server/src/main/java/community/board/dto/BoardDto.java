@@ -46,6 +46,8 @@ public class BoardDto {
         private Long boardId;
         private String title;
         private String contents;
+        private int likeCount;
+        private int viewCount;
         private LocalDateTime createdAt;
         private LocalDateTime modifiedAt;
     }
