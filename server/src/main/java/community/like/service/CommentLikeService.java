@@ -32,19 +32,15 @@ public class CommentLikeService {
             commentLike = new CommentLike();
             commentLike.setComment(comment);
             commentLike.setMember(member);
-            commentLike.setCommentLikeStatus(CommentLike.CommentLikeStatus.UP);
+            commentLike.setCLikeStatus(true);
             comment.setLikeCount(comment.getLikeCount() + 1);
         }
-        else if (commentLike.getCommentLikeStatus() == CommentLike.CommentLikeStatus.DOWN) {
-            commentLike.setCommentLikeStatus(CommentLike.CommentLikeStatus.UP);
-            comment.setLikeCount(comment.getLikeCount() + 2);
-        }
-        else if (commentLike.getCommentLikeStatus() == CommentLike.CommentLikeStatus.UP) {
-            commentLike.setCommentLikeStatus(CommentLike.CommentLikeStatus.NONE);
+        else if (commentLike.getCLikeStatus()) {
+            commentLike.setCLikeStatus(false);
             comment.setLikeCount(comment.getLikeCount() - 1);
         }
-        else if (commentLike.getCommentLikeStatus() == CommentLike.CommentLikeStatus.NONE) {
-            commentLike.setCommentLikeStatus(CommentLike.CommentLikeStatus.UP);
+        else if (!commentLike.getCLikeStatus()) {
+            commentLike.setCLikeStatus(true);
             comment.setLikeCount(comment.getLikeCount() + 1);
         }
 

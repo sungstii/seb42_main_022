@@ -15,9 +15,7 @@ public class BoardLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardLikeId;
-
-    @Enumerated(EnumType.STRING)
-    private BoardLikeStatus boardlikeStatus;
+    private boolean bLikeStatus;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -27,9 +25,7 @@ public class BoardLike {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    public enum BoardLikeStatus {
-        UP,
-        NONE,
-        DOWN
+    public boolean getBLikeStatus(){
+        return bLikeStatus;
     }
 }

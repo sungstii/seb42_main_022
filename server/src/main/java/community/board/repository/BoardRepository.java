@@ -14,7 +14,6 @@ import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
 import org.springframework.data.rest.core.annotation.RepositoryRestResource;
-import org.springframework.stereotype.Repository;
 
 @RepositoryRestResource
 public interface BoardRepository extends JpaRepository<Board, Long>,
@@ -36,6 +35,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>,
         bindings.bind(root.title).first(StringExpression::containsIgnoreCase); // like '%${v}%'/ 부분검색
         bindings.bind(root.contents).first(StringExpression::containsIgnoreCase);
         bindings.bind(root.createdAt).first(DateTimeExpression::eq);//원하는 날짜검색 /시분초 동일하게 넣어야함
-
     }
 }
