@@ -48,6 +48,8 @@ public class BoardDto {
         private Long boardId;
         private String title;
         private String contents;
+        @JsonProperty("image_url")
+        private String imageUrl;
         @JsonProperty("like_count")
         private int likeCount;
         @JsonProperty("view_count")

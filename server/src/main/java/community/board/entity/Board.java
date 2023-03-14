@@ -25,7 +25,6 @@ public class Board extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long boardId;
-
     @Column(nullable = false, length = 100)
     private String title;
 
@@ -37,7 +36,6 @@ public class Board extends AuditingFields {
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewCount;
-
     @ManyToOne
     @JoinColumn(name = "member_id")
     @JsonBackReference
@@ -45,6 +43,9 @@ public class Board extends AuditingFields {
 
     @OneToMany(mappedBy = "board")
     private List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<UploadFile> uploadFiles = new ArrayList<>();
 
     //equals 해시코드 기능 생성 / id가 같으면 같은게시물로 취급
     @Override

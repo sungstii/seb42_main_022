@@ -19,6 +19,8 @@ spring:
     rest:
       base-path: /api  #endpoint start path
       detection-strategy: annotated
+  profiles:
+    include: api-key   #key가 저장된 yml 연동
 mail:
   address:
     admin: admin@gmail.com
@@ -26,3 +28,14 @@ jwt:
   secret-key: adsadsadasdasdasdasdasdasd123213123123123123####
   access-token-expiration-minutes: 10
   refresh-token-expiration-minutes: 420
+
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
+#    s3:
+#      credentials:
+#        access-key: access-key
+#        secret-key: secret-key
+    stack:
+      auto: false

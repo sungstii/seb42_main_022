@@ -1,24 +1,25 @@
 package community.board.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.Setter;
 
-import static javax.persistence.GenerationType.IDENTITY;
-
+import javax.persistence.*;
 @NoArgsConstructor
+@Setter @Getter
 @Entity
-public class UploadFile {
+public class UploadFile{
     @Id
-    @GeneratedValue(strategy = IDENTITY)
-    private Long id;
-    private String uploadFileName;
-    private String storeFileUrl;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long fileId;
+    private String fileName;
+    private String imagePath;
+    @ManyToOne
+    @JoinColumn(name = "board_id")
+    private Board board;
 
-    public UploadFile(String uploadFileName, String storeFileUrl) {
-        this.uploadFileName = uploadFileName;
-        this.storeFileUrl = storeFileUrl;
+    public UploadFile(String fileName, String imagePath) {
+        this.fileName = fileName;
+        this.imagePath = imagePath;
     }
 }
