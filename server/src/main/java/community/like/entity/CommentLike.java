@@ -19,9 +19,6 @@ public class CommentLike {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentLikeId;
 
-    @Enumerated(EnumType.STRING)
-    private CommentLikeStatus commentLikeStatus;
-
     private boolean cLikeStatus;
 
     @ManyToOne
@@ -34,10 +31,5 @@ public class CommentLike {
 
     public boolean getCLikeStatus(){
         return cLikeStatus;
-    }
-    public enum CommentLikeStatus {
-        UP,
-        NONE,
-        DOWN
     }
 }

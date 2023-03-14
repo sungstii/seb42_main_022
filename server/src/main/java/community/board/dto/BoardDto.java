@@ -1,5 +1,6 @@
 package community.board.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -43,12 +44,17 @@ public class BoardDto {
     @RequiredArgsConstructor
     @ToString
     public static class Response {
+        @JsonProperty("board_id")
         private Long boardId;
         private String title;
         private String contents;
+        @JsonProperty("like_count")
         private int likeCount;
+        @JsonProperty("view_count")
         private int viewCount;
+        @JsonProperty("created_at")
         private LocalDateTime createdAt;
+        @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
     }
 }
