@@ -37,7 +37,6 @@ public class Board extends AuditingFields {
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewCount;
-
     @ManyToOne
     @JoinColumn(name = "member_id")
     @JsonBackReference
