@@ -1,5 +1,6 @@
 package community.member.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import community.member.entity.Member;
 import lombok.*;
 
@@ -55,9 +56,11 @@ public class MemberDto {
     @AllArgsConstructor
     @Getter
     public static class Response{
+        @JsonProperty("member_id")
         private long memberId;
         private String email;
         private String phone;
+        @JsonProperty("member_status")
         private Member.MemberStatus memberStatus;
         private List<String> roles;
 

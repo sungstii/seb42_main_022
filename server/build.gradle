@@ -26,6 +26,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-rest' // data rest기능 
     implementation 'org.springframework.data:spring-data-rest-hal-explorer' // 해당내용을 시각적표시
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    //implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' //aws cloud s3
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'

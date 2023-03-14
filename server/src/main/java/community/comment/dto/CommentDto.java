@@ -1,5 +1,6 @@
 package community.comment.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,12 +32,18 @@ public class CommentDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Response {
+        @JsonProperty("comment_id")
         private Long commentId;
         private String contents;
+        @JsonProperty("like_count")
         private int likeCount;
+        @JsonProperty("create_at")
         private LocalDateTime createdAt;
+        @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
+        @JsonProperty("board_id")
         private long boardId;
+        @JsonProperty("member_id")
         private long memberId;
     }
 }
