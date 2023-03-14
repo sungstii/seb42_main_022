@@ -65,6 +65,16 @@ public class BoardController {
         return new ResponseEntity(response, HttpStatus.OK);
     }
 
+    //게시판 추천수 랭킹
+    @GetMapping ("/rankBoards")
+    public ResponseEntity rankBoards(@PageableDefault(size = 5,sort = "likeCount", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
+    {
+        Page<Board> boardPage = boardService.rankBoards(pageable);
+        List<Board> boards = boardPage.getContent();
+        List<BoardDto.Response> response = boardMapper.boardToBoardListResponse(boards);
+        return new ResponseEntity(response, HttpStatus.OK);
+    }
+
     @GetMapping("/{board-id}")
     public ResponseEntity getBoardById(@PathVariable("board-id") @Positive long boardId){
         boardService.updateViewCount(boardId);      // 조회수 증가
@@ -84,7 +94,7 @@ public class BoardController {
     public ResponseEntity<?> upLikeBoard(@Positive @PathVariable("board-id") long boardId,
                                          @Valid @RequestBody BoardLikeDto requestBody) {
 
-        Board likeBoard = boardLikeService.boardLikeUP(boardId, requestBody.getMemberId());
+        Board likeBoard = boardLikeService.boardLikeUP(requestBody.getMemberId(), boardId);
         BoardDto.Response response = boardMapper.boardToBoardResponse(likeBoard);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
