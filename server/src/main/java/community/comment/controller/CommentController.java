@@ -83,7 +83,7 @@ public class CommentController {
     public ResponseEntity<?> upLikeComment(@PathVariable("comment-id") long commentId,
                                            @Valid @RequestBody CommentLikeDto requestBody) {
 
-        Comment likeComment = commentLikeService.commentLikeUp(commentId, requestBody.getMemberId());
+        Comment likeComment = commentLikeService.commentLikeUp(requestBody.getMemberId(), commentId);
         CommentDto.Response response = mapper.commentToCommentResponse(likeComment);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);

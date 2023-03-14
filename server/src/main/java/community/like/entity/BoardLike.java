@@ -15,7 +15,7 @@ public class BoardLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardLikeId;
-    private boolean bLikeStatus;
+    private boolean bLikeStatus; //좋아요 누름 상태
 
     @ManyToOne
     @JoinColumn(name = "member_id")

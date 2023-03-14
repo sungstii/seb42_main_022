@@ -50,6 +50,11 @@ public class BoardService {
         }return null;
     }
 
+    @Transactional
+    public Page<Board> rankBoards(Pageable pageable){
+        return boardRepository.findAll(pageable);
+    }
+
     /*게시글 삭제*/
     public void deleteBoard(Long boardId) {
         boardRepository.deleteById(boardId);
