@@ -20,7 +20,7 @@ spring:
       base-path: /api  #endpoint start path
       detection-strategy: annotated
   profiles:
-    include: api-key   #key 저장설정 연동
+    include: api-key   #key가 저장된 yml 연동
 mail:
   address:
     admin: admin@gmail.com

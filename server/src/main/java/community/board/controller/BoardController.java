@@ -41,8 +41,8 @@ public class BoardController {
     private final S3Service s3Service;
 
     @PostMapping("/upload")
-    public ResponseEntity<Object> upload(@RequestParam("files") MultipartFile[] multipartFileList) throws Exception {
-        List<String> imagePathList = s3Service.uploadFiles(multipartFileList);
+    public ResponseEntity<Object> upload(@RequestParam MultipartFile[] files) throws Exception {
+        List<String> imagePathList = s3Service.uploadFiles(files);
 
         return new ResponseEntity<>(imagePathList, HttpStatus.OK);
     }

@@ -23,8 +23,7 @@ public interface BoardRepository extends JpaRepository<Board, Long>,
     @Modifying //추천수
     @Query("update Board p set p.viewCount = p.viewCount + 1 where p.id = :id")
     int updateViewCount(Long id);
-    
-    
+
     //검색기능 관련
     Page<Board> findByTitleContaining(String title, Pageable pageable); //제목검색
     Page<Board> findByContentsContaining(String contents, Pageable pageable); //내용검색
