@@ -1,14 +1,15 @@
 package community.comment.controller;
 
+import community.board.service.BoardService;
 import community.comment.dto.CommentDto;
 import community.comment.entity.Comment;
 import community.comment.mapper.CommentMapper;
 import community.comment.service.CommentService;
 import community.globaldto.MultiResponseDto;
 import community.globaldto.SingleResponseDto;
-import community.like.dto.BoardLikeDto;
 import community.like.dto.CommentLikeDto;
 import community.like.service.CommentLikeService;
+import community.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -28,14 +29,22 @@ public class CommentController {
     private final CommentMapper mapper;
     private final CommentService commentService;
     private final CommentLikeService commentLikeService;
-    //post
-    @PostMapping
+    private final MemberService memberService;
+    private final BoardService boardService;
+
+
+    @PostMapping //post
     public ResponseEntity<?> postComment(@Valid @RequestBody CommentDto.Post commentPostDto) {
 
         Comment postComment = mapper.commentPostDtoToComment(commentPostDto);
 
+        postComment.setMember(memberService.findVerifiedMember(commentPostDto.getMemberId()));
+        postComment.setBoard(boardService.findBoardById(commentPostDto.getBoardId()));
+
         Comment comment = commentService.createComment(postComment);
-        CommentDto.Response response = mapper.commentToCommentResponse(comment);
+        Comment comment1 = commentService.findComment(comment.getCommentId());
+
+        CommentDto.InfoResponse response = mapper.commentToCommentInfoResponse(comment1);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
@@ -47,7 +56,7 @@ public class CommentController {
 
         Comment requestComment = mapper.commentPatchDtoToComment(commentPatchDto);
         Comment comment = commentService.updateComment(requestComment);
-        CommentDto.Response response = mapper.commentToCommentResponse(comment);
+        CommentDto.InfoResponse response = mapper.commentToCommentInfoResponse(comment);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
@@ -56,7 +65,7 @@ public class CommentController {
     public ResponseEntity<?> getComment(@PathVariable("comment-id") long commentId) {
         Comment comment = commentService.findComment(commentId);
 
-        CommentDto.Response response = mapper.commentToCommentResponse(comment);
+        CommentDto.InfoResponse response = mapper.commentToCommentInfoResponse(comment);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
@@ -67,7 +76,7 @@ public class CommentController {
         Page<Comment> pageComments = commentService.findComments(page - 1, size);
 
         List<Comment> comments = pageComments.getContent();
-        List<CommentDto.Response> response = mapper.commentToCommentResponses(comments);
+        List<CommentDto.InfoResponse> response = mapper.commentToCommentResponses(comments);
 
         return new ResponseEntity<>(new MultiResponseDto<>(response, pageComments), HttpStatus.OK);
     }
@@ -76,7 +85,7 @@ public class CommentController {
     public ResponseEntity<?> deleteComment(@PathVariable long commentId) {
         commentService.deleteComment(commentId);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/{comment-id}/Like")  // 좋아요

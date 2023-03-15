@@ -12,5 +12,7 @@ public interface BoardMapper {
     Board boardPostToBoard(BoardDto.Post boardPostDto); //boardPostDto -> board
     Board boardPatchToBoard(BoardDto.Patch boardPatchDto); //boardPatchDto -> board
     BoardDto.Response boardToBoardResponse(Board board); //board -> response
+
+    BoardDto.TotalPageResponse boardToBoardTotalPageResponse(Board board);
     List<BoardDto.Response> boardToBoardListResponse(List<Board> boards);
 }

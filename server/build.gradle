@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.google.code.gson:gson'//gson
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'//jwt
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'//jwt
+    implementation 'org.springdoc:springdoc-openapi-ui:1.6.9'
 
     // queryDSL 설정
     // 엔티티 검색기능 사용 가능

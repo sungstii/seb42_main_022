@@ -1,7 +1,6 @@
 package community.like.service;
 
 import community.comment.entity.Comment;
-import community.comment.repository.CommentRepository;
 import community.comment.service.CommentService;
 import community.like.entity.CommentLike;
 import community.like.repository.CommentLikeRepository;

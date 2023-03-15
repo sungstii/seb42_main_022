@@ -9,7 +9,6 @@ import community.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @RequiredArgsConstructor
 public class BoardLikeService {
@@ -33,13 +32,15 @@ public class BoardLikeService {
             boardLike.setBLikeStatus(true);
             board.setLikeCount(board.getLikeCount() + 1);
         }
+
         else if (boardLike.getBLikeStatus()) {
             boardLike.setBLikeStatus(false);
-            board.setLikeCount(board.getLikeCount() -1);
+            board.setLikeCount(board.getLikeCount() - 1);
         }
+
         else if (!boardLike.getBLikeStatus()) {
             boardLike.setBLikeStatus(true);
-            board.setLikeCount(board.getLikeCount() +1);
+            board.setLikeCount(board.getLikeCount() + 1);
         }
 
         boardLikeRepository.save(boardLike);

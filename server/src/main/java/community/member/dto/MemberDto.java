@@ -59,6 +59,7 @@ public class MemberDto {
         @JsonProperty("member_id")
         private long memberId;
         private String email;
+        private String name;
         private String phone;
         @JsonProperty("member_status")
         private Member.MemberStatus memberStatus;

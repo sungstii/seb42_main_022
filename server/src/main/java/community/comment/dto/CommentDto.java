@@ -1,6 +1,7 @@
 package community.comment.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import community.member.dto.MemberDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ public class CommentDto {
     public static class Post {
         private Long commentId;
         private Long memberId;
+        private Long boardId;
         @NotBlank(message = "내용을 입력해주세요.")
         private String contents;
     }
@@ -41,9 +43,23 @@ public class CommentDto {
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
+    }
+
+    @Setter @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class InfoResponse {
+        @JsonProperty("comment_id")
+        private Long commentId;
         @JsonProperty("board_id")
         private long boardId;
-        @JsonProperty("member_id")
-        private long memberId;
+        private String contents;
+        @JsonProperty("like_count")
+        private int likeCount;
+        @JsonProperty("create_at")
+        private LocalDateTime createdAt;
+        @JsonProperty("modified_at")
+        private LocalDateTime modifiedAt;
+        private MemberDto.Response member;
     }
 }

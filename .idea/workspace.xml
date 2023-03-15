@@ -4,12 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="790404dd-32ec-49db-b438-bb83838ac20d" name="변경" comment="Comment 완성">
-      <change afterPath="$PROJECT_DIR$/.idea/modules/com.example.community.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/board/entity/UploadFile.java" afterDir="false" />
+    <list default="true" id="790404dd-32ec-49db-b438-bb83838ac20d" name="변경" comment="feat : 좋아요 기능 추가 + 조회수 기능 추가">
+      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/exception/ExceptionCodeController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/server/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/auth/jwt/JwtTokenizer.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/auth/jwt/JwtTokenizer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/auth/userdetails/MemberDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/auth/userdetails/MemberDetailsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/controller/BoardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/controller/BoardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/dto/BoardDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/dto/BoardDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/mapper/BoardMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/mapper/BoardMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/repository/BoardRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/repository/BoardRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/comment/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/comment/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/comment/dto/CommentDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/comment/dto/CommentDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/comment/mapper/CommentMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/comment/mapper/CommentMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/comment/service/CommentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/comment/service/CommentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/exception/BusinessLogicException.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/exception/BusinessLogicException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/exception/ExceptionCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/exception/ExceptionCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/like/entity/BoardLike.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/like/entity/BoardLike.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/like/service/BoardLikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/like/service/BoardLikeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/like/service/CommentLikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/like/service/CommentLikeService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/member/dto/MemberDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/member/dto/MemberDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/member/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/member/service/MemberService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -107,15 +123,15 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/Tim/Desktop/seb42_main_022/server/build.gradle"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Tim/Desktop/seb42_main_022/server/build.gradle&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Gradle.server [build]">
+}</component>
+  <component name="RunManager">
     <configuration name="CommunityApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="community.CommunityApplication" />
       <module name="com.example.community.main" />
