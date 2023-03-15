@@ -16,7 +16,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
 @Component
-public class JwtTokenizer {
+public class JwtTokenizer {     // 헤더로
     @Getter
     @Value("${jwt.secret-key}")
     private String secretKey;

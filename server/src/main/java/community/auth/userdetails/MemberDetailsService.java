@@ -17,7 +17,7 @@ import java.util.Optional;
 import static community.exception.ExceptionCode.*;
 
 @Component
-public class MemberDetailsService implements UserDetailsService {
+public class MemberDetailsService implements UserDetailsService { // 계정정보, 유저 인증 데이터를 불러옴
     private final MemberRepository memberRepository;
     private final CustomAuthorityUtils authorityUtils;
 

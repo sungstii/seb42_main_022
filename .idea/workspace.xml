@@ -4,12 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="790404dd-32ec-49db-b438-bb83838ac20d" name="변경" comment="Comment 완성">
-      <change afterPath="$PROJECT_DIR$/.idea/modules/com.example.community.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/server/src/main/java/community/board/entity/UploadFile.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+    <list default="true" id="cd6551d4-ed1a-49b7-982d-e8f0fb2b2fd3" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/controller/BoardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/controller/BoardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/dto/BoardDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/dto/BoardDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/entity/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/entity/Board.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/mapper/BoardMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/mapper/BoardMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/board/service/BoardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/board/service/BoardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/comment/controller/CommentController.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/comment/controller/CommentController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/comment/dto/CommentDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/comment/dto/CommentDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/src/main/java/community/like/service/BoardLikeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/java/community/like/service/BoardLikeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/server/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -30,41 +35,17 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="community" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="community" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="community" type="f1a62948:ProjectNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="build" type="c8890929:TasksNode$1" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
       </state>
     </system>
   </component>
-  <component name="FileTemplateManagerImpl">
-    <option name="RECENT_TEMPLATES">
-      <list>
-        <option value="Class" />
-        <option value="Interface" />
-      </list>
-    </option>
-  </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="serverDev" />
+        <entry key="$PROJECT_DIR$" value="sung" />
       </map>
     </option>
   </component>
@@ -79,11 +60,11 @@
                 <list>
                   <RecentBranch>
                     <option name="branchName" value="sung" />
-                    <option name="lastUsedInstant" value="1678177617" />
+                    <option name="lastUsedInstant" value="1678870332" />
                   </RecentBranch>
                   <RecentBranch>
-                    <option name="branchName" value="serverDev" />
-                    <option name="lastUsedInstant" value="1678177607" />
+                    <option name="branchName" value="main" />
+                    <option name="lastUsedInstant" value="1678870331" />
                   </RecentBranch>
                 </list>
               </option>
@@ -100,109 +81,29 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2MffT4lrpHlIlwUl4GAc4ClFQuh" />
+  <component name="ProjectId" id="2N2lxwbZjuu02oJLi69VJLM8u2m" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "C:/Users/Tim/Desktop/seb42_main_022/server/build.gradle"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/intelli/seb42_main_022&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="Gradle.server [build]">
-    <configuration name="CommunityApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="community.CommunityApplication" />
-      <module name="com.example.community.main" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="community.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="server [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/server" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="build" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <configuration name="server [clean]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$/server" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value="clean" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <method v="2" />
-    </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Gradle.server [build]" />
-        <item itemvalue="Gradle.server [clean]" />
-        <item itemvalue="애플리케이션.CommunityApplication" />
-      </list>
-    </recent_temporary>
-  </component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="애플리케이션 수준" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
-      <changelist id="790404dd-32ec-49db-b438-bb83838ac20d" name="변경" comment="" />
-      <created>1678163562359</created>
+      <changelist id="cd6551d4-ed1a-49b7-982d-e8f0fb2b2fd3" name="변경" comment="" />
+      <created>1678870318621</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1678163562359</updated>
+      <updated>1678870318621</updated>
     </task>
-    <task id="LOCAL-00001" summary="Comment 완성">
-      <created>1678177349321</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1678177349321</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Comment 완성">
-      <created>1678177596165</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1678177596165</updated>
-    </task>
-    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -215,19 +116,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="VcsManagerConfiguration">
-    <MESSAGE value="Comment 완성" />
-    <option name="LAST_COMMIT_MESSAGE" value="Comment 완성" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <breakpoint enabled="true" type="java-exception">
-          <properties class="org.springframework.beans.factory.UnsatisfiedDependencyException" package="org.springframework.beans.factory" />
-          <option name="timeStamp" value="1" />
-        </breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
