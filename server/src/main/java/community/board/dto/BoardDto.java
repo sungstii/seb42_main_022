@@ -1,6 +1,7 @@
 package community.board.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import community.board.entity.UploadFile;
 import community.comment.dto.CommentDto;
 import community.member.dto.MemberDto;
 import lombok.*;
@@ -13,26 +14,27 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class BoardDto {
-
-    @Getter
-    @RequiredArgsConstructor
+    @Getter @Setter //@ModelAttribute 사용하기위함
+    @NoArgsConstructor //@ModelAttribute 사용하기위함
     @ToString
     public static class Post {
         @Positive
         @NotNull
         private Long memberId;
-
         @NotBlank(message = "제목을 작성해주세요")
         @Size(max = 100, message = "100자 이내로 작성해 주세요.")
         private String title;
-
         @NotBlank(message = "내용은 공백이 아니어야 합니다.")
         private String contents;
+        public Post(Long memberId, String title, String contents) {
+            this.memberId = memberId;
+            this.title = title;
+            this.contents = contents;
+        }
     }
 
     @Getter
     @RequiredArgsConstructor
-    @Setter
     @ToString
     public static class Patch {
         private Long questionId;
@@ -46,7 +48,6 @@ public class BoardDto {
     }
 
     @Getter
-    @Setter
     @NoArgsConstructor
     public static class Response {
         @JsonProperty("board_id")
@@ -82,10 +83,18 @@ public class BoardDto {
         @JsonProperty("view_count")
         private int viewCount;
         private MemberDto.Response member;
+        private List<UploadFile> uploadFiles;
         @JsonProperty("created_at")
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
+    }
+
+    @Getter
+    @Setter
+    public static class UploadFileDto {
+        private String fileName;
+        private String imagePath;
     }
 
     @Getter
