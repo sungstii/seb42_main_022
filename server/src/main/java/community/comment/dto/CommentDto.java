@@ -36,6 +36,10 @@ public class CommentDto {
     public static class Response {
         @JsonProperty("comment_id")
         private Long commentId;
+        @JsonProperty("member_id")
+        private Long memberId;
+        @JsonProperty("board_id")
+        private long boardId;
         private String contents;
         @JsonProperty("like_count")
         private int likeCount;
@@ -43,6 +47,7 @@ public class CommentDto {
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
+        private MemberDto.Response member;
     }
 
     @Setter @Getter

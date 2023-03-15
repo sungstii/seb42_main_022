@@ -39,7 +39,7 @@ public class CommentController {
         Comment postComment = mapper.commentPostDtoToComment(commentPostDto);
 
         postComment.setMember(memberService.findVerifiedMember(commentPostDto.getMemberId()));
-        postComment.setBoard(boardService.findBoardById(commentPostDto.getBoardId()));
+        postComment.setBoard(boardService.findBoard(commentPostDto.getBoardId()));
 
         Comment comment = commentService.createComment(postComment);
         Comment comment1 = commentService.findComment(comment.getCommentId());

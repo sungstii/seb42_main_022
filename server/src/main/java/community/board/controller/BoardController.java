@@ -51,9 +51,8 @@ public class BoardController {
         board.setMember(memberService.findVerifiedMember(boardPostDto.getMemberId()));
 
         Board boardCreate = boardService.createBoard(board);
-        Board boardCreate1 = boardService.findBoardById(boardCreate.getBoardId());
 
-        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(boardCreate1);
+        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(boardCreate);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
@@ -94,8 +93,9 @@ public class BoardController {
     @GetMapping("/{board-id}")
     public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId) {
         boardService.updateViewCount(boardId);      // 조회수 증가
-        Board board = boardService.findBoardById(boardId);
-        BoardDto.Response response = boardMapper.boardToBoardResponse(board);
+
+        Board board = boardService.findBoard(boardId);
+        BoardDto.DetailPageResponse response = boardMapper.boardToBoardDetailPageResponse(board);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -111,7 +111,7 @@ public class BoardController {
                                          @Valid @RequestBody BoardLikeDto requestBody) {
 
         Board likeBoard = boardLikeService.boardLikeUP(requestBody.getMemberId(), boardId);
-        BoardDto.Response response = boardMapper.boardToBoardResponse(likeBoard);
+        BoardDto.Response response = boardMapper.   boardToBoardResponse(likeBoard);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }

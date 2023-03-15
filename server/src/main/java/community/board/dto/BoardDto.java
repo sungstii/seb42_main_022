@@ -59,10 +59,12 @@ public class BoardDto {
         private int likeCount;
         @JsonProperty("view_count")
         private int viewCount;
+        private MemberDto.Response member;
         @JsonProperty("created_at")
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
+        private List<CommentDto.Response> comments;
     }
 
     @Getter
@@ -79,7 +81,7 @@ public class BoardDto {
         private int likeCount;
         @JsonProperty("view_count")
         private int viewCount;
-        private MemberDto.Response member;    // member null 발생
+        private MemberDto.Response member;
         @JsonProperty("created_at")
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")
@@ -101,10 +103,10 @@ public class BoardDto {
         @JsonProperty("view_count")
         private int viewCount;
         private MemberDto.Response member;
+        private List<CommentDto.InfoResponse> comments;
         @JsonProperty("created_at")
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
-        private List<CommentDto.InfoResponse> comments;
     }
 }

@@ -21,7 +21,7 @@ public class BoardLikeService {
     public Board boardLikeUP(long memberId, long boardId) {
 
         Member member = memberService.findMember(memberId);
-        Board board = boardService.findBoardById(boardId);
+        Board board = boardService.findBoard(boardId);
 
         BoardLike boardLike = boardLikeRepository.findByMemberAndBoard(member, board);
 
@@ -44,6 +44,6 @@ public class BoardLikeService {
         }
 
         boardLikeRepository.save(boardLike);
-        return boardService.findBoardById(boardId);
+        return boardService.findBoard(boardId);
     }
 }

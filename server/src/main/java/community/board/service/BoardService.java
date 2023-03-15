@@ -1,6 +1,7 @@
 package community.board.service;
 
 import community.board.entity.Board;
+import community.comment.entity.Comment;
 import community.type.SearchType;
 import community.board.repository.BoardRepository;
 import community.exception.BusinessLogicException;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class BoardService {
 
         return findBoard;
     }
+    public Board findBoard(long boardId) {
+        return findBoardById(boardId);
+    }
+
 
     /*게시글 검색 및 조회*/
     @Transactional(readOnly = true) // 변경하지 않기때문에 readonly
@@ -49,6 +55,7 @@ public class BoardService {
                 return boardRepository.findByContentsContaining(search_keyword, pageable);
         }return null;
     }
+
 
     @Transactional
     public Page<Board> rankBoards(Pageable pageable){

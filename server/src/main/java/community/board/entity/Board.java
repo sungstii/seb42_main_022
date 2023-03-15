@@ -1,6 +1,7 @@
 package community.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import community.comment.entity.Comment;
 import community.config.AuditingFields;
 import community.member.entity.Member;
@@ -19,7 +20,6 @@ import java.util.Objects;
 @Getter @Setter
 @RequiredArgsConstructor
 @ToString(callSuper = true)
-@Table(name = "boards")
 public class Board extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,8 @@ public class Board extends AuditingFields {
     private Member member;
 
     @OneToMany(mappedBy = "board")
-    private List<Comment> commentList = new ArrayList<>();
+    @JsonManagedReference
+    private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
     private List<UploadFile> uploadFiles = new ArrayList<>();
