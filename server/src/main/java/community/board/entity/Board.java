@@ -46,6 +46,7 @@ public class Board extends AuditingFields {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "board")
+    @ToString.Exclude
     private List<UploadFile> uploadFiles = new ArrayList<>();
 
     //equals 해시코드 기능 생성 / id가 같으면 같은게시물로 취급

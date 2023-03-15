@@ -25,34 +25,37 @@ public class S3Service {
     private final AmazonS3Client amazonS3Client;
     private final UploadFileRepository uploadFileRepository;
 
-    public List<String> uploadFiles(MultipartFile[] multipartFileList) throws Exception {
-        List<String> imagePathList = new ArrayList<>();
+    public List<UploadFile> uploadFiles(MultipartFile[] multipartFileList, Board board) throws Exception {
+        if (multipartFileList == null) return null;
+        else {
+            List<String> imagePathList = new ArrayList<>();
 
-        for (MultipartFile multipartFile : multipartFileList) {
-            String fileName = multipartFile.getOriginalFilename(); // 파일 이름
-            long size = multipartFile.getSize(); // 파일 크기
+            for (MultipartFile multipartFile : multipartFileList) {
+                String fileName = multipartFile.getOriginalFilename(); // 파일 이름
+                long size = multipartFile.getSize(); // 파일 크기
 
-            ObjectMetadata objectMetaData = new ObjectMetadata();
-            objectMetaData.setContentType(multipartFile.getContentType());
-            objectMetaData.setContentLength(size);
+                ObjectMetadata objectMetaData = new ObjectMetadata();
+                objectMetaData.setContentType(multipartFile.getContentType());
+                objectMetaData.setContentLength(size);
 
-            // S3에 업로드
-            amazonS3Client.putObject(
-                    new PutObjectRequest(S3Bucket, fileName, multipartFile.getInputStream(), objectMetaData)
-                            .withCannedAcl(CannedAccessControlList.PublicRead)
-            );
+                // S3에 업로드
+                amazonS3Client.putObject(
+                        new PutObjectRequest(S3Bucket, fileName, multipartFile.getInputStream(), objectMetaData)
+                                .withCannedAcl(CannedAccessControlList.PublicRead)
+                );
 
-            String imagePath = amazonS3Client.getUrl(S3Bucket, fileName).toString(); // 접근가능한 URL 가져오기
-            imagePathList.add(imagePath); //String Type URL주소
+                String imagePath = amazonS3Client.getUrl(S3Bucket, fileName).toString(); // 접근가능한 URL 가져오기
+                imagePathList.add(imagePath); //String Type URL주소
 
-            //엔티티에 저장하는 로직
-
-            UploadFile uploadFile = new UploadFile();
-            uploadFile.setFileName(fileName);
-            uploadFile.setImagePath(imagePath);
-            uploadFileRepository.save(uploadFile);
+                //엔티티에 저장하는 로직
+                UploadFile uploadFile = new UploadFile();
+                uploadFile.setBoard(board); //게시글Id 매핑
+                uploadFile.setFileName(fileName);
+                uploadFile.setImagePath(imagePath);
+                uploadFileRepository.save(uploadFile);
+            }
+            List<UploadFile> list = uploadFileRepository.findByBoardBoardId(board.getBoardId());
+            return list;
         }
-        return imagePathList;
     }
-
 }

@@ -2,6 +2,7 @@ package community.board.controller;
 
 import community.board.dto.BoardDto;
 import community.board.entity.Board;
+import community.board.entity.UploadFile;
 import community.board.service.S3Service;
 import community.member.service.MemberService;
 import community.type.SearchType;
@@ -36,43 +37,37 @@ public class BoardController {
     private final S3Service s3Service;
     private final MemberService memberService;
 
-    @PostMapping("/upload")
-    public ResponseEntity<Object> upload(@RequestParam MultipartFile[] files) throws Exception {
-        List<String> imagePathList = s3Service.uploadFiles(files);
-
-        return new ResponseEntity<>(imagePathList, HttpStatus.OK);
-    }
-
     @PostMapping
-    public ResponseEntity<?> postBoard(@Valid @RequestBody BoardDto.Post boardPostDto) {
-
+    public ResponseEntity<?> upload(@ModelAttribute MultipartFile[] files,
+                                    @ModelAttribute BoardDto.Post boardPostDto) throws Exception {
         Board board = boardMapper.boardPostToBoard(boardPostDto);
-
         board.setMember(memberService.findVerifiedMember(boardPostDto.getMemberId()));
-
         Board boardCreate = boardService.createBoard(board);
 
-        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(boardCreate);
+        List<UploadFile> uploadFiles = s3Service.uploadFiles(files, boardCreate); // aws s3업로드
+
+        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(boardCreate, uploadFiles);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{board-id}")
+    @PatchMapping("/{board-id}") //파일을 올릴때 stackoverflow 해결해야함
     public ResponseEntity<?> updateBoard(@PathVariable("board-id") @Positive long boardId,
-                                      @Valid @RequestBody BoardDto.Patch boardPatchDto) {
+                                         @ModelAttribute MultipartFile[] files,
+                                         @ModelAttribute BoardDto.Patch boardPatchDto) throws Exception {
         Board board = boardMapper.boardPatchToBoard(boardPatchDto);
         board.setBoardId(boardId);
-
-        Board updateBoard = boardService.updateBoard(board);
-        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(updateBoard);
+       Board updateBoard = boardService.updateBoard(board);
+        List<UploadFile> uploadFiles = s3Service.uploadFiles(files, updateBoard); // aws s3업로드
+       BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(updateBoard, uploadFiles);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
     @GetMapping //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어
     public ResponseEntity<?> searchBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
-                                       @RequestParam(required = false) String searchValue,
-                                       @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
+                                          @RequestParam(required = false) String searchValue,
+                                          @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
     {
         Page<Board> boardPage = boardService.findBoards(searchType, searchValue, pageable);
         List<Board> boards = boardPage.getContent();
@@ -111,7 +106,7 @@ public class BoardController {
                                          @Valid @RequestBody BoardLikeDto requestBody) {
 
         Board likeBoard = boardLikeService.boardLikeUP(requestBody.getMemberId(), boardId);
-        BoardDto.Response response = boardMapper.   boardToBoardResponse(likeBoard);
+        BoardDto.Response response = boardMapper.boardToBoardResponse(likeBoard);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
