@@ -92,6 +92,13 @@ public class BoardDto {
 
     @Getter
     @Setter
+    public static class UploadFileDto {
+        private String fileName;
+        private String imagePath;
+    }
+
+    @Getter
+    @Setter
     @NoArgsConstructor
     public static class DetailPageResponse {
         @JsonProperty("board_id")

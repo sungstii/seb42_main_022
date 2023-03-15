@@ -14,9 +14,10 @@ public class UploadFile{
     private Long fileId;
     private String fileName;
     private String imagePath;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private Board board;
+    private Board board; //순환참조??
+
 
     public UploadFile(String fileName, String imagePath) {
         this.fileName = fileName;
