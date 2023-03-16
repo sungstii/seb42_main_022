@@ -17,11 +17,13 @@ public interface BoardMapper {
     Board boardPostToBoard(BoardDto.Post boardPostDto); //boardPostDto -> board
 
     Board boardPatchToBoard(BoardDto.Patch boardPatchDto); //boardPatchDto -> board
-
+    @Mapping(source = "uploadFiles", target = "uploadFiles")//uploadfile 매핑
     BoardDto.DetailPageResponse boardToBoardDetailPageResponse(Board board);
 
-    @Mapping(source = "uploadFiles", target = "uploadFiles")
-    BoardDto.TotalPageResponse boardToBoardTotalPageResponse(Board board, List<UploadFile> uploadFiles); //uploadfile 매핑 / Post Patch
+    @Mapping(source = "uploadFiles", target = "uploadFiles")//uploadfile 매핑 
+    BoardDto.TotalPageResponse boardToBoardTotalPageResponse(Board board, List<UploadFile> uploadFiles); // 이미지첨부 게시글 Post Patch
 
-    List<BoardDto.TotalPageResponse> boardToBoardListResponse(List<Board> boards);
+    List<BoardDto.TotalPageResponse> boardToBoardListResponse(List<Board> boards); //검색리스트, 조회리스트
+
+    List<BoardDto.RankResponse> boardToBoardRankResponse(List<Board> board);
 }

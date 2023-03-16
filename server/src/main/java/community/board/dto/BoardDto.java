@@ -80,10 +80,24 @@ public class BoardDto {
         @JsonProperty("view_count")
         private int viewCount;
         private MemberDto.Response member;
+        private List<UploadFile> uploadFiles;
         private List<CommentDto.InfoResponse> comments;
         @JsonProperty("created_at")
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class RankResponse {
+        @JsonProperty("board_id")
+        private Long boardId;
+        private String title;
+        @JsonProperty("like_count")
+        private int likeCount;
+        @JsonProperty("view_count")
+        private int viewCount;
     }
 }

@@ -18,7 +18,7 @@ public class UploadFile{
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
-    private Board board; //순환참조??
+    private Board board;
 
 
     public UploadFile(String fileName, String imagePath) {
