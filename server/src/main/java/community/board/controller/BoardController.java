@@ -57,9 +57,10 @@ public class BoardController {
                                          @ModelAttribute BoardDto.Patch boardPatchDto) throws Exception {
         Board board = boardMapper.boardPatchToBoard(boardPatchDto);
         board.setBoardId(boardId);
-       Board updateBoard = boardService.updateBoard(board);
+        Board updateBoard = boardService.updateBoard(board);
+
         List<UploadFile> uploadFiles = s3Service.uploadFiles(files, updateBoard); // aws s3업로드
-       BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(updateBoard, uploadFiles);
+        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(updateBoard, uploadFiles);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
@@ -71,7 +72,7 @@ public class BoardController {
     {
         Page<Board> boardPage = boardService.findBoards(searchType, searchValue, pageable);
         List<Board> boards = boardPage.getContent();
-        List<BoardDto.Response> response = boardMapper.boardToBoardListResponse(boards);
+        List<BoardDto.TotalPageResponse> response = boardMapper.boardToBoardListResponse(boards);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -81,16 +82,17 @@ public class BoardController {
     {
         Page<Board> boardPage = boardService.rankBoards(pageable);
         List<Board> boards = boardPage.getContent();
-        List<BoardDto.Response> response = boardMapper.boardToBoardListResponse(boards);
+        List<BoardDto.TotalPageResponse> response = boardMapper.boardToBoardListResponse(boards);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{board-id}")
-    public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId) {
-        boardService.updateViewCount(boardId);      // 조회수 증가
+    public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId) throws Exception {
+        boardService.updateViewCount(boardId); // 조회수 증가
 
         Board board = boardService.findBoard(boardId);
-        BoardDto.DetailPageResponse response = boardMapper.boardToBoardDetailPageResponse(board);
+        List<UploadFile> uploadFiles = s3Service.uploadFiles(null, board); // aws s3업로드
+        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(board, uploadFiles);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -106,7 +108,7 @@ public class BoardController {
                                          @Valid @RequestBody BoardLikeDto requestBody) {
 
         Board likeBoard = boardLikeService.boardLikeUP(requestBody.getMemberId(), boardId);
-        BoardDto.Response response = boardMapper.boardToBoardResponse(likeBoard);
+        BoardDto.DetailPageResponse response = boardMapper.boardToBoardDetailPageResponse(likeBoard);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }

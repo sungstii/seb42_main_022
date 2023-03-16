@@ -48,27 +48,6 @@ public class BoardDto {
     }
 
     @Getter
-    @NoArgsConstructor
-    public static class Response {
-        @JsonProperty("board_id")
-        private Long boardId;
-        private String title;
-        private String contents;
-        @JsonProperty("image_url")
-        private String imageUrl;
-        @JsonProperty("like_count")
-        private int likeCount;
-        @JsonProperty("view_count")
-        private int viewCount;
-        private MemberDto.Response member;
-        @JsonProperty("created_at")
-        private LocalDateTime createdAt;
-        @JsonProperty("modified_at")
-        private LocalDateTime modifiedAt;
-        private List<CommentDto.Response> comments;
-    }
-
-    @Getter
     @Setter
     @NoArgsConstructor
     public static class TotalPageResponse {
@@ -76,8 +55,6 @@ public class BoardDto {
         private Long boardId;
         private String title;
         private String contents;
-        @JsonProperty("image_url")
-        private String imageUrl;
         @JsonProperty("like_count")
         private int likeCount;
         @JsonProperty("view_count")
@@ -92,21 +69,12 @@ public class BoardDto {
 
     @Getter
     @Setter
-    public static class UploadFileDto {
-        private String fileName;
-        private String imagePath;
-    }
-
-    @Getter
-    @Setter
     @NoArgsConstructor
     public static class DetailPageResponse {
         @JsonProperty("board_id")
         private Long boardId;
         private String title;
         private String contents;
-        @JsonProperty("image_url")
-        private String imageUrl;
         @JsonProperty("like_count")
         private int likeCount;
         @JsonProperty("view_count")

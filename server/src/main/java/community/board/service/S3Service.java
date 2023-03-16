@@ -26,7 +26,8 @@ public class S3Service {
     private final UploadFileRepository uploadFileRepository;
 
     public List<UploadFile> uploadFiles(MultipartFile[] multipartFileList, Board board) throws Exception {
-        if (multipartFileList == null) return null;
+        if (multipartFileList == null) return uploadFileRepository.findByBoardBoardId(board.getBoardId());
+         //파일을 선택적으로 업로드 할 수 있도록
         else {
             List<String> imagePathList = new ArrayList<>();
 
@@ -49,13 +50,13 @@ public class S3Service {
 
                 //엔티티에 저장하는 로직
                 UploadFile uploadFile = new UploadFile();
-                uploadFile.setBoard(board); //게시글Id 매핑
+                uploadFile.setBoard(board); //UploadFile 엔티티에 게시글Id 매핑
                 uploadFile.setFileName(fileName);
                 uploadFile.setImagePath(imagePath);
                 uploadFileRepository.save(uploadFile);
             }
-            List<UploadFile> list = uploadFileRepository.findByBoardBoardId(board.getBoardId());
-            return list;
+            List<UploadFile> filelist = uploadFileRepository.findByBoardBoardId(board.getBoardId());
+            return filelist;
         }
     }
 }

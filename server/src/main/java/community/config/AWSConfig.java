@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AWSConfig {
     /**
-     * Key는 중요정보이기 때문에 properties 파일에 저장한 뒤 가져와 사용하는 방법이 좋습니다.
+     * AWS 연동관련 설정
      */
     @Value("${cloud.aws.s3.credentials.access-key}")
     private String iamAccessKey; // IAM Access Key
