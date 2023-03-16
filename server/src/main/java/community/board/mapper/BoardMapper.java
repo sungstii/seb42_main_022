@@ -18,12 +18,10 @@ public interface BoardMapper {
 
     Board boardPatchToBoard(BoardDto.Patch boardPatchDto); //boardPatchDto -> board
 
-    BoardDto.Response boardToBoardResponse(Board board); //board -> response
-
     BoardDto.DetailPageResponse boardToBoardDetailPageResponse(Board board);
 
     @Mapping(source = "uploadFiles", target = "uploadFiles")
-    BoardDto.TotalPageResponse boardToBoardTotalPageResponse(Board board, List<UploadFile> uploadFiles); //uploadfile 매핑
+    BoardDto.TotalPageResponse boardToBoardTotalPageResponse(Board board, List<UploadFile> uploadFiles); //uploadfile 매핑 / Post Patch
 
-    List<BoardDto.Response> boardToBoardListResponse(List<Board> boards);
+    List<BoardDto.TotalPageResponse> boardToBoardListResponse(List<Board> boards);
 }

@@ -3,6 +3,7 @@ package community.board.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 @NoArgsConstructor
@@ -14,6 +15,7 @@ public class UploadFile{
     private Long fileId;
     private String fileName;
     private String imagePath;
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board; //순환참조??

@@ -1,6 +1,7 @@
 package community.board.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import community.comment.entity.Comment;
 import community.config.AuditingFields;
@@ -40,13 +41,14 @@ public class Board extends AuditingFields {
     @JoinColumn(name = "member_id")
     @JsonBackReference
     private Member member;
-
-    @OneToMany(mappedBy = "board")
-    @JsonManagedReference
+    @JsonIgnore // 순환참조 방지
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference // 순환참조 방지
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board")
-    @ToString.Exclude
+    @JsonIgnore // 순환참조 방지
+    @OneToMany(mappedBy = "board",cascade = CascadeType.ALL, orphanRemoval = true) // 게시판과 생명주기 동일하게 관리
+    @ToString.Exclude // ToString
     private List<UploadFile> uploadFiles = new ArrayList<>();
 
     //equals 해시코드 기능 생성 / id가 같으면 같은게시물로 취급
