@@ -57,8 +57,8 @@ public class Member{
     }
 
     public enum MemberStatus{
-        MEMBER_ACTIVE("온라인"),
-        MEMBER_QUIT("로그아웃");
+        MEMBER_ACTIVE("회원생성"),
+        MEMBER_QUIT("회원탈퇴");
 
         @Getter
         private String status;

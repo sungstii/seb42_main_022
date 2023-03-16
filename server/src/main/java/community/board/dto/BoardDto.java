@@ -60,7 +60,7 @@ public class BoardDto {
         @JsonProperty("view_count")
         private int viewCount;
         private MemberDto.Response member;
-        private List<UploadFile> uploadFiles;
+        private List<UploadDto> uploadDto;
         @JsonProperty("created_at")
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")
@@ -80,7 +80,8 @@ public class BoardDto {
         @JsonProperty("view_count")
         private int viewCount;
         private MemberDto.Response member;
-        private List<UploadFile> uploadFiles;
+        private List<UploadDto> uploadDto;
+
         private List<CommentDto.InfoResponse> comments;
         @JsonProperty("created_at")
         private LocalDateTime createdAt;

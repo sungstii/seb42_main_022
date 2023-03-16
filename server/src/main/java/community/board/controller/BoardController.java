@@ -1,6 +1,7 @@
 package community.board.controller;
 
 import community.board.dto.BoardDto;
+import community.board.dto.UploadDto;
 import community.board.entity.Board;
 import community.board.entity.UploadFile;
 import community.board.service.S3Service;
@@ -38,16 +39,16 @@ public class BoardController {
     private final MemberService memberService;
 
     @PostMapping
-    public ResponseEntity<?> upload(@ModelAttribute MultipartFile[] files,
+    public ResponseEntity<?> createBoard(@ModelAttribute MultipartFile[] files,
                                     @ModelAttribute BoardDto.Post boardPostDto) throws Exception {
         Board board = boardMapper.boardPostToBoard(boardPostDto);
         board.setMember(memberService.findVerifiedMember(boardPostDto.getMemberId()));
         Board boardCreate = boardService.createBoard(board);
 
         List<UploadFile> uploadFiles = s3Service.uploadFiles(files, boardCreate); // aws s3업로드
+        List<UploadDto> uploadResponse = boardMapper.uploadFilesToUploadDtoList(uploadFiles); //업로드 dto리스트를 생성
 
-        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(boardCreate, uploadFiles);
-
+        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(boardCreate, uploadResponse);//게시글 dto에 업로드 dto담아주기
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
@@ -60,8 +61,9 @@ public class BoardController {
         Board updateBoard = boardService.updateBoard(board);
 
         List<UploadFile> uploadFiles = s3Service.uploadFiles(files, updateBoard); // aws s3업로드
-        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(updateBoard, uploadFiles);
+        List<UploadDto> uploadResponse = boardMapper.uploadFilesToUploadDtoList(uploadFiles); //업로드 dto리스트를 생성
 
+        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(updateBoard, uploadResponse); //게시글 dto에 업로드 dto담아주기
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
@@ -72,6 +74,7 @@ public class BoardController {
     {
         Page<Board> boardPage = boardService.findBoards(searchType, searchValue, pageable);
         List<Board> boards = boardPage.getContent();
+
         List<BoardDto.TotalPageResponse> response = boardMapper.boardToBoardListResponse(boards);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -82,16 +85,18 @@ public class BoardController {
     {
         Page<Board> boardPage = boardService.rankBoards(pageable);
         List<Board> boards = boardPage.getContent();
-        List<BoardDto.RankResponse> response = boardMapper.boardToBoardRankResponse(boards);
+        List<BoardDto.RankResponse> response = boardMapper.boardToBoardRankListResponse(boards);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/{board-id}")
     public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId) throws Exception {
         boardService.updateViewCount(boardId); // 조회수 증가
-
         Board board = boardService.findBoard(boardId);
-        BoardDto.DetailPageResponse response = boardMapper.boardToBoardDetailPageResponse(board);
+
+        List<UploadFile> uploadFiles = s3Service.uploadFiles(null, board); // aws s3업로드
+        List<UploadDto> uploadResponse = boardMapper.uploadFilesToUploadDtoList(uploadFiles); //업로드 dto생성
+        BoardDto.DetailPageResponse response = boardMapper.boardToBoardDetailPageResponse(board, uploadResponse); //게시글+ 업로드 dto 리스폰스
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -107,7 +112,7 @@ public class BoardController {
                                          @Valid @RequestBody BoardLikeDto requestBody) {
 
         Board likeBoard = boardLikeService.boardLikeUP(requestBody.getMemberId(), boardId);
-        BoardDto.DetailPageResponse response = boardMapper.boardToBoardDetailPageResponse(likeBoard);
+        BoardDto.RankResponse response = boardMapper.boardToBoardRankResponse(likeBoard);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
