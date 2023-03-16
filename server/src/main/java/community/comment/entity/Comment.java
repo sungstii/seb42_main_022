@@ -1,6 +1,7 @@
 package community.comment.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import community.board.entity.Board;
 import community.config.AuditingFields;
 import community.member.entity.Member;
@@ -31,6 +32,7 @@ public class Comment extends AuditingFields {
     @JoinColumn(name = "member_id")
     @JsonBackReference
     private Member member;
+    @JsonIgnore // 순환참조 방지
     @ManyToOne
     @JoinColumn(name = "board_id")
     private Board board;

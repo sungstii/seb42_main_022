@@ -51,7 +51,7 @@ public class BoardController {
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{board-id}") //파일을 올릴때 stackoverflow 해결해야함
+    @PatchMapping("/{board-id}")
     public ResponseEntity<?> updateBoard(@PathVariable("board-id") @Positive long boardId,
                                          @ModelAttribute MultipartFile[] files,
                                          @ModelAttribute BoardDto.Patch boardPatchDto) throws Exception {
@@ -82,7 +82,7 @@ public class BoardController {
     {
         Page<Board> boardPage = boardService.rankBoards(pageable);
         List<Board> boards = boardPage.getContent();
-        List<BoardDto.TotalPageResponse> response = boardMapper.boardToBoardListResponse(boards);
+        List<BoardDto.RankResponse> response = boardMapper.boardToBoardRankResponse(boards);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -91,8 +91,7 @@ public class BoardController {
         boardService.updateViewCount(boardId); // 조회수 증가
 
         Board board = boardService.findBoard(boardId);
-        List<UploadFile> uploadFiles = s3Service.uploadFiles(null, board); // aws s3업로드
-        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(board, uploadFiles);
+        BoardDto.DetailPageResponse response = boardMapper.boardToBoardDetailPageResponse(board);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
