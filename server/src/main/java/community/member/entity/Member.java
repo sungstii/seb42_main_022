@@ -1,11 +1,14 @@
 package community.member.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import community.board.entity.Board;
+import community.board.entity.UploadFile;
 import community.comment.entity.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
@@ -40,6 +43,11 @@ public class Member{
 
     @Column
     String password;
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int point;
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int treeCount;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     @JsonManagedReference

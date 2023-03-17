@@ -1,7 +1,6 @@
 package community.board.service;
 
 import community.board.entity.Board;
-import community.comment.entity.Comment;
 import community.type.SearchType;
 import community.board.repository.BoardRepository;
 import community.exception.BusinessLogicException;
@@ -12,7 +11,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +21,7 @@ public class BoardService {
 
     /*게시글 등록*/
     public Board createBoard(Board board) {
+
         return boardRepository.save(board);
     }
 
@@ -56,7 +55,7 @@ public class BoardService {
         }return null;
     }
 
-
+    /* 추천 게시글 페이지 */
     @Transactional
     public Page<Board> rankBoards(Pageable pageable){
         return boardRepository.findAll(pageable);
@@ -74,6 +73,7 @@ public class BoardService {
                 new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
 
+    /*조회수 관련*/
     @Transactional
     public int updateViewCount(Long id) {
         return boardRepository.updateViewCount(id);

@@ -38,7 +38,6 @@ public class BoardDto {
     @ToString
     public static class Patch {
         private Long questionId;
-
         @NotBlank(message = "제목을 작성해주세요")
         private String title;
 
@@ -50,7 +49,7 @@ public class BoardDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class TotalPageResponse {
+    public static class TotalPageResponse { //Post, Patch
         @JsonProperty("board_id")
         private Long boardId;
         private String title;
@@ -70,7 +69,7 @@ public class BoardDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class DetailPageResponse {
+    public static class DetailPageResponse { //단건조회, 댓글 포함
         @JsonProperty("board_id")
         private Long boardId;
         private String title;
@@ -92,7 +91,7 @@ public class BoardDto {
     @Getter
     @Setter
     @NoArgsConstructor
-    public static class RankResponse {
+    public static class RankResponse { //랭킹 및 좋아요 조회
         @JsonProperty("board_id")
         private Long boardId;
         private String title;
