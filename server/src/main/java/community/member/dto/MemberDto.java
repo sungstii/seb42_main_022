@@ -61,6 +61,8 @@ public class MemberDto {
         private String email;
         private String name;
         private String phone;
+        private String point;
+        private String treeCount;
         @JsonProperty("member_status")
         private Member.MemberStatus memberStatus;
         private List<String> roles;

@@ -16,7 +16,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 
 @RepositoryRestResource
 public interface BoardRepository extends JpaRepository<Board, Long>,
-        QuerydslPredicateExecutor<Board>, //해당 엔티티 안에있는 모든 검색기능을 추가해줌 // 완전 동일해야만 동작
+        QuerydslPredicateExecutor<Board>, //해당 엔티티 안에있는 모든 검색기능을 추가해줌 // 검색어가 완전 일치해야만 동작
         QuerydslBinderCustomizer<QBoard> // 부분검색, 대소문자 구분 등을 위함
 {
     @Modifying //추천수

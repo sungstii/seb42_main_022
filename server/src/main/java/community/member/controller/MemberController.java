@@ -36,6 +36,12 @@ public class MemberController {
         System.out.println(createdMember.toString());
         return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponse(createdMember)), HttpStatus.CREATED);
     }
+    @PostMapping("/donation/{member-id}") // 나무심기 버튼용
+    public ResponseEntity postDonation(@PathVariable("member-id") @Positive long memberId){
+        Member member = memberService.donateTree(memberId);
+        MemberDto.Response response = mapper.memberToMemberResponse(member);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
 
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,

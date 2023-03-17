@@ -23,13 +23,9 @@ import java.util.Optional;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-
     private final CustomBeanUtils customBeanUtils;
-
     private final CustomAuthorityUtils authorityUtils;
-
     private final JwtTokenizer jwtTokenizer;
-
     private final PasswordEncoder passwordEncoder;
 
 
@@ -82,6 +78,18 @@ public class MemberService {
         Optional<Member> member= memberRepository.findByEmail(email);
         if(member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
 
+    /* 나무기부
+     1번 누를때마다 300포인트씩 차감 */
+    public Member donateTree(long memberId){
+        Member member = findMember(memberId);
+
+        if(member.getPoint() >= 300) { // 300포인트 이상일 경우만 실행
+            member.setPoint(member.getPoint() - 300);
+            member.setTreeCount(member.getTreeCount() + 1);
+            memberRepository.save(member);
+        }
+        return member;
     }
 }
