@@ -5,41 +5,54 @@ import { ReactComponent as ProfileIcon } from "../icon/account_circle.svg";
 import styled from "styled-components";
 
 const HeaderContainer = styled.div`
+  position: sticky;
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: 8px;
-  width: 90%;
-  height: 61px;
+  width: 100%;
+  height: 50px;
   background-color: white;
-  border: 1px solid black;
+  border: 1px solid #f6f6f6;
 `;
 const TapWrapper = styled.div`
   margin: auto;
   flex-grow: 0.5;
 `;
 const ProfileWrapper = styled.div`
+  display: flex;
+  justify-content: center;
   margin: auto;
-  flex-grow: 0.5;
+  flex-grow: 0.4;
 `;
 const EmptySpace = styled.div`
-  flex-grow: 5;
+  flex-grow: 7;
+`;
+const LogoWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 0.4;
 `;
 const LogoLink = styled(Link)`
-  margin-right: 20px;
+  display: flex;
 `;
 const HeaderTap = styled(Link)`
   text-decoration: none;
   color: black;
-  font-size: 20px;
+  font-size: 18px;
 `;
 const ProfileLink = styled(Link)``;
 
 const Header = () => {
   return (
     <HeaderContainer>
-      <LogoLink to="./">
-        <LogoImg width="80" />
-      </LogoLink>
+      <LogoWrapper>
+        <LogoLink to="./">
+          <LogoImg width="60px" height="60px" />
+        </LogoLink>
+      </LogoWrapper>
+      <EmptySpace style={{ flexGrow: "0.2" }} />
       <TapWrapper>
         <HeaderTap to="./community">녹색활동</HeaderTap>
       </TapWrapper>
@@ -61,7 +74,7 @@ const Header = () => {
       <EmptySpace />
       <ProfileWrapper>
         <ProfileLink to="./community">
-          <ProfileIcon width="32" height="32" />
+          <ProfileIcon width="35px" height="35px" />
         </ProfileLink>
       </ProfileWrapper>
     </HeaderContainer>

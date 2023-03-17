@@ -7,10 +7,11 @@ import GreenCalImg from "../image/GreenCal.jpg";
 import NewsImg from "../image/News.jpg";
 
 const Container = styled.div`
-  width: 100%;
-  height: 630px;
+  width: 70%;
+  height: 700px;
   display: flex;
   justify-content: space-between;
+  margin: 20px 0 200px 0;
 `;
 
 interface SquareProps {
@@ -22,7 +23,7 @@ interface SquareProps {
 const Square = styled(Link)<SquareProps>`
   display: flex;
   justify-content: center;
-  height: 500px;
+  height: 700px;
   width: 23%;
   text-decoration: none;
   background: ${(props) =>
