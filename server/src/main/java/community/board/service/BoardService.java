@@ -1,6 +1,8 @@
 package community.board.service;
 
 import community.board.entity.Board;
+import community.member.entity.Member;
+import community.member.service.MemberService;
 import community.type.SearchType;
 import community.board.repository.BoardRepository;
 import community.exception.BusinessLogicException;
@@ -18,11 +20,15 @@ import java.util.Optional;
 @Service
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final MemberService memberService;
 
     /*게시글 등록*/
     public Board createBoard(Board board) {
+        Board createBoard = boardRepository.save(board); // 게시판 저장
+        Member member = memberService.findMember(createBoard.getMember().getMemberId()); //생성된 게시글을 작성한 회원을 찾는다
+        member.setBoardCount(member.getBoardCount() + 1); //해당 회원에 대한 게시글 작성 카운트 1 증가
 
-        return boardRepository.save(board);
+        return createBoard;
     }
 
     /*게시글 수정*/
@@ -63,7 +69,12 @@ public class BoardService {
 
     /*게시글 삭제*/
     public void deleteBoard(Long boardId) {
+        Board board = findBoard(boardId);
+
         boardRepository.deleteById(boardId);
+
+        Member member = memberService.findMember(board.getMember().getMemberId()); //생성된 게시글을 작성한 회원을 찾는다
+        member.setBoardCount(member.getBoardCount() - 1); //해당 회원에 대한 게시글 작성 카운트 1 감소
     }
 
     /*게시글 게시글ID 찾기*/
@@ -72,7 +83,6 @@ public class BoardService {
         return optionalQuestion.orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.BOARD_NOT_FOUND));
     }
-
     /*조회수 관련*/
     @Transactional
     public int updateViewCount(Long id) {
