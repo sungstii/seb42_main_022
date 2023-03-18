@@ -54,7 +54,7 @@ const Input = styled.input`
   height: 20px;
 `;
 
-const Carousel: React.FC = () => {
+function Carousel() {
   const TOTAL_SLIDES = 2;
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const slideRef = useRef<HTMLDivElement>(null);
@@ -128,6 +128,6 @@ const Carousel: React.FC = () => {
       </InputContainer>
     </>
   );
-};
+}
 
 export default Carousel;
