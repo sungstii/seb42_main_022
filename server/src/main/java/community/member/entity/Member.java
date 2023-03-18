@@ -48,12 +48,15 @@ public class Member{
     private int point;
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int treeCount;
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int boardCount;
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private int commentCount;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Board> boards = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
@@ -65,7 +68,7 @@ public class Member{
     }
 
     public enum MemberStatus{
-        MEMBER_ACTIVE("회원생성"),
+        MEMBER_ACTIVE("활동중"),
         MEMBER_QUIT("회원탈퇴");
 
         @Getter
