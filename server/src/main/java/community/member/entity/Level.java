@@ -1,14 +1,12 @@
 package community.member.entity;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
+@Getter @Setter
 @Entity
 public class Level {
     @Id
@@ -22,6 +20,7 @@ public class Level {
     private int totalExp; // 현재 경험치 총량
     @Column(columnDefinition = "integer default 100", nullable = false)
     private int requiredExp; // 레벨업까지 필요한 경험치 총량
+    private String userName; //회원 이름
 
     @JsonIgnore
     @OneToOne
@@ -31,5 +30,9 @@ public class Level {
     public Level() { //레벨테이블 생성시 초기값 설정
         this.level = 1;
         this.requiredExp = 100;
+    }
+
+    public Level(String name) {
+        this.userName = name;
     }
 }
