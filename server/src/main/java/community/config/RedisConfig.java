@@ -26,7 +26,7 @@ public class RedisConfig {
 
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
-        redisTemplate.setConnectionFactory(redisConnectionFactory(redisProperties));
+        redisTemplate.setConnectionFactory(redisConnectionFactory(redisProperties)); // 빨간줄?
 
         return redisTemplate;
     }

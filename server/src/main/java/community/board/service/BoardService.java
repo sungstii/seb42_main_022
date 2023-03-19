@@ -82,7 +82,7 @@ public class BoardService {
         member.setBoardCount(member.getBoardCount() - 1); //해당 회원에 대한 게시글 작성 카운트 1 감소
     }
 
-    /*게시글 게시글ID 찾기*/
+    /*게시글 ID 찾기*/
     public Board findBoardById(long boardId) {
         Optional<Board> optionalQuestion = boardRepository.findById(boardId);
         return optionalQuestion.orElseThrow(() ->

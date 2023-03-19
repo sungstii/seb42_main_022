@@ -10,6 +10,6 @@ import lombok.Setter;
 public class LevelDto {
     private String userName;
     private int level;
-//    private int levelExp; // 해당부분에 대한 계산식을 수정하면 오픈하겠음
+    private int levelExp; // 해당부분에 대한 계산식을 수정하면 오픈하겠음 / 재개장
     private int totalExp;
 }
