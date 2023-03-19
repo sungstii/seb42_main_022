@@ -42,6 +42,7 @@ public class MemberService {
         // 레벨관련 로직
         Level level = new Level(); // 회원이 생성되면 레벨테이블을 만든다.
         level.setMember(savedMember); // 레벨 - 생성된회원 테이블 연결
+        level.setUserName(savedMember.getName()); // 회원이름 연결
         member.setLevel(level); // 레벨 - 회원 테이블 연결
 
         return savedMember;

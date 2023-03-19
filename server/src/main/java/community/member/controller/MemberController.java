@@ -11,6 +11,10 @@ import community.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RequestMapping("/members")
 @RestController
@@ -89,5 +94,15 @@ public class MemberController {
     public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId){
         memberService.deleteMember(memberId);
         return new ResponseEntity<>("회원탈퇴 완료.",HttpStatus.NO_CONTENT);
+    }
+
+    /*레벨 랭킹 페이지*/
+    @GetMapping("/levelRanks")
+    public ResponseEntity<?> rankBoards(@PageableDefault(size = 10, sort = "totalExp", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
+    {
+        Page<Level> levelPage = levelService.levelRanks(pageable);
+        List<Level> levels = levelPage.getContent();
+        List<LevelDto> response = mapper.levelsToLevelResponseList(levels);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

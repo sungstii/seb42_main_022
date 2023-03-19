@@ -4,6 +4,8 @@ import community.member.entity.Level;
 import community.member.entity.Member;
 import community.member.repository.LevelRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -54,5 +56,10 @@ public class LevelService {
 
     public Level findLevel(long memberId) {
         return levelRepository.findByMemberMemberId(memberId); //해당 회원에 대한 레벨정보 가져오기
+    }
+
+    /*레벨 랭킹*/
+    public Page<Level> levelRanks(Pageable pageable){
+        return levelRepository.findAll(pageable);
     }
 }
