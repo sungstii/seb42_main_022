@@ -68,6 +68,7 @@ public class MemberDto {
         @JsonProperty("member_status")
         private Member.MemberStatus memberStatus;
 //        private List<String> roles; //role이 user뿐이라 필요없음
+        private LevelDto levelDto;
         public String getMemberStatus(){
             return memberStatus.getStatus();
         }

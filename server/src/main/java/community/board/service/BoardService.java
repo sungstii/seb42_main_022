@@ -2,6 +2,7 @@ package community.board.service;
 
 import community.board.entity.Board;
 import community.member.entity.Member;
+import community.member.service.LevelService;
 import community.member.service.MemberService;
 import community.type.SearchType;
 import community.board.repository.BoardRepository;
@@ -21,13 +22,17 @@ import java.util.Optional;
 public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberService memberService;
+    private final LevelService levelService;
 
     /*게시글 등록*/
     public Board createBoard(Board board) {
         Board createBoard = boardRepository.save(board); // 게시판 저장
+        
         Member member = memberService.findMember(createBoard.getMember().getMemberId()); //생성된 게시글을 작성한 회원을 찾는다
         member.setBoardCount(member.getBoardCount() + 1); //해당 회원에 대한 게시글 작성 카운트 1 증가
 
+        levelService.memberlevel(member); // 커뮤니티 활동을 하면 레벨관련정보를 갱신
+        
         return createBoard;
     }
 
