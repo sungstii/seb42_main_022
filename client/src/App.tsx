@@ -8,11 +8,13 @@ import GreenAct from './pages/GreenAct';
 import News from "./pages/News";
 import GreenCal from './pages/GreenCal';
 import Ranking from "./pages/Ranking";
+import { RecoilRoot } from 'recoil';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <RecoilRoot>
         <Routes>
           <Route path='/' element={<Main/>}/>
           <Route path='/community' element={<Community/>}/>
@@ -22,6 +24,7 @@ function App() {
           <Route path='/greencal' element={<GreenCal/>}/>
           <Route path='/ranking' element={<Ranking/>}/>
         </Routes>
+        </RecoilRoot>
       </header>
     </div>
   );

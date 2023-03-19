@@ -10,7 +10,12 @@ import less from "../icon/expand_less.svg"
 import axios from "axios";
 import { useState, useEffect } from "react";
 import apiFetch from "../utils/useFetch";
-import serverFetch from "../utils/serverFetch";
+import { useQuery } from 'react-query';
+import { atom, useRecoilState } from 'recoil';
+import { postListState } from "../recoil/state";
+import { areaState } from "../recoil/state";
+import { usePosts } from "../react-query/usePosts"
+import { useWeatherInfo } from "../react-query/useWeatherInfo"
 
 const MainContainer = styled.div`
   display: flex;
@@ -195,16 +200,16 @@ const Row4 = styled.div<{pm25:number, pm10:number, o3:number, no2:number, co:num
     color: ${(props) => props.pm10<30 ? "blue" : (props.pm10<80 ? "green" : (props.pm10<150 ? "orange" : "red"))};
   }
   .c{
-    color: ${(props) => props.o3<50 ? "blue" : (props.pm25<100 ? "green" : (props.pm25<150 ? "orange" : "red"))};
+    color: ${(props) => props.o3<50 ? "blue" : (props.o3<100 ? "green" : (props.o3<150 ? "orange" : "red"))};
   }
   .d{
-    color: ${(props) => props.no2<50 ? "blue" : (props.pm25<100 ? "green" : (props.pm25<150 ? "orange" : "red"))};
+    color: ${(props) => props.no2<50 ? "blue" : (props.no2<100 ? "green" : (props.no2<150 ? "orange" : "red"))};
   }
   .e{
-    color: ${(props) => props.co<50 ? "blue" : (props.pm25<100 ? "green" : (props.pm25<150 ? "orange" : "red"))};
+    color: ${(props) => props.co<50 ? "blue" : (props.co<100 ? "green" : (props.co<150 ? "orange" : "red"))};
   }
   .f{
-    color: ${(props) => props.so2<50 ? "blue" : (props.pm25<100 ? "green" : (props.pm25<150 ? "orange" : "red"))};
+    color: ${(props) => props.so2<50 ? "blue" : (props.so2<100 ? "green" : (props.so2<150 ? "orange" : "red"))};
   }
 `;
 const DustDropdown = styled.div`
@@ -277,10 +282,12 @@ export interface Item {
   label: string;
   value: string;
 }
+
 function Community() {
-  const [itemvalue, setItemvalue] = useState("seoul"); // 지역 상태 (서울, 부산 등)
+  const [itemvalue, setItemvalue] = useRecoilState(areaState); // 지역 상태 (서울, 부산 등)
   const { data, loading, error } = apiFetch(`https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`);
-  const { sdata, isloading, isError } = serverFetch(`http://3.39.150.26:8080/boards?searchType=CONTENTS&searchValue=`);
+  // const { data: dusts, isLoading: dustLoading, error } = useWeatherInfo();
+  const { data: posts, isLoading, isError } = usePosts();
   const [pm25, setPm25] = useState(0);
   const [pm10, setPm10] = useState(0);
   const [o3, setO3] = useState(0);
@@ -300,6 +307,10 @@ function Community() {
   const [isSearchbox, setIsSearchbox] = useState<Item | null>(null); // 검색 드롭다운 현재값 (label)
   const [searchValue, setSearchValue] = useState(""); // 검색 input 값
   const [elvalue, setElvalue] = useState("TITLE"); // 검색타입 상태 (제목, 내용)
+  const [postList, setPostList] = useRecoilState(postListState); // recoil 상태 선언
+
+  if (posts) setPostList(posts); // 서버에서 데이터 가져왔으면 리코일 상태에 넣기
+  
 
   const handleItemClick = (item: Item) => {
     setSelectedItem(item);
@@ -370,6 +381,12 @@ function Community() {
   }
 
   useEffect(() => {
+    // setPm25(dusts?.rxs.obs[0].msg.iaqi.pm25.v);
+    // setPm10(dusts?.rxs.obs[0].msg.iaqi.pm10.v);
+    // setO3(dusts?.rxs.obs[0].msg.iaqi.o3.v);
+    // setNo2(dusts?.rxs.obs[0].msg.iaqi.no2.v);
+    // setCo(dusts?.rxs.obs[0].msg.iaqi.co.v);
+    // setSo2(dusts?.rxs.obs[0].msg.iaqi.so2.v);
     setPm25(data?.rxs.obs[0].msg.iaqi.pm25.v);
     setPm10(data?.rxs.obs[0].msg.iaqi.pm10.v);
     setO3(data?.rxs.obs[0].msg.iaqi.o3.v);
@@ -387,7 +404,7 @@ function Community() {
 
   return (
     <>
-      {isloading && 'Error!'}
+      {isLoading && 'Error!'}
       {isError && 'Loading...'}
       <MainContainer>
         <SectionContainer>
@@ -395,9 +412,9 @@ function Community() {
             <Usericon src={user} alt='user'/>
             <PostButton>오늘 실천하신 회원님의 노력을 알려주세요!</PostButton>
           </Posting>
-          {sdata.map((el)=>{
+          {postList.map((el, index)=>{
             return(
-              <PostSection key={el.member.member_id}>
+              <PostSection key={index}>
                 <Postuser>
                   <Usericon src={user} alt='user'/>
                   <div style={{padding:"5px 0px 0px 0px"}}><b>{el.member.name}</b>&nbsp;Lv. {el.member.point}</div>
