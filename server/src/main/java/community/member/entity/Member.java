@@ -60,6 +60,11 @@ public class Member{
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore // 순환참조 방지
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true) //생명주기 동일하게 관리
+    @JoinColumn(name = "level_id")
+    private Level level;
+
     public Member(String email, String name, String phone, String password){
         this.email=email;
         this.name=name;

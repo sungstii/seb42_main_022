@@ -1,9 +1,12 @@
 package community.member.controller;
 
 import community.globaldto.SingleResponseDto;
+import community.member.dto.LevelDto;
 import community.member.dto.MemberDto;
+import community.member.entity.Level;
 import community.member.entity.Member;
 import community.member.mapper.MemberMapper;
+import community.member.service.LevelService;
 import community.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -26,6 +29,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final MemberMapper mapper;
+    private final LevelService levelService;
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody){
@@ -34,12 +38,21 @@ public class MemberController {
         System.out.println(member.toString());
         Member createdMember=memberService.createMember(member);
         System.out.println(createdMember.toString());
-        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponse(createdMember)), HttpStatus.CREATED);
+
+        Level level = levelService.memberlevel(createdMember); //만들어진 회원에 대한 레벨테이블
+        LevelDto levelResponse = mapper.levelToLevelResponse(level); // 해당 레벨 리스폰스
+
+        return new ResponseEntity<>(new SingleResponseDto<>(mapper.memberToMemberResponse(createdMember, levelResponse)), HttpStatus.CREATED);
     }
     @PostMapping("/donation/{member-id}") // 나무심기 버튼용
     public ResponseEntity postDonation(@PathVariable("member-id") @Positive long memberId){
         Member member = memberService.donateTree(memberId);
-        MemberDto.Response response = mapper.memberToMemberResponse(member);
+
+        Level level = levelService.memberlevel(member);
+        LevelDto levelResponse = mapper.levelToLevelResponse(level);
+
+        MemberDto.Response response = mapper.memberToMemberResponse(member, levelResponse);
+
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
@@ -50,7 +63,11 @@ public class MemberController {
         Member member=mapper.memberPatchToMember(requestBody);
         member.setMemberId(memberId);
         Member updatedMember=memberService.updateMember(member);
-        MemberDto.Response response= mapper.memberToMemberResponse(updatedMember);
+
+        Level level = levelService.memberlevel(updatedMember);
+        LevelDto levelResponse = mapper.levelToLevelResponse(level);
+
+        MemberDto.Response response= mapper.memberToMemberResponse(updatedMember, levelResponse);
 
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
@@ -60,8 +77,11 @@ public class MemberController {
             @PathVariable("member-id") @Positive long memberId){
         Member member=memberService.findMember(memberId);
 
+        Level level = levelService.memberlevel(member);
+        LevelDto levelResponse = mapper.levelToLevelResponse(level);
+
         return new ResponseEntity<>(
-                mapper.memberToMemberResponse(member),HttpStatus.OK
+                mapper.memberToMemberResponse(member, levelResponse),HttpStatus.OK
         );
     }
 

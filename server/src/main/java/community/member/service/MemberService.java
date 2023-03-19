@@ -4,6 +4,7 @@ import community.auth.jwt.JwtTokenizer;
 import community.auth.utils.CustomAuthorityUtils;
 import community.exception.BusinessLogicException;
 import community.exception.ExceptionCode;
+import community.member.entity.Level;
 import community.member.entity.Member;
 import community.member.repository.MemberRepository;
 import community.utils.CustomBeanUtils;
@@ -28,7 +29,6 @@ public class MemberService {
     private final JwtTokenizer jwtTokenizer;
     private final PasswordEncoder passwordEncoder;
 
-
     public Member createMember(Member member){
         verifyExistsEmail(member.getEmail());
 
@@ -38,6 +38,11 @@ public class MemberService {
         List<String> roles=authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
         Member savedMember = memberRepository.save(member);
+
+        // 레벨관련 로직
+        Level level = new Level(); // 회원이 생성되면 레벨테이블을 만든다.
+        level.setMember(savedMember); // 레벨 - 생성된회원 테이블 연결
+        member.setLevel(level); // 레벨 - 회원 테이블 연결
 
         return savedMember;
     }
