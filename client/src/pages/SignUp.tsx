@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Input from "../components/Input";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
+import { Formik } from "formik";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -16,6 +16,10 @@ const LeftContainer = styled.div`
   height: 100%;
 `;
 const RightContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   width: 50%;
   height: 821px;
   background: linear-gradient(#52797a, #365b68);
@@ -35,6 +39,13 @@ const FormContainer = styled.div`
   border: 1px solid black;
 `;
 
+interface FormModel {
+  name: string;
+  email: string;
+  phone: string;
+  password: string;
+}
+
 const SignUp = () => {
   return (
     <InputContainer>
@@ -43,22 +54,72 @@ const SignUp = () => {
           <LogoImg width="60px" height="60px" />
         </LogoContainer>
         <FormContainer>
-          <h1>지금 Green Circle에 가입하세요</h1>
-          <Input
-            type="text"
-            id="inputName"
-            placeholder="이름을 입력해주세요."
-            label="이름"
-          />
-          <Input
-            type="email"
-            id="email"
-            placeholder="이메일을 입력해주세요."
-            label="이메일"
-          />
+          <Formik<FormModel>
+            initialValues={{
+              name: "",
+              email: "",
+              phone: "",
+              password: "",
+            }}
+            onSubmit={(values) => {
+              alert(JSON.stringify(values));
+            }}
+          >
+            {({ handleSubmit, values, handleChange }) => (
+              <form onSubmit={handleSubmit}>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="name">이름</label>
+                  <input
+                    type="text"
+                    id="name"
+                    placeholder="이름을 입력해주세요."
+                    value={values.name}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="email">이메일</label>
+                  <input
+                    type="email"
+                    id="email"
+                    placeholder="이메일을 입력해주세요."
+                    value={values.email}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="phone">전화번호</label>
+                  <input
+                    type="tel"
+                    id="phone"
+                    placeholder="전화번호를 입력해주세요."
+                    value={values.phone}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label htmlFor="password">비밀번호</label>
+                  <input
+                    type="password"
+                    id="password"
+                    placeholder="비밀번호를 입력해주세요."
+                    value={values.password}
+                    onChange={handleChange}
+                  />
+                </div>
+                <button type="submit">회원가입</button>
+              </form>
+            )}
+          </Formik>
         </FormContainer>
       </LeftContainer>
-      <RightContainer></RightContainer>
+      <RightContainer>
+        <span style={{ fontSize: "60px", color: "white" }}>Go green,</span>
+        <span style={{ fontSize: "60px", color: "white" }}>
+          make a difference
+        </span>
+        <LogoImg width="380px" height="380px" />
+      </RightContainer>
     </InputContainer>
   );
 };
