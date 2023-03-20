@@ -4,6 +4,7 @@ import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { Formik } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { object, string, number, date, InferType } from "yup";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -43,10 +44,31 @@ const FormContainer = styled.div`
 
 interface FormModel {
   name: string;
+  // 이름은 공백이 아니여야 합니다
   email: string;
+  // 형식 제한 없음
   phone: string;
+  // 휴대폰 번호는 010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다
   password: string;
+  // 패스워드를 입력해 주세요(최소 8자 최대 12자)
 }
+
+const signUpSchema = object({
+  name: string().required("이름을 입력해주세요"),
+  email: string().email().required("이메일을 입력해주세요"),
+  phone: string()
+    .test(
+      "phone",
+      "010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다",
+      (val: any) => /^010-\d{3,4}-\d{4}$/.test(val),
+    )
+    .required("전화번호를 입력해주세요"),
+  password: string()
+    .test("pw", "숫자 + 영문자 8자 이상 12자 이하입니다", (val: any) =>
+      /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,12}$/.test(val),
+    )
+    .required("비밀번호를 입력해주세요"),
+});
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -64,6 +86,7 @@ const SignUp = () => {
               phone: "",
               password: "",
             }}
+            validationSchema={signUpSchema}
             onSubmit={(values) => {
               alert(JSON.stringify(values));
               axios
@@ -71,6 +94,9 @@ const SignUp = () => {
                 .then((res) => {
                   alert("회원가입이 완료되었습니다.");
                   navigate("../");
+                })
+                .catch((e) => {
+                  console.log("회원가입 실패", e.response);
                 });
             }}
           >
