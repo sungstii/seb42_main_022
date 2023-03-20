@@ -11,6 +11,7 @@ import Ranking from "./pages/Ranking";
 import SignUp from "./pages/SignUp";
 import { Reset } from "styled-reset";
 import { RecoilRoot } from "recoil";
+import SignIn from "./pages/SignIn";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/greencal" element={<GreenCal />} />
             <Route path="/ranking" element={<Ranking />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
           </Routes>
         </RecoilRoot>
       </header>

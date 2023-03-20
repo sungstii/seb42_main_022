@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
-import { Formik } from "formik";
+import { ErrorMessage, Formik } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { object, string, number, date, InferType } from "yup";
@@ -35,27 +35,51 @@ const LogoContainer = styled.div`
 `;
 const FormContainer = styled.div`
   width: 100%;
+  height: 600px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   border: 1px solid black;
 `;
+const RadiusInput = styled.input`
+  border-radius: 12px;
+  padding: 6px;
+`;
+const ErrorMsg = styled.div`
+  color: red;
+  font-size: 12px;
+  padding: 2px;
+  margin-top: 2px;
+`;
+const SignUpBtn = styled.button`
+  color: white;
+  font-size: 16px;
+  background: #609966;
+  border-radius: 12px;
+  padding: 8px;
+  border: none;
+`;
 
 interface FormModel {
+  // 이름은 공백이 아니여야 합니다.
   name: string;
-  // 이름은 공백이 아니여야 합니다
   email: string;
-  // 형식 제한 없음
+  /**
+   * 휴대폰 번호는 010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다.
+   */
   phone: string;
-  // 휴대폰 번호는 010으로 시작하는 11자리 숫자와 '-'로 구성되어야 합니다
+  /**
+   * 영문자와 숫자, !@#$%^&*()_+-=만 사용 가능합니다.
+   */
   password: string;
-  // 패스워드를 입력해 주세요(최소 8자 최대 12자)
 }
 
 const signUpSchema = object({
   name: string().required("이름을 입력해주세요"),
-  email: string().email().required("이메일을 입력해주세요"),
+  email: string()
+    .email("이메일 주소를 다시 확인해주세요.")
+    .required("이메일을 입력해주세요"),
   phone: string()
     .test(
       "phone",
@@ -79,6 +103,15 @@ const SignUp = () => {
           <LogoImg width="60px" height="60px" />
         </LogoContainer>
         <FormContainer>
+          <h1
+            style={{
+              fontSize: "30px",
+              fontWeight: "700",
+              marginBottom: "32px",
+            }}
+          >
+            지금 Green Circle에 가입하세요.
+          </h1>
           <Formik<FormModel>
             initialValues={{
               name: "",
@@ -93,56 +126,97 @@ const SignUp = () => {
                 .post("http://3.39.150.26:8080/members", values)
                 .then((res) => {
                   alert("회원가입이 완료되었습니다.");
-                  navigate("../");
+                  navigate("../signin");
                 })
                 .catch((e) => {
                   console.log("회원가입 실패", e.response);
                 });
             }}
           >
-            {({ handleSubmit, values, handleChange }) => (
-              <form onSubmit={handleSubmit}>
+            {({ handleSubmit, values, handleChange, errors, touched }) => (
+              <form
+                style={{
+                  width: "50%",
+                  height: "60%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  padding: "12px",
+                }}
+                onSubmit={handleSubmit}
+              >
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <label htmlFor="name">이름</label>
-                  <input
+                  <RadiusInput
                     type="text"
                     id="name"
                     placeholder="이름을 입력해주세요."
                     value={values.name}
                     onChange={handleChange}
                   />
+                  {touched.name && errors.name ? (
+                    <ErrorMsg
+                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
+                    >
+                      {errors.name}
+                    </ErrorMsg>
+                  ) : null}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <label htmlFor="email">이메일</label>
-                  <input
+                  <RadiusInput
                     type="email"
                     id="email"
                     placeholder="이메일을 입력해주세요."
                     value={values.email}
                     onChange={handleChange}
                   />
+                  {touched.email && errors.email ? (
+                    <ErrorMsg
+                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
+                    >
+                      {errors.email}
+                    </ErrorMsg>
+                  ) : null}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <label htmlFor="phone">전화번호</label>
-                  <input
+                  <RadiusInput
                     type="tel"
                     id="phone"
                     placeholder="전화번호를 입력해주세요."
                     value={values.phone}
                     onChange={handleChange}
                   />
+                  {touched.phone && errors.phone ? (
+                    <ErrorMsg
+                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
+                    >
+                      {errors.phone}
+                    </ErrorMsg>
+                  ) : null}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
                   <label htmlFor="password">비밀번호</label>
-                  <input
+                  <RadiusInput
                     type="password"
                     id="password"
                     placeholder="비밀번호를 입력해주세요."
                     value={values.password}
                     onChange={handleChange}
                   />
+                  {touched.password && errors.password ? (
+                    <ErrorMsg
+                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
+                    >
+                      {errors.password}
+                    </ErrorMsg>
+                  ) : null}
                 </div>
-                <button type="submit">회원가입</button>
+                <SignUpBtn type="submit">회원가입</SignUpBtn>
+                <span style={{ textAlign: "center" }}>
+                  이미회원이신가요?<a href="../signin">로그인</a>
+                </span>
               </form>
             )}
           </Formik>
