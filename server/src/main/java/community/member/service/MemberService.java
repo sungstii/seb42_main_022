@@ -10,6 +10,8 @@ import community.member.repository.MemberRepository;
 import community.utils.CustomBeanUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,6 +86,11 @@ public class MemberService {
         Optional<Member> member= memberRepository.findByEmail(email);
         if(member.isPresent())
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
+    }
+
+    /*회원전체 정보 페이지*/
+    public Page<Member> memberPage(Pageable pageable){
+      return memberRepository.findAll(pageable);
     }
 
     /* 나무기부

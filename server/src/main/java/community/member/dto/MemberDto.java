@@ -73,5 +73,12 @@ public class MemberDto {
             return memberStatus.getStatus();
         }
     }
+
+    @AllArgsConstructor
+    @Getter
+    public static class donationRanks{ //기부 랭킹 Response
+        private String name;
+        private String treeCount;
+    }
 }
 

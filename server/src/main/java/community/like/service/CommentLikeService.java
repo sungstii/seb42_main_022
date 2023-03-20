@@ -23,8 +23,9 @@ public class CommentLikeService {
 
     public Comment commentLikeUp(long memberId, long commentId) {
 
-        Member member = memberService.findVerifiedMember(memberId);
-        Comment comment = commentService.findByComment(commentId);
+        Member member = memberService.findVerifiedMember(memberId); //좋아요 누르는 회원
+        Comment comment = commentService.findByComment(commentId); // 댓글
+        Member commentMember = memberService.findMember(comment.getMember().getMemberId()); // 댓글 작성자
 
 
         CommentLike commentLike = commentLikeRepository.findByMemberAndComment(member, comment);
@@ -35,21 +36,23 @@ public class CommentLikeService {
             commentLike.setMember(member);
             commentLike.setCLikeStatus(true);
             comment.setLikeCount(comment.getLikeCount() + 1);
-            member.setPoint(member.getPoint() + 10);// 포인트 적립 로직
+            commentMember.setPoint(commentMember.getPoint() + 10);// 포인트 적립 로직
         }
         else if (commentLike.getCLikeStatus()) {
             commentLike.setCLikeStatus(false);
             comment.setLikeCount(comment.getLikeCount() - 1);
-            member.setPoint(member.getPoint() - 10);// 포인트 적립 로직
+            commentMember.setPoint(commentMember.getPoint() - 10);// 포인트 적립 로직
         }
         else if (!commentLike.getCLikeStatus()) {
             commentLike.setCLikeStatus(true);
             comment.setLikeCount(comment.getLikeCount() + 1);
-            member.setPoint(member.getPoint() + 10);// 포인트 적립 로직
+            commentMember.setPoint(commentMember.getPoint() + 10);// 포인트 적립 로직
         }
 
         commentLikeRepository.save(commentLike);
         memberRepository.save(member);
+        memberRepository.save(commentMember);
+
         return commentService.findByComment(commentId);
     }
 }

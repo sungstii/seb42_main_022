@@ -20,8 +20,9 @@ public class BoardLikeService {
 
     public Board boardLikeUP(long memberId, long boardId) {
 
-        Member member = memberService.findMember(memberId);
-        Board board = boardService.findBoard(boardId);
+        Member member = memberService.findMember(memberId); // 좋아요 누르는 회원
+        Board board = boardService.findBoard(boardId); // 좋아요가 눌리는 게시판
+        Member boardMember = memberService.findMember(board.getMember().getMemberId()); // 게시판 작성자
 
         BoardLike boardLike = boardLikeRepository.findByMemberAndBoard(member, board); // 추천수
 
@@ -32,22 +33,23 @@ public class BoardLikeService {
             boardLike.setMember(member);
             boardLike.setBLikeStatus(true);
             board.setLikeCount(board.getLikeCount() + 1);
-            member.setPoint(member.getPoint() + 50);// 포인트 적립 로직
+            boardMember.setPoint(boardMember.getPoint() + 50);// 포인트 적립 로직
         }
 
         else if (boardLike.getBLikeStatus()) {
             boardLike.setBLikeStatus(false);
             board.setLikeCount(board.getLikeCount() - 1);
-            member.setPoint(member.getPoint() -50);// 포인트 적립 로직
+            boardMember.setPoint(boardMember.getPoint() -50);// 포인트 적립 로직
         }
 
         else if (!boardLike.getBLikeStatus()) {
             boardLike.setBLikeStatus(true);
             board.setLikeCount(board.getLikeCount() + 1);
-            member.setPoint(member.getPoint() + 50);// 포인트 적립 로직
+            boardMember.setPoint(boardMember.getPoint() + 50);// 포인트 적립 로직
         }
         boardLikeRepository.save(boardLike);
         memberRepository.save(member);
+        memberRepository.save(boardMember);
 
         return boardService.findBoard(boardId);
     }

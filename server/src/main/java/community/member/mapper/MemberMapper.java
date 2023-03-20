@@ -18,6 +18,7 @@ public interface MemberMapper {
 
     LevelDto levelToLevelResponse(Level level); // 레벨 dto
     List<LevelDto> levelsToLevelResponseList(List<Level> levels); //레벨 랭킹을 위한 리스트
+    List<MemberDto.donationRanks> membersToDonationRanks(List<Member> members); // 기부 랭킹을 위한 리스트
 
 
 }
