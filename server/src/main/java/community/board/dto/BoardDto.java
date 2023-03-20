@@ -3,6 +3,7 @@ package community.board.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import community.board.entity.UploadFile;
 import community.comment.dto.CommentDto;
+import community.member.dto.LevelDto;
 import community.member.dto.MemberDto;
 import lombok.*;
 
@@ -75,6 +76,8 @@ public class BoardDto {
         private Long boardId;
         private String title;
         private String contents;
+        private String boardCreator; //게시글 작성자
+        private String creatorLevel; //작성자 레벨정보
         @JsonProperty("like_count")
         private int likeCount;
         @JsonProperty("view_count")
@@ -99,6 +102,7 @@ public class BoardDto {
         @JsonProperty("view_count")
         private int viewCount;
         private MemberDto.Response member;
+        private int creatorLevel; //작성자 레벨
         private List<UploadDto> uploadDto;
 
         private List<CommentDto.InfoResponse> comments;

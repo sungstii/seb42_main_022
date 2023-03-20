@@ -27,6 +27,7 @@ public class Comment extends AuditingFields {
     private String contents;
     @Column(nullable = false)
     private int likeCount;
+    private int creatorLevel; //작성자 레벨
 
     @ManyToOne
     @JoinColumn(name = "member_id")

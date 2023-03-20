@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -30,6 +31,9 @@ public class BoardService {
         
         Member member = memberService.findMember(createBoard.getMember().getMemberId()); //생성된 게시글을 작성한 회원을 찾는다
         member.setBoardCount(member.getBoardCount() + 1); //해당 회원에 대한 게시글 작성 카운트 1 증가
+
+        createBoard.setBoardCreator(member.getName()); //작성자 이름
+        createBoard.setCreatorLevel(member.getLevel().getLevel()); // 작성자 레벨
 
         levelService.memberlevel(member); // 커뮤니티 활동을 하면 레벨관련정보를 갱신
         
@@ -69,7 +73,18 @@ public class BoardService {
     /* 추천 게시글 페이지 */
     @Transactional
     public Page<Board> rankBoards(Pageable pageable){
-        return boardRepository.findAll(pageable);
+        Page<Board> boardPage = boardRepository.findAll(pageable);
+
+        return boardPage;
+    }
+    
+    /*게시글 작성자들의 이름, level정보 업데이트*/
+    public void nameAndLevelUpdate(){
+        List<Board> boards = boardRepository.findAll(); //전체조회
+        for(Board board : boards){
+            board.setBoardCreator(board.getMember().getName());
+            board.setCreatorLevel(board.getMember().getLevel().getLevel());
+        }
     }
 
     /*게시글 삭제*/

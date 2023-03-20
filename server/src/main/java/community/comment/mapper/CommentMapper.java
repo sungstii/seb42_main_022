@@ -15,7 +15,7 @@ public interface CommentMapper {
     Comment commentPatchDtoToComment(CommentDto.Patch commentPatchDto);
     CommentDto.Response commentToCommentResponse(Comment comment);
 
-    @Mapping(source = "board", target = "boardId", qualifiedByName = "boardId")
+    //@Mapping(source = "board", target = "boardId", qualifiedByName = "boardId")
     CommentDto.InfoResponse commentToCommentInfoResponse(Comment comment);
 
     @Named("boardId")
