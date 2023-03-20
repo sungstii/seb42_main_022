@@ -73,7 +73,7 @@ const Header = () => {
       </TapWrapper>
       <EmptySpace />
       <ProfileWrapper>
-        <ProfileLink to="./community">
+        <ProfileLink to="./signup">
           <ProfileIcon width="35px" height="35px" />
         </ProfileLink>
       </ProfileWrapper>

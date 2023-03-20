@@ -16,7 +16,6 @@ const Container = styled.div`
 const Main = () => {
   return (
     <Container>
-      <Reset />
       <Header />
       <Carousel />
       <ShortcutCard />
