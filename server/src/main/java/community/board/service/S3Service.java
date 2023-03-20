@@ -54,6 +54,9 @@ public class S3Service {
                 uploadFile.setFileName(fileName);
                 uploadFile.setImagePath(imagePath);
                 uploadFileRepository.save(uploadFile);
+
+                //대표이미지 저장  / 마지막 사진기준으로 저장
+                board.setDelegateImagePath(uploadFile.getImagePath());
             }
             List<UploadFile> filelist = uploadFileRepository.findByBoardBoardId(board.getBoardId());
             return filelist;

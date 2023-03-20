@@ -58,8 +58,28 @@ public class BoardDto {
         private int likeCount;
         @JsonProperty("view_count")
         private int viewCount;
+        private String delegateImagePath;
         private MemberDto.Response member;
         private List<UploadDto> uploadDto;
+        @JsonProperty("created_at")
+        private LocalDateTime createdAt;
+        @JsonProperty("modified_at")
+        private LocalDateTime modifiedAt;
+    }
+
+    @Getter
+    @Setter
+    @NoArgsConstructor
+    public static class TotalPageListResponse { //전체조회 및 검색
+        @JsonProperty("board_id")
+        private Long boardId;
+        private String title;
+        private String contents;
+        @JsonProperty("like_count")
+        private int likeCount;
+        @JsonProperty("view_count")
+        private int viewCount;
+        private String delegateImagePath;
         @JsonProperty("created_at")
         private LocalDateTime createdAt;
         @JsonProperty("modified_at")

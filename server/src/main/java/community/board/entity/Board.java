@@ -34,7 +34,7 @@ public class Board extends AuditingFields {
 
     @Column(nullable = false)
     private int likeCount;
-
+    private String delegateImagePath; //게시판 대표이미지 URL
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewCount;
     @ManyToOne

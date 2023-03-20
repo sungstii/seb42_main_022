@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -70,12 +71,12 @@ public class BoardController {
     @GetMapping //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어
     public ResponseEntity<?> searchBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
                                           @RequestParam(required = false) String searchValue,
-                                          @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
+                                          @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
     {
         Page<Board> boardPage = boardService.findBoards(searchType, searchValue, pageable);
         List<Board> boards = boardPage.getContent();
 
-        List<BoardDto.TotalPageResponse> response = boardMapper.boardToBoardListResponse(boards);
+        List<BoardDto.TotalPageListResponse> response = boardMapper.boardToBoardListResponse(boards);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
@@ -89,6 +90,7 @@ public class BoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /*단건조회*/
     @GetMapping("/{board-id}")
     public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId) throws Exception {
         boardService.updateViewCount(boardId); // 조회수 증가
