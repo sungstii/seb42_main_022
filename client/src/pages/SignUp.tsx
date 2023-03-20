@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { Formik } from "formik";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -47,6 +49,7 @@ interface FormModel {
 }
 
 const SignUp = () => {
+  const navigate = useNavigate();
   return (
     <InputContainer>
       <LeftContainer>
@@ -63,6 +66,12 @@ const SignUp = () => {
             }}
             onSubmit={(values) => {
               alert(JSON.stringify(values));
+              axios
+                .post("http://3.39.150.26:8080/members", values)
+                .then((res) => {
+                  alert("회원가입이 완료되었습니다.");
+                  navigate("../");
+                });
             }}
           >
             {({ handleSubmit, values, handleChange }) => (
