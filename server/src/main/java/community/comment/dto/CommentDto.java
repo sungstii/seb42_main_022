@@ -38,8 +38,6 @@ public class CommentDto {
         private Long commentId;
         @JsonProperty("member_id")
         private Long memberId;
-        @JsonProperty("board_id")
-        private long boardId;
         private String contents;
         @JsonProperty("like_count")
         private int likeCount;
@@ -56,8 +54,6 @@ public class CommentDto {
     public static class InfoResponse {
         @JsonProperty("comment_id")
         private Long commentId;
-        @JsonProperty("board_id")
-        private long boardId;
         private String contents;
         @JsonProperty("like_count")
         private int likeCount;
@@ -66,5 +62,6 @@ public class CommentDto {
         @JsonProperty("modified_at")
         private LocalDateTime modifiedAt;
         private MemberDto.Response member;
+        private int creatorLevel; //작성자 레벨
     }
 }

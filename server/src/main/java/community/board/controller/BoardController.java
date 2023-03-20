@@ -5,6 +5,8 @@ import community.board.dto.UploadDto;
 import community.board.entity.Board;
 import community.board.entity.UploadFile;
 import community.board.service.S3Service;
+import community.member.entity.Level;
+import community.member.mapper.MemberMapper;
 import community.member.service.MemberService;
 import community.type.SearchType;
 import community.board.mapper.BoardMapper;
@@ -68,11 +70,14 @@ public class BoardController {
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
     }
 
+    /*검색 및 전체조회*/
     @GetMapping //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어
     public ResponseEntity<?> searchBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
                                           @RequestParam(required = false) String searchValue,
                                           @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
     {
+        boardService.nameAndLevelUpdate(); //작성자들의 레벨 및 이름 업데이트
+        
         Page<Board> boardPage = boardService.findBoards(searchType, searchValue, pageable);
         List<Board> boards = boardPage.getContent();
 
@@ -80,8 +85,8 @@ public class BoardController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-
-    @GetMapping("/rankBoards") //게시판 추천수 랭킹
+    /*추천 게시판*/
+    @GetMapping("/rankBoards")
     public ResponseEntity<?> rankBoards(@PageableDefault(size = 5, sort = "likeCount", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
     {
         Page<Board> boardPage = boardService.rankBoards(pageable);

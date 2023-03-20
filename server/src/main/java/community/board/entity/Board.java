@@ -34,6 +34,8 @@ public class Board extends AuditingFields {
 
     @Column(nullable = false)
     private int likeCount;
+    private String boardCreator; //게시글 작성자
+    private int creatorLevel; //작성자 레벨
     private String delegateImagePath; //게시판 대표이미지 URL
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewCount;

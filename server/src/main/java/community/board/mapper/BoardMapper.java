@@ -4,6 +4,7 @@ import community.board.dto.BoardDto;
 import community.board.dto.UploadDto;
 import community.board.entity.Board;
 import community.board.entity.UploadFile;
+import community.member.entity.Level;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 

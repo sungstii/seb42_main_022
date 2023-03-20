@@ -13,7 +13,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
+
 @Transactional
 @Service
 @RequiredArgsConstructor
@@ -26,6 +28,8 @@ public class CommentService {
 
         Member member = memberService.findMember(createComment.getMember().getMemberId()); //생성된 댓글을 작성한 회원을 찾는다
         member.setCommentCount(member.getCommentCount() + 1); //해당 회원에 대한 댓글 작성 카운트 1 증가
+
+        creatorLevelUpdate(); // 작성자의 레벨정보들 업데이트
 
         return createComment;
     }
@@ -64,5 +68,13 @@ public class CommentService {
         Comment findComment = optionalComment.orElseThrow(() -> new BusinessLogicException(ExceptionCode.COMMENT_NOT_FOUND));
 
         return findComment;
+    }
+    
+    /*작성자들의 레벨정보 업데이트*/
+    public void creatorLevelUpdate() {
+        List<Comment> comments = commentRepository.findAll();
+        for(Comment comment : comments){
+            comment.setCreatorLevel(comment.getMember().getLevel().getLevel());
+        }
     }
 }
