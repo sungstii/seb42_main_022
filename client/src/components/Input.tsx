@@ -1,6 +1,13 @@
 import React from "react";
 import styled from "styled-components";
 
+type Props = {
+  type: string;
+  id: string;
+  placeholder: string;
+  label: string;
+};
+
 const InputContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,11 +33,11 @@ const InputForm = styled.input`
   box-shadow: 2px 2px gray;
 `;
 
-function Input() {
+function Input({ type, id, placeholder, label }: Props) {
   return (
     <InputContainer>
-      <InputLabel htmlFor="inputName">이름</InputLabel>
-      <InputForm type="text" id="inputName" placeholder="이름을 입력하세요" />
+      <InputLabel htmlFor={id}>{label}</InputLabel>
+      <InputForm type={type} id={id} placeholder={placeholder} />
     </InputContainer>
   );
 }

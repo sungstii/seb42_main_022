@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import Input from "../components/Input";
+import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -44,10 +44,18 @@ const SignUp = () => {
         </LogoContainer>
         <FormContainer>
           <h1>지금 Green Circle에 가입하세요</h1>
-          <Input />
-          <Input />
-          <Input />
-          <Input />
+          <Input
+            type="text"
+            id="inputName"
+            placeholder="이름을 입력해주세요."
+            label="이름"
+          />
+          <Input
+            type="email"
+            id="email"
+            placeholder="이메일을 입력해주세요."
+            label="이메일"
+          />
         </FormContainer>
       </LeftContainer>
       <RightContainer></RightContainer>
