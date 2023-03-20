@@ -16,6 +16,7 @@ import { postListState } from "../recoil/state";
 import { areaState } from "../recoil/state";
 import { usePosts } from "../react-query/usePosts"
 import { useWeatherInfo } from "../react-query/useWeatherInfo"
+import PostModal from '../components/PostModal';
 
 const MainContainer = styled.div`
   display: flex;
@@ -41,6 +42,7 @@ const Posting = styled.div`
   border-radius: 15px;
   padding: 15px;
   margin: 20px 0px 20px 0px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 `;
 const Usericon = styled.img`
   padding: 2px 17px 2px 2px;
@@ -67,6 +69,7 @@ const PostSection = styled.div`
   padding: 15px;
   width: 600px;
   margin: 0px 0px 20px 0px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 `;
 const Postuser = styled.div`
   display: flex;
@@ -117,8 +120,8 @@ const SearchButton = styled.img`
 const DustBar = styled.div`
   display: flex;
   position: fixed;
-  /* top: 130px; */
-  top: 150px;
+  top: 130px;
+  /* top: 150px; */
   background-color: rgb(246,246,246);
   border-radius: 15px;
   padding: 15px;
@@ -308,6 +311,7 @@ function Community() {
   const [searchValue, setSearchValue] = useState(""); // 검색 input 값
   const [elvalue, setElvalue] = useState("TITLE"); // 검색타입 상태 (제목, 내용)
   const [postList, setPostList] = useRecoilState(postListState); // recoil 상태 선언
+  const [showModal, setShowModal] = useState(false);
 
   if (posts) setPostList(posts); // 서버에서 데이터 가져왔으면 리코일 상태에 넣기
   
@@ -380,6 +384,15 @@ function Community() {
 
   }
 
+  const handleClose = () => {
+    setShowModal(false);
+  };
+
+  const handleConfirm = () => {
+    alert('게시물이 등록되었습니다!');
+    handleClose();
+  };
+
   useEffect(() => {
     // setPm25(dusts?.rxs.obs[0].msg.iaqi.pm25.v);
     // setPm10(dusts?.rxs.obs[0].msg.iaqi.pm10.v);
@@ -410,7 +423,13 @@ function Community() {
         <SectionContainer>
           <Posting>
             <Usericon src={user} alt='user'/>
-            <PostButton>오늘 실천하신 회원님의 노력을 알려주세요!</PostButton>
+            <PostButton onClick={() => setShowModal(true)}>오늘 실천하신 회원님의 노력을 알려주세요!</PostButton>
+            {showModal && (
+              <PostModal
+                onClose={handleClose}
+                onConfirm={handleConfirm}
+              />
+            )}
           </Posting>
           {postList.map((el, index)=>{
             return(
