@@ -2,14 +2,12 @@ import axios from "axios";
 import { useQuery } from 'react-query';
 
 interface postList {
-    title: string;
-    contents: string;
-    member: {
-        member_id: number;
-        name: string;
-        point: string;
-    }
-  }
+  board_creator: string;
+  creator_level: number;
+  delegate_image_path: string;
+  title: string;
+  contents: string;
+}
 
 export const usePosts = () => {
   const fetchPosts = async () => {

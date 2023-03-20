@@ -14,6 +14,8 @@ import { useQuery } from 'react-query';
 import { atom, useRecoilState } from 'recoil';
 import { postListState } from "../recoil/state";
 import { areaState } from "../recoil/state";
+import { tokenState } from "../recoil/state";
+import { myIdState } from "../recoil/state";
 import { usePosts } from "../react-query/usePosts"
 import { useWeatherInfo } from "../react-query/useWeatherInfo"
 import PostModal from '../components/PostModal';
@@ -305,7 +307,8 @@ function Community() {
   const [no2info, setNo2info] = useState("");
   const [coinfo, setCoinfo] = useState("");
   const [so2info, setSo2info] = useState("");
-  const [logintoken, setLogintoken] = useState(""); // 회원 권한
+  const [logintoken, setLogintoken] = useRecoilState(tokenState); // 회원 권한
+  const [memberId, setMemberId] = useRecoilState(myIdState);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 드롭다운 open
   const [isSearchbox, setIsSearchbox] = useState<Item | null>(null); // 검색 드롭다운 현재값 (label)
   const [searchValue, setSearchValue] = useState(""); // 검색 input 값
@@ -359,7 +362,7 @@ function Community() {
       const token = response.headers.authorization;
       const { data } = response;
       console.log(data);
-      // console.log(token);
+      setMemberId(data.memberId);
       setLogintoken(token);
     })
     .catch((error) => console.log(error));
@@ -381,7 +384,22 @@ function Community() {
       console.log(data);
     })
     .catch((error) => console.log(error));
+  }
 
+  const formData = new FormData();
+  formData.append('memberId', '3');
+  formData.append('title', '테스트');
+  formData.append('contents', '내용 테스트');
+  formData.append('file', '');
+
+  const submit = () => { // 게시글 등록
+    axios.post('http://3.39.150.26:8080/boards',formData, { 
+      headers: {Authorization: logintoken}})
+    .then((response) => {
+      const { data } = response;
+      console.log(data);
+    })
+    .catch((error) => console.log(error));
   }
 
   const handleClose = () => {
@@ -412,7 +430,6 @@ function Community() {
     // posthandle();
     // console.log(sdata?.title);
     //Optional Chaining
-
   });
 
   return (
@@ -428,6 +445,7 @@ function Community() {
               <PostModal
                 onClose={handleClose}
                 onConfirm={handleConfirm}
+                // onSubmit={submit}
               />
             )}
           </Posting>
@@ -436,10 +454,11 @@ function Community() {
               <PostSection key={index}>
                 <Postuser>
                   <Usericon src={user} alt='user'/>
-                  <div style={{padding:"5px 0px 0px 0px"}}><b>{el.member.name}</b>&nbsp;Lv. {el.member.point}</div>
+                  <div style={{padding:"5px 0px 0px 0px"}}><b>{el.board_creator}</b>&nbsp;Lv. {el.creator_level}</div>
                 </Postuser>
                 <PostBody>{el.title}</PostBody>
-                <img src={picture} alt='picture'/>
+                {/* <img src={picture} alt='picture'/> */}
+                {el.delegate_image_path && ( <img src={el.delegate_image_path} alt='picture'/>)}
               </PostSection>
             );
           })}
@@ -529,7 +548,8 @@ function Community() {
               <div>300P</div>
             </MileageInfo>
             <MileageButton><img src={nature}/>내 마일리지로 나무 심기!</MileageButton>
-            {/* <div onClick={membersearch}>회원 검색 버튼</div> */}
+            <div onClick={membersearch}>회원 검색 버튼</div>
+            <div onClick={login}>로그인 버튼</div>
           </MileageBar>
           <Aside/>
         </AsideContainer>

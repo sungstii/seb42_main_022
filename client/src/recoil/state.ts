@@ -1,13 +1,11 @@
 import { atom } from "recoil";
 
 interface postList {
+    board_creator: string;
+    creator_level: number;
+    delegate_image_path: string;
     title: string;
     contents: string;
-    member: {
-        member_id: number;
-        name: string;
-        point: string;
-    }
   }
 
 export const postListState = atom<postList[]>({
@@ -18,4 +16,14 @@ export const postListState = atom<postList[]>({
 export const areaState = atom<string>({
     key: 'areaState',
     default: 'seoul',
+});
+
+export const tokenState = atom<string>({
+    key: 'tokenState',
+    default: '',
+});
+
+export const myIdState = atom<number>({
+    key: 'myIdState',
+    default: 0,
 });
