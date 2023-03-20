@@ -96,6 +96,16 @@ public class MemberController {
         return new ResponseEntity<>("회원탈퇴 완료.",HttpStatus.NO_CONTENT);
     }
 
+    /*기부 랭킹 페이지*/
+    @GetMapping("/donationRanks")
+    public ResponseEntity<?> donationRanks(@PageableDefault(size = 10, sort = "treeCount", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
+    {
+        Page<Member> memberPage = memberService.memberPage(pageable);
+        List<Member> members = memberPage.getContent();
+        List<MemberDto.donationRanks> response = mapper.membersToDonationRanks(members);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     /*레벨 랭킹 페이지*/
     @GetMapping("/levelRanks")
     public ResponseEntity<?> rankBoards(@PageableDefault(size = 10, sort = "totalExp", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
@@ -105,4 +115,6 @@ public class MemberController {
         List<LevelDto> response = mapper.levelsToLevelResponseList(levels);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+
 }
