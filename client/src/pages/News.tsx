@@ -1,11 +1,11 @@
 import React from 'react';
 
-const News = () => {
+function News () {
   return (
     <>
       <div>여긴 뉴스페이지입니다.</div>
     </>
   );
-};
+}
 
 export default News;

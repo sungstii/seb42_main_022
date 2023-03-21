@@ -166,11 +166,12 @@ function PostModal({ onClose, onConfirm }: modal) {
     formData.append('files', imageFile);
 
     const submit = () => { // 게시글 등록
-        axios.post('http://3.39.150.26:8080/boards',formData, { 
+        axios.post('http://3.39.150.26:8080/boards/free',formData, { 
         headers: {Authorization: token}})
         .then((response) => {
         const { data } = response;
         console.log(data);
+        window.location.reload();
         })
         .catch((error) => console.log(error));
     }

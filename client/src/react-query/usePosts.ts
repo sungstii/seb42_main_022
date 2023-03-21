@@ -11,7 +11,7 @@ interface postList {
 
 export const usePosts = () => {
   const fetchPosts = async () => {
-    const response = await axios.get<postList[]>('http://3.39.150.26:8080/boards?searchType=CONTENTS&searchValue=');
+    const response = await axios.get<postList[]>('http://3.39.150.26:8080/boards/free?searchType=CONTENTS&searchValue=&page=&size=');
     return response.data;
   };
 
