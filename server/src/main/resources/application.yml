@@ -33,9 +33,12 @@ cloud:
   aws:
     region:
       static: ap-northeast-2
-#    s3:
-#      credentials:
-#        access-key: access-key
-#        secret-key: secret-key
+    s3:
+      credentials:
+        access-key: ENC(xFO5USJEzJjHL8RB+a7IREpyQOoHp4HZhL2OFzzKIBs=)
+        secret-key: ENC(PtaZU3cqX2thf4/AeCsoMF+XCJRo3WR8q3U1iGexhAqLXaFIQ5JKn8CKkO3uRyKipF9cb/Qy4W8=)
     stack:
       auto: false
+     
+      
+
