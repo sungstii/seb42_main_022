@@ -41,12 +41,38 @@ public class BoardController {
     private final S3Service s3Service;
     private final MemberService memberService;
 
-    @PostMapping
-    public ResponseEntity<?> createBoard(@ModelAttribute MultipartFile[] files,
+    @PostMapping("/free")
+    public ResponseEntity<?> createFreeBoard(@ModelAttribute MultipartFile[] files,
                                     @ModelAttribute BoardDto.Post boardPostDto) throws Exception {
         Board board = boardMapper.boardPostToBoard(boardPostDto);
         board.setMember(memberService.findVerifiedMember(boardPostDto.getMemberId()));
-        Board boardCreate = boardService.createBoard(board);
+        Board boardCreate = boardService.createBoard(board, Board.KindOfBoard.FREE_BOARD); //게시판 종류를 입력
+
+        List<UploadFile> uploadFiles = s3Service.uploadFiles(files, boardCreate); // aws s3업로드
+        List<UploadDto> uploadResponse = boardMapper.uploadFilesToUploadDtoList(uploadFiles); //업로드 dto리스트를 생성
+
+        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(boardCreate, uploadResponse);//게시글 dto에 업로드 dto담아주기
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
+    }
+    @PostMapping("/eco")
+    public ResponseEntity<?> createEcoBoard(@ModelAttribute MultipartFile[] files,
+                                         @ModelAttribute BoardDto.Post boardPostDto) throws Exception {
+        Board board = boardMapper.boardPostToBoard(boardPostDto);
+        board.setMember(memberService.findVerifiedMember(boardPostDto.getMemberId()));
+        Board boardCreate = boardService.createBoard(board, Board.KindOfBoard.ECO_REVIEW); //게시판 종류를 입력
+
+        List<UploadFile> uploadFiles = s3Service.uploadFiles(files, boardCreate); // aws s3업로드
+        List<UploadDto> uploadResponse = boardMapper.uploadFilesToUploadDtoList(uploadFiles); //업로드 dto리스트를 생성
+
+        BoardDto.TotalPageResponse response = boardMapper.boardToBoardTotalPageResponse(boardCreate, uploadResponse);//게시글 dto에 업로드 dto담아주기
+        return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.CREATED);
+    }
+    @PostMapping("/green")
+    public ResponseEntity<?> createGreenBoard(@ModelAttribute MultipartFile[] files,
+                                         @ModelAttribute BoardDto.Post boardPostDto) throws Exception {
+        Board board = boardMapper.boardPostToBoard(boardPostDto);
+        board.setMember(memberService.findVerifiedMember(boardPostDto.getMemberId()));
+        Board boardCreate = boardService.createBoard(board, Board.KindOfBoard.GREEN_ACTIVE); //게시판 종류를 입력
 
         List<UploadFile> uploadFiles = s3Service.uploadFiles(files, boardCreate); // aws s3업로드
         List<UploadDto> uploadResponse = boardMapper.uploadFilesToUploadDtoList(uploadFiles); //업로드 dto리스트를 생성
@@ -71,14 +97,42 @@ public class BoardController {
     }
 
     /*검색 및 전체조회*/
-    @GetMapping //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어
-    public ResponseEntity<?> searchBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
+    @GetMapping("/free") //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어&page=&size
+    public ResponseEntity<?> searchFreeBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
                                           @RequestParam(required = false) String searchValue,
                                           @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
     {
         boardService.nameAndLevelUpdate(); //작성자들의 레벨 및 이름 업데이트
         
-        Page<Board> boardPage = boardService.findBoards(searchType, searchValue, pageable);
+        Page<Board> boardPage = boardService.findBoards(Board.KindOfBoard.FREE_BOARD, searchType, searchValue, pageable);
+        List<Board> boards = boardPage.getContent();
+
+        List<BoardDto.TotalPageListResponse> response = boardMapper.boardToBoardListResponse(boards);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    /*검색 및 전체조회*/
+    @GetMapping("/eco") //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어&page=&size
+    public ResponseEntity<?> searchEcoBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
+                                          @RequestParam(required = false) String searchValue,
+                                          @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
+    {
+        boardService.nameAndLevelUpdate(); //작성자들의 레벨 및 이름 업데이트
+
+        Page<Board> boardPage = boardService.findBoards(Board.KindOfBoard.ECO_REVIEW, searchType, searchValue, pageable);
+        List<Board> boards = boardPage.getContent();
+
+        List<BoardDto.TotalPageListResponse> response = boardMapper.boardToBoardListResponse(boards);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    /*검색 및 전체조회*/
+    @GetMapping("/green") //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어&page=&size
+    public ResponseEntity<?> searchGreenBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
+                                          @RequestParam(required = false) String searchValue,
+                                          @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
+    {
+        boardService.nameAndLevelUpdate(); //작성자들의 레벨 및 이름 업데이트
+
+        Page<Board> boardPage = boardService.findBoards(Board.KindOfBoard.GREEN_ACTIVE, searchType, searchValue, pageable);
         List<Board> boards = boardPage.getContent();
 
         List<BoardDto.TotalPageListResponse> response = boardMapper.boardToBoardListResponse(boards);

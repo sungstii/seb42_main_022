@@ -39,6 +39,9 @@ public class Board extends AuditingFields {
     private String delegateImagePath; //게시판 대표이미지 URL
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int viewCount;
+    @Enumerated(value = EnumType.STRING) //Enum값이 string Type으로 들어감
+    @Column(length = 20)
+    private Board.KindOfBoard kindOfBoard; //게시판 분류
     @ManyToOne
     @JoinColumn(name = "member_id")
     @JsonBackReference
@@ -65,5 +68,17 @@ public class Board extends AuditingFields {
     @Override
     public int hashCode() {
         return Objects.hash(boardId);
+    }
+
+    /*게시판 분류에 대한 Enum*/
+    public enum KindOfBoard{
+        GREEN_ACTIVE("녹색활동"),
+        FREE_BOARD("자유게시판"),
+        ECO_REVIEW("에코리뷰");
+        @Getter
+        private String status;
+        KindOfBoard(String status){
+            this.status=status;
+        }
     }
 }

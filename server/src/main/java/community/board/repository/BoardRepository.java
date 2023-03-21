@@ -23,9 +23,9 @@ public interface BoardRepository extends JpaRepository<Board, Long>,
     @Query("update Board p set p.viewCount = p.viewCount + 1 where p.id = :id")
     int updateViewCount(Long id);
 
-    //검색기능 관련
-    Page<Board> findByTitleContaining(String title, Pageable pageable); //제목검색
-    Page<Board> findByContentsContaining(String contents, Pageable pageable); //내용검색
+    //검색기능 관련 / 게시판 종류 -> 이름이 포함된것을 찾아라
+    Page<Board> findByKindOfBoardAndTitleContaining(Board.KindOfBoard kindOfBoard, String title, Pageable pageable); //제목검색
+    Page<Board> findByKindOfBoardAndContentsContaining(Board.KindOfBoard kindOfBoard, String contents, Pageable pageable); //내용검색
     @Override
     default void customize(QuerydslBindings bindings, QBoard root){
         bindings.excludeUnlistedProperties(true);
