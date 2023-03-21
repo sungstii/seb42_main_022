@@ -26,8 +26,9 @@ public class BoardService {
     private final LevelService levelService;
 
     /*게시글 등록*/
-    public Board createBoard(Board board) {
+    public Board createBoard(Board board, Board.KindOfBoard kindOfBoard) {
         Board createBoard = boardRepository.save(board); // 게시판 저장
+        createBoard.setKindOfBoard(kindOfBoard); // 게시판 분류하기
         
         Member member = memberService.findMember(createBoard.getMember().getMemberId()); //생성된 게시글을 작성한 회원을 찾는다
         member.setBoardCount(member.getBoardCount() + 1); //해당 회원에 대한 게시글 작성 카운트 1 증가
@@ -56,7 +57,7 @@ public class BoardService {
 
     /*게시글 검색 및 조회*/
     @Transactional(readOnly = true) // 변경하지 않기때문에 readonly
-    public Page<Board> findBoards(SearchType searchType, String search_keyword, Pageable pageable) {
+    public Page<Board> findBoards(Board.KindOfBoard kindOfBoard, SearchType searchType, String search_keyword, Pageable pageable) {
         // 검색어 없이 검색하면 게시글 페이지를 반환.
         if (search_keyword == null || search_keyword.isBlank()) {
             return boardRepository.findAll(pageable);
@@ -64,9 +65,9 @@ public class BoardService {
         // 항목에 따른 검색 - 조회
         switch (searchType) {
             case TITLE:
-                return boardRepository.findByTitleContaining(search_keyword, pageable);
+                return boardRepository.findByKindOfBoardAndTitleContaining(kindOfBoard, search_keyword, pageable);
             case CONTENTS:
-                return boardRepository.findByContentsContaining(search_keyword, pageable);
+                return boardRepository.findByKindOfBoardAndContentsContaining(kindOfBoard, search_keyword, pageable);
         }return null;
     }
 
