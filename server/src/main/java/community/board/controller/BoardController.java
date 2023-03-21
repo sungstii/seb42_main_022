@@ -140,10 +140,28 @@ public class BoardController {
     }
 
     /*추천 게시판*/
-    @GetMapping("/rankBoards")
-    public ResponseEntity<?> rankBoards(@PageableDefault(size = 5, sort = "likeCount", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
+    @GetMapping("/rankFreeBoards")
+    public ResponseEntity<?> rankFreeBoards(@PageableDefault(size = 5, sort = "likeCount", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
     {
-        Page<Board> boardPage = boardService.rankBoards(pageable);
+        Page<Board> boardPage = boardService.rankBoards(Board.KindOfBoard.FREE_BOARD,pageable);
+        List<Board> boards = boardPage.getContent();
+        List<BoardDto.RankResponse> response = boardMapper.boardToBoardRankListResponse(boards);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    /*추천 게시판*/
+    @GetMapping("/rankEcoBoards")
+    public ResponseEntity<?> rankEcoBoards(@PageableDefault(size = 5, sort = "likeCount", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
+    {
+        Page<Board> boardPage = boardService.rankBoards(Board.KindOfBoard.ECO_REVIEW,pageable);
+        List<Board> boards = boardPage.getContent();
+        List<BoardDto.RankResponse> response = boardMapper.boardToBoardRankListResponse(boards);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    /*추천 게시판*/
+    @GetMapping("/rankGreenBoards")
+    public ResponseEntity<?> rankGreenBoards(@PageableDefault(size = 5, sort = "likeCount", direction = Sort.Direction.DESC) Pageable pageable) //페이지 기본값
+    {
+        Page<Board> boardPage = boardService.rankBoards(Board.KindOfBoard.GREEN_ACTIVE,pageable);
         List<Board> boards = boardPage.getContent();
         List<BoardDto.RankResponse> response = boardMapper.boardToBoardRankListResponse(boards);
         return new ResponseEntity<>(response, HttpStatus.OK);

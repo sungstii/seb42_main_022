@@ -49,12 +49,12 @@ public class CommentService {
     }
 
     public void deleteComment(long commentId) {
-        Comment comment = findComment(commentId);
+//        Comment comment = findComment(commentId);
 
         commentRepository.deleteById(commentId);
-
-        Member member = memberService.findMember(comment.getMember().getMemberId()); //생성된 댓글을 작성한 회원을 찾는다
-        member.setCommentCount(member.getCommentCount() - 1); //해당 회원에 대한 댓글 작성 카운트 1 감소
+//레벨이 줄어들지 않게 해달라는 요청을 받음
+//        Member member = memberService.findMember(comment.getMember().getMemberId()); //생성된 댓글을 작성한 회원을 찾는다
+//        member.setCommentCount(member.getCommentCount() - 1); //해당 회원에 대한 댓글 작성 카운트 1 감소
     }
 
     public Page<Comment> findComments(int page, int size) {
