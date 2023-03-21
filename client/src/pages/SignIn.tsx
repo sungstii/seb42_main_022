@@ -4,7 +4,8 @@ import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { Formik } from "formik";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { object, string, ref } from "yup";
+import { object, string } from "yup";
+import setAuthorizationToken from "../utils/setAuthorizationToken";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -110,7 +111,7 @@ const SignIn = () => {
                   const ref = res.headers.authorization;
                   localStorage.setItem("token", token);
                   localStorage.setItem("ref", ref);
-                  axios.defaults.headers.common["Authorization"] = token;
+                  setAuthorizationToken(token);
                   alert("로그인이 완료되었습니다");
                   navigate("../");
                 })
