@@ -3,8 +3,8 @@ import styled from "styled-components";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { ErrorMessage, Formik } from "formik";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { object, string, number, date, InferType } from "yup";
+import { Link, useNavigate } from "react-router-dom";
+import { object, string, ref } from "yup";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -31,16 +31,16 @@ const LogoContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 `;
 const FormContainer = styled.div`
   width: 100%;
-  height: 600px;
+  height: 680px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border: 1px solid black;
+  /* border: 1px solid black; */
 `;
 const RadiusInput = styled.input`
   border-radius: 12px;
@@ -53,12 +53,16 @@ const ErrorMsg = styled.div`
   margin-top: 2px;
 `;
 const SignUpBtn = styled.button`
+  margin-top: 20px;
   color: white;
   font-size: 16px;
   background: #609966;
   border-radius: 12px;
   padding: 8px;
   border: none;
+`;
+const LogoLink = styled(Link)`
+  display: flex;
 `;
 
 interface FormModel {
@@ -73,6 +77,7 @@ interface FormModel {
    * 영문자와 숫자, !@#$%^&*()_+-=만 사용 가능합니다.
    */
   password: string;
+  passwordConfirm: string;
 }
 
 const signUpSchema = object({
@@ -92,6 +97,9 @@ const signUpSchema = object({
       /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z]{8,12}$/.test(val),
     )
     .required("비밀번호를 입력해주세요"),
+  passwordConfirm: string()
+    .oneOf([ref("password")], "비밀번호가 일치하지 않습니다.")
+    .required("비밀번호를 입력해주세요"),
 });
 
 const SignUp = () => {
@@ -100,14 +108,16 @@ const SignUp = () => {
     <InputContainer>
       <LeftContainer>
         <LogoContainer>
-          <LogoImg width="60px" height="60px" />
+          <LogoLink to="../">
+            <LogoImg width="60px" height="60px" />
+          </LogoLink>
         </LogoContainer>
         <FormContainer>
           <h1
             style={{
               fontSize: "30px",
               fontWeight: "700",
-              marginBottom: "32px",
+              marginBottom: "30px",
             }}
           >
             지금 Green Circle에 가입하세요.
@@ -118,10 +128,10 @@ const SignUp = () => {
               email: "",
               phone: "",
               password: "",
+              passwordConfirm: "",
             }}
             validationSchema={signUpSchema}
             onSubmit={(values) => {
-              alert(JSON.stringify(values));
               axios
                 .post("http://3.39.150.26:8080/members", values)
                 .then((res) => {
@@ -137,16 +147,18 @@ const SignUp = () => {
               <form
                 style={{
                   width: "50%",
-                  height: "60%",
+                  height: "70%",
                   display: "flex",
                   flexDirection: "column",
-                  justifyContent: "space-between",
+                  justifyContent: "space-around",
                   padding: "12px",
                 }}
                 onSubmit={handleSubmit}
               >
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label htmlFor="name">이름</label>
+                  <label style={{ fontSize: "15px" }} htmlFor="name">
+                    이름
+                  </label>
                   <RadiusInput
                     type="text"
                     id="name"
@@ -163,7 +175,9 @@ const SignUp = () => {
                   ) : null}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label htmlFor="email">이메일</label>
+                  <label style={{ fontSize: "15px" }} htmlFor="email">
+                    이메일
+                  </label>
                   <RadiusInput
                     type="email"
                     id="email"
@@ -180,7 +194,9 @@ const SignUp = () => {
                   ) : null}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label htmlFor="phone">전화번호</label>
+                  <label style={{ fontSize: "15px" }} htmlFor="phone">
+                    전화번호
+                  </label>
                   <RadiusInput
                     type="tel"
                     id="phone"
@@ -197,7 +213,9 @@ const SignUp = () => {
                   ) : null}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label htmlFor="password">비밀번호</label>
+                  <label style={{ fontSize: "15px" }} htmlFor="password">
+                    비밀번호
+                  </label>
                   <RadiusInput
                     type="password"
                     id="password"
@@ -213,13 +231,33 @@ const SignUp = () => {
                     </ErrorMsg>
                   ) : null}
                 </div>
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                  <label style={{ fontSize: "15px" }} htmlFor="passwordConfirm">
+                    비밀번호 확인
+                  </label>
+                  <RadiusInput
+                    type="password"
+                    id="passwordConfirm"
+                    placeholder="비밀번호를 입력해주세요."
+                    value={values.passwordConfirm}
+                    onChange={handleChange}
+                  />
+                  {touched.passwordConfirm && errors.passwordConfirm ? (
+                    <ErrorMsg
+                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
+                    >
+                      {errors.passwordConfirm}
+                    </ErrorMsg>
+                  ) : null}
+                </div>
                 <SignUpBtn type="submit">회원가입</SignUpBtn>
-                <span style={{ textAlign: "center" }}>
-                  이미회원이신가요?<a href="../signin">로그인</a>
-                </span>
               </form>
             )}
           </Formik>
+          <span style={{ textAlign: "center", marginTop: "20px" }}>
+            이미회원이신가요?&nbsp;&nbsp;&nbsp;
+            <a href="../signin">로그인</a>
+          </span>
         </FormContainer>
       </LeftContainer>
       <RightContainer>
