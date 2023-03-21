@@ -60,7 +60,7 @@ public class BoardService {
     public Page<Board> findBoards(Board.KindOfBoard kindOfBoard, SearchType searchType, String search_keyword, Pageable pageable) {
         // 검색어 없이 검색하면 게시글 페이지를 반환.
         if (search_keyword == null || search_keyword.isBlank()) {
-            return boardRepository.findAll(pageable);
+            return boardRepository.findAllByKindOfBoard(kindOfBoard, pageable);
         }
         // 항목에 따른 검색 - 조회
         switch (searchType) {

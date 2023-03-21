@@ -100,7 +100,7 @@ public class BoardController {
     @GetMapping("/free") //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어&page=&size
     public ResponseEntity<?> searchFreeBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
                                           @RequestParam(required = false) String searchValue,
-                                          @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
+                                          @PageableDefault(size = 100, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
     {
         boardService.nameAndLevelUpdate(); //작성자들의 레벨 및 이름 업데이트
         
@@ -114,7 +114,7 @@ public class BoardController {
     @GetMapping("/eco") //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어&page=&size
     public ResponseEntity<?> searchEcoBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
                                           @RequestParam(required = false) String searchValue,
-                                          @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
+                                          @PageableDefault(size = 100, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
     {
         boardService.nameAndLevelUpdate(); //작성자들의 레벨 및 이름 업데이트
 
@@ -128,7 +128,7 @@ public class BoardController {
     @GetMapping("/green") //부분검색 //http://localhost:8080/boards?searchType=CONTENTS&searchValue=검색어&page=&size
     public ResponseEntity<?> searchGreenBoards(@RequestParam(required = false) SearchType searchType,//required = false - 선택적 파라미터
                                           @RequestParam(required = false) String searchValue,
-                                          @PageableDefault(size = 30, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
+                                          @PageableDefault(size = 100, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) throws Exception //페이지 기본값
     {
         boardService.nameAndLevelUpdate(); //작성자들의 레벨 및 이름 업데이트
 
