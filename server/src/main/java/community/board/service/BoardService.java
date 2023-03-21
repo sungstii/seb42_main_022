@@ -60,7 +60,7 @@ public class BoardService {
     public Page<Board> findBoards(Board.KindOfBoard kindOfBoard, SearchType searchType, String search_keyword, Pageable pageable) {
         // 검색어 없이 검색하면 게시글 페이지를 반환.
         if (search_keyword == null || search_keyword.isBlank()) {
-            return boardRepository.findAll(pageable);
+            return boardRepository.findAllByKindOfBoard(kindOfBoard, pageable);
         }
         // 항목에 따른 검색 - 조회
         switch (searchType) {
@@ -73,8 +73,8 @@ public class BoardService {
 
     /* 추천 게시글 페이지 */
     @Transactional
-    public Page<Board> rankBoards(Pageable pageable){
-        Page<Board> boardPage = boardRepository.findAll(pageable);
+    public Page<Board> rankBoards(Board.KindOfBoard kindOfBoard , Pageable pageable){
+        Page<Board> boardPage = boardRepository.findAllByKindOfBoard(kindOfBoard, pageable);
 
         return boardPage;
     }
@@ -90,12 +90,13 @@ public class BoardService {
 
     /*게시글 삭제*/
     public void deleteBoard(Long boardId) {
-        Board board = findBoard(boardId);
+//        Board board = findBoard(boardId);
 
         boardRepository.deleteById(boardId);
 
-        Member member = memberService.findMember(board.getMember().getMemberId()); //생성된 게시글을 작성한 회원을 찾는다
-        member.setBoardCount(member.getBoardCount() - 1); //해당 회원에 대한 게시글 작성 카운트 1 감소
+        //레벨이 줄어들지 않게 해달라는 요청을 받음
+//        Member member = memberService.findMember(board.getMember().getMemberId()); //생성된 게시글을 작성한 회원을 찾는다
+//        member.setBoardCount(member.getBoardCount() - 1); //해당 회원에 대한 게시글 작성 카운트 1 감소
     }
 
     /*게시글 ID 찾기*/
