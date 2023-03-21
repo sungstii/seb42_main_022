@@ -65,7 +65,9 @@ public class SecurityConfiguration {
                                         //질문조회
                                         .antMatchers(HttpMethod.GET, "/boards/*").permitAll()
                                         //질문등록
-                                        .antMatchers(HttpMethod.POST, "/boards").hasRole("USER")
+                                        .antMatchers(HttpMethod.POST, "/boards/free").hasRole("USER")
+                                        .antMatchers(HttpMethod.POST, "/boards/eco").hasRole("USER")
+                                        .antMatchers(HttpMethod.POST, "/boards/green").hasRole("USER")
                                         //질문 전체 삭제
                                         .antMatchers(HttpMethod.DELETE, "/boards").hasRole("ADMIN")
                                         //질문 추천/ 비추천 / 수정 /삭제
