@@ -21,15 +21,17 @@ spring:
       detection-strategy: annotated
   profiles:
     include: api-key   #key가 저장된 yml 연동
+
 mail:
   address:
     admin: admin@gmail.com
+
 jwt:
-  secret-key: adsadsadasdasdasdasdasdasd123213123123123123####
+  secret-key: ENC(QTKjempCn+a9nX+/g7yPL4cjydlx3H++BoqZvdD8hnQbs2A7jwmhG48/6S179LF5XSxEkLNakdwsXbcJtg5/Uw==)
   access-token-expiration-minutes: 10
   refresh-token-expiration-minutes: 420
 
-cloud:
+cloud: # AWS 계정 설정
   aws:
     region:
       static: ap-northeast-2
@@ -39,6 +41,15 @@ cloud:
         secret-key: ENC(PtaZU3cqX2thf4/AeCsoMF+XCJRo3WR8q3U1iGexhAqLXaFIQ5JKn8CKkO3uRyKipF9cb/Qy4W8=)
     stack:
       auto: false
+
+naver:  #naver API 설정
+  url:
+    search:
+      news: https://openapi.naver.com/v1/search/news.json   #뉴스검색
+      image: https://openapi.naver.com/v1/search/image    #이미지검색
+  client:
+    id: ENC(liCAjIhIST7kFAUK4qcXCF5Kdc3WwDw7fcNRUtv1CLM=)
+    secret: ENC(rAkKtet+r7L3KfChwPK5m8NuysjKYVpC)
 
 jasypt: #패스워드 암호화/복호화 키
   encryptor:

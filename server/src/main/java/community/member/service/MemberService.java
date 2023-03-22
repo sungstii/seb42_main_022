@@ -2,8 +2,10 @@ package community.member.service;
 
 import community.auth.jwt.JwtTokenizer;
 import community.auth.utils.CustomAuthorityUtils;
+import community.board.service.BoardService;
 import community.exception.BusinessLogicException;
 import community.exception.ExceptionCode;
+import community.like.service.BoardLikeService;
 import community.member.entity.Level;
 import community.member.entity.Member;
 import community.member.repository.MemberRepository;
@@ -40,6 +42,8 @@ public class MemberService {
         List<String> roles=authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
         Member savedMember = memberRepository.save(member);
+
+        savedMember.setPoint(10000);
 
         // 레벨관련 로직
         Level level = new Level(); // 회원이 생성되면 레벨테이블을 만든다.

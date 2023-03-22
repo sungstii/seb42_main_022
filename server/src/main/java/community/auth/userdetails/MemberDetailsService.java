@@ -35,7 +35,8 @@ public class MemberDetailsService implements UserDetailsService { // 계정정�
 
         return new MemberDetails(findMember);
     }
-
+    
+    /*멤버 정보를 세팅해주는 부분*/
     private final class MemberDetails extends Member implements UserDetails {
 
         MemberDetails(Member member) {
@@ -43,6 +44,8 @@ public class MemberDetailsService implements UserDetailsService { // 계정정�
             setEmail(member.getEmail());
             setPassword(member.getPassword());
             setRoles(member.getRoles());
+            setName(member.getName());
+            setLevel(member.getLevel());
         }
 
         @Override

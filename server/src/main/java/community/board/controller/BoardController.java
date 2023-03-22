@@ -5,8 +5,6 @@ import community.board.dto.UploadDto;
 import community.board.entity.Board;
 import community.board.entity.UploadFile;
 import community.board.service.S3Service;
-import community.member.entity.Level;
-import community.member.mapper.MemberMapper;
 import community.member.service.MemberService;
 import community.type.SearchType;
 import community.board.mapper.BoardMapper;
@@ -27,7 +25,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -174,10 +171,13 @@ public class BoardController {
     }
 
     /*단건조회*/
-    @GetMapping("/{board-id}")
-    public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId) throws Exception {
+    @GetMapping("/{board-id}/{member-id}")
+    public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId,
+                                          @PathVariable("member-id") @Positive long memberId) throws Exception {
         boardService.updateViewCount(boardId); // 조회수 증가
         Board board = boardService.findBoard(boardId);
+
+        boardLikeService.BoardLikeStatus(memberId, board); //게시글에대한 좋아요상태 업데이트
 
         List<UploadFile> uploadFiles = s3Service.uploadFiles(null, board); // aws s3업로드
         List<UploadDto> uploadResponse = boardMapper.uploadFilesToUploadDtoList(uploadFiles); //업로드 dto생성

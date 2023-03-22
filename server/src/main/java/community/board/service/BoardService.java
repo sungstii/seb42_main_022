@@ -1,7 +1,9 @@
 package community.board.service;
 
 import community.board.entity.Board;
+import community.like.repository.BoardLikeRepository;
 import community.member.entity.Member;
+import community.member.repository.MemberRepository;
 import community.member.service.LevelService;
 import community.member.service.MemberService;
 import community.type.SearchType;
@@ -24,6 +26,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final MemberService memberService;
     private final LevelService levelService;
+    private final MemberRepository memberRepository;
 
     /*게시글 등록*/
     public Board createBoard(Board board, Board.KindOfBoard kindOfBoard) {

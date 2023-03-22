@@ -31,7 +31,6 @@ public class Board extends AuditingFields {
 
     @Column(nullable = false)
     private String contents;
-
     @Column(nullable = false)
     private int likeCount;
     private String boardCreator; //게시글 작성자
