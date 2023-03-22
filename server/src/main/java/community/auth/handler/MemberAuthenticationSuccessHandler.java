@@ -32,7 +32,7 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
         loginResponse.put("memberId", member.getMemberId());
         loginResponse.put("email", member.getEmail());
         loginResponse.put("roles", member.getRoles());
-        loginResponse.put("level", member.getLevel().getLevel());
+        loginResponse.put("level", member.getLevel().getLevel()); //추가
         loginResponse.put("name", member.getName());
 
 
