@@ -1,17 +1,17 @@
-import React from 'react';
+import React from "react";
 import styled from "styled-components";
 import user from "../icon/user.svg";
-import picture from "../icon/picture.png"
-import search from "../icon/search.svg"
-import saving from "../icon/savings.svg"
-import nature from "../icon/nature.svg"
-import more from "../icon/expand_more.svg"
-import less from "../icon/expand_less.svg"
+import picture from "../icon/picture.png";
+import search from "../icon/search.svg";
+import saving from "../icon/savings.svg";
+import nature from "../icon/nature.svg";
+import more from "../icon/expand_more.svg";
+import less from "../icon/expand_less.svg";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import apiFetch from "../utils/useFetch";
-import { useQuery } from 'react-query';
-import { atom, useRecoilState } from 'recoil';
+import { useQuery } from "react-query";
+import { atom, useRecoilState } from "recoil";
 import { postListState } from "../recoil/state";
 import { areaState } from "../recoil/state";
 import { tokenState } from "../recoil/state";
@@ -45,7 +45,7 @@ const Aside = styled.div`
 `;
 const Posting = styled.div`
   display: flex;
-  background-color: rgb(246,246,246);
+  background-color: rgb(246, 246, 246);
   border-radius: 15px;
   padding: 15px;
   margin: 20px 0px 20px 0px;
@@ -57,7 +57,7 @@ const Usericon = styled.img`
   height: 50px;
 `;
 const PostButton = styled.button`
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   border-radius: 15px;
   font-size: 15px;
   color: #939393;
@@ -71,7 +71,7 @@ const PostButton = styled.button`
 const PostSection = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: rgb(246,246,246);
+  background-color: rgb(246, 246, 246);
   border-radius: 15px;
   padding: 15px;
   width: 600px;
@@ -91,7 +91,7 @@ const SearchBar = styled.div`
   position: relative;
   font-weight: bold;
   font-size: 18px;
-  background-color: rgb(246,246,246);
+  background-color: rgb(246, 246, 246);
   border-radius: 15px;
   padding: 15px;
   width: 300px;
@@ -101,7 +101,7 @@ const SearchBar = styled.div`
 const SearchOption = styled.div`
   display: flex;
   justify-content: center;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   border-radius: 15px;
   padding: 2px 0px 0px 10px;
   width: 120px;
@@ -110,8 +110,8 @@ const SearchOption = styled.div`
   cursor: pointer;
 `;
 const SearchInput = styled.input`
-  background-color: #EBEBEB;
-  border-width: 0px; 
+  background-color: #ebebeb;
+  border-width: 0px;
   border-radius: 15px;
   padding: 5px 10px 5px 10px;
   width: 100%;
@@ -129,7 +129,7 @@ const DustBar = styled.div`
   position: relative;
   /* top: 130px; */
   /* top: 150px; */
-  background-color: rgb(246,246,246);
+  background-color: rgb(246, 246, 246);
   border-radius: 15px;
   padding: 15px;
   width: 300px;
@@ -196,30 +196,78 @@ const DustGraph = styled.div`
 `;
 const Line = styled.div`
   padding: 0px 0px 20px 0px;
-  
 `;
 const Row = styled.div`
   /* padding: 0px 30px 0px 0px; */
 `;
-const Row4 = styled.div<{pm25:number, pm10:number, o3:number, no2:number, co:number, so2:number}>`
+const Row4 = styled.div<{
+  pm25: number;
+  pm10: number;
+  o3: number;
+  no2: number;
+  co: number;
+  so2: number;
+}>`
   /* padding: 0px 30px 0px 0px; */
-  .a{
-    color: ${(props) => props.pm25<50 ? "blue" : (props.pm25<100 ? "green" : (props.pm25<150 ? "orange" : "red"))};
+  .a {
+    color: ${(props) =>
+      props.pm25 < 50
+        ? "blue"
+        : props.pm25 < 100
+        ? "green"
+        : props.pm25 < 150
+        ? "orange"
+        : "red"};
   }
-  .b{
-    color: ${(props) => props.pm10<30 ? "blue" : (props.pm10<80 ? "green" : (props.pm10<150 ? "orange" : "red"))};
+  .b {
+    color: ${(props) =>
+      props.pm10 < 30
+        ? "blue"
+        : props.pm10 < 80
+        ? "green"
+        : props.pm10 < 150
+        ? "orange"
+        : "red"};
   }
-  .c{
-    color: ${(props) => props.o3<50 ? "blue" : (props.o3<100 ? "green" : (props.o3<150 ? "orange" : "red"))};
+  .c {
+    color: ${(props) =>
+      props.o3 < 50
+        ? "blue"
+        : props.o3 < 100
+        ? "green"
+        : props.o3 < 150
+        ? "orange"
+        : "red"};
   }
-  .d{
-    color: ${(props) => props.no2<50 ? "blue" : (props.no2<100 ? "green" : (props.no2<150 ? "orange" : "red"))};
+  .d {
+    color: ${(props) =>
+      props.no2 < 50
+        ? "blue"
+        : props.no2 < 100
+        ? "green"
+        : props.no2 < 150
+        ? "orange"
+        : "red"};
   }
-  .e{
-    color: ${(props) => props.co<50 ? "blue" : (props.co<100 ? "green" : (props.co<150 ? "orange" : "red"))};
+  .e {
+    color: ${(props) =>
+      props.co < 50
+        ? "blue"
+        : props.co < 100
+        ? "green"
+        : props.co < 150
+        ? "orange"
+        : "red"};
   }
-  .f{
-    color: ${(props) => props.so2<50 ? "blue" : (props.so2<100 ? "green" : (props.so2<150 ? "orange" : "red"))};
+  .f {
+    color: ${(props) =>
+      props.so2 < 50
+        ? "blue"
+        : props.so2 < 100
+        ? "green"
+        : props.so2 < 150
+        ? "orange"
+        : "red"};
   }
 `;
 const DustDropdown = styled.div`
@@ -233,7 +281,7 @@ const DustDropdown = styled.div`
 const DropdownHeader = styled.div`
   display: flex;
   justify-content: center;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   border-radius: 15px;
   padding: 0px 0px 0px 10px;
   width: 80px;
@@ -247,7 +295,7 @@ const DropdownMenu = styled.ul`
   font-size: 15px;
   margin: 0;
   padding: 0;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   border-radius: 0px 0px 15px 15px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   position: absolute;
@@ -259,7 +307,6 @@ const DropdownMenu = styled.ul`
   li {
     padding: 8px 16px;
     cursor: pointer;
-    
   }
 `;
 const SearchdownMenu = styled.ul`
@@ -267,7 +314,7 @@ const SearchdownMenu = styled.ul`
   font-size: 15px;
   margin: 0;
   padding: 0;
-  background-color: #EBEBEB;
+  background-color: #ebebeb;
   border-radius: 0px 0px 15px 15px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   position: absolute;
@@ -295,7 +342,9 @@ export interface Item {
 
 function Community() {
   const [itemvalue, setItemvalue] = useRecoilState(areaState); // 지역 상태 (서울, 부산 등)
-  const { data, loading, error } = apiFetch(`https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`);
+  const { data, loading, error } = apiFetch(
+    `https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`,
+  );
   // const { data: dusts, isLoading: dustLoading, error } = useWeatherInfo();
   const { data: posts, isLoading, isError } = usePosts();
   const [pm25, setPm25] = useState(0);
@@ -324,7 +373,6 @@ function Community() {
   const [loginModal, setLoginModal] = useState(false);
 
   if (posts) setPostList(posts); // 서버에서 데이터 가져왔으면 리코일 상태에 넣기
-  
 
   const handleItemClick = (item: Item) => {
     setSelectedItem(item);
@@ -339,15 +387,51 @@ function Community() {
     // console.log(isSearchbox)
   };
   const AQIhandle = () => {
-    pm25<50 ? setPm25info('좋음') : (pm25<100 ? setPm25info('보통') : (pm25<150 ? setPm25info('나쁨') : setPm25info('매우나쁨')))
-    pm10<30 ? setPm10info('좋음') : (pm10<80 ? setPm10info('보통') : (pm10<150 ? setPm10info('나쁨') : setPm10info('매우나쁨')))
-    o3<50 ? setO3info('좋음') : (o3<100 ? setO3info('보통') : (o3<100 ? setO3info('나쁨') : setO3info('매우나쁨')))
-    no2<50 ? setNo2info('좋음') : (no2<100 ? setNo2info('보통') : (no2<100 ? setNo2info('나쁨') : setNo2info('매우나쁨')))
-    co<50 ? setCoinfo('좋음') : (co<100 ? setCoinfo('보통') : (co<100 ? setCoinfo('나쁨') : setCoinfo('매우나쁨')))
-    so2<50 ? setSo2info('좋음') : (so2<100 ? setSo2info('보통') : (so2<100 ? setSo2info('나쁨') : setSo2info('매우나쁨')))
+    pm25 < 50
+      ? setPm25info("좋음")
+      : pm25 < 100
+      ? setPm25info("보통")
+      : pm25 < 150
+      ? setPm25info("나쁨")
+      : setPm25info("매우나쁨");
+    pm10 < 30
+      ? setPm10info("좋음")
+      : pm10 < 80
+      ? setPm10info("보통")
+      : pm10 < 150
+      ? setPm10info("나쁨")
+      : setPm10info("매우나쁨");
+    o3 < 50
+      ? setO3info("좋음")
+      : o3 < 100
+      ? setO3info("보통")
+      : o3 < 100
+      ? setO3info("나쁨")
+      : setO3info("매우나쁨");
+    no2 < 50
+      ? setNo2info("좋음")
+      : no2 < 100
+      ? setNo2info("보통")
+      : no2 < 100
+      ? setNo2info("나쁨")
+      : setNo2info("매우나쁨");
+    co < 50
+      ? setCoinfo("좋음")
+      : co < 100
+      ? setCoinfo("보통")
+      : co < 100
+      ? setCoinfo("나쁨")
+      : setCoinfo("매우나쁨");
+    so2 < 50
+      ? setSo2info("좋음")
+      : so2 < 100
+      ? setSo2info("보통")
+      : so2 < 100
+      ? setSo2info("나쁨")
+      : setSo2info("매우나쁨");
   };
 
-  const items: Item[]  = [
+  const items: Item[] = [
     { id: 1, label: "서울", value: "seoul" },
     { id: 2, label: "대구", value: "daegu" },
     { id: 3, label: "성남", value: "Seongnam" },
@@ -356,9 +440,9 @@ function Community() {
     { id: 6, label: "고양", value: "Goyang" },
     { id: 7, label: "부천", value: "bucheon" },
     { id: 8, label: "인천", value: "Incheon" },
-    { id: 9, label: "부산", value: "busan"},
+    { id: 9, label: "부산", value: "busan" },
   ];
-  const searchbox: Item[]  = [
+  const searchbox: Item[] = [
     { id: 1, label: "제목", value: "TITLE" },
     { id: 2, label: "내용", value: "CONTENTS" },
   ];
@@ -429,7 +513,7 @@ function Community() {
   };
 
   const handleConfirm = () => {
-    alert('게시물이 등록되었습니다!');
+    alert("게시물이 등록되었습니다!");
     handleClose();
   };
 
@@ -479,8 +563,8 @@ function Community() {
   
   return (
     <>
-      {isLoading && 'Error!'}
-      {isError && 'Loading...'}
+      {isLoading && "Error!"}
+      {isError && "Loading..."}
       <MainContainer>
         <SectionContainer>
           <Posting>
@@ -497,8 +581,8 @@ function Community() {
               />
             )}
           </Posting>
-          {postList.map((el, index)=>{
-            return(
+          {postList.map((el, index) => {
+            return (
               <PostSection key={index}>
                 <Postuser>
                   <Usericon src={user} alt='user'/>
@@ -515,47 +599,59 @@ function Community() {
           <SidebarContainer>
           <SearchBar>
             <SearchOption onClick={() => setIsSearchOpen(!isSearchOpen)}>
-              {isSearchbox ? isSearchbox.label : "제목"}{isSearchOpen === false ? <ExpandButton src={more} /> : <ExpandButton src={less}/>}
+              {isSearchbox ? isSearchbox.label : "제목"}
+              {isSearchOpen === false ? (
+                <ExpandButton src={more} />
+              ) : (
+                <ExpandButton src={less} />
+              )}
             </SearchOption>
             {isSearchOpen && (
               <SearchdownMenu>
-                {searchbox.map(({id, label, value}) => (
-                  <li key={id} onClick={() => searchbarClick({id, label, value})}>
+                {searchbox.map(({ id, label, value }) => (
+                  <li
+                    key={id}
+                    onClick={() => searchbarClick({ id, label, value })}
+                  >
                     {label}
                   </li>
                 ))}
               </SearchdownMenu>
             )}
 
-            <SearchInput 
-            placeholder='검색'
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
+            <SearchInput
+              placeholder="검색"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
-            <SearchButton src={search} onClick={() => postsearch()}/>
+            <SearchButton src={search} onClick={() => postsearch()} />
           </SearchBar>
           {/* {error && 'Error!'}
           {loading && 'Loading...'} */}
           {data && (
             <DustBar>
-              
               <DustDropdown>
                 <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
-                  {selectedItem ? selectedItem.label : "서울"}{isOpen === false ? <img src={more}/> : <img src={less}/>}
+                  {selectedItem ? selectedItem.label : "서울"}
+                  {isOpen === false ? <img src={more} /> : <img src={less} />}
                 </DropdownHeader>
                 {isOpen && (
                   <DropdownMenu>
-                    {items.map(({id, label, value}) => (
-                      <li key={id} onClick={() => handleItemClick({id, label, value})}>
+                    {items.map(({ id, label, value }) => (
+                      <li
+                        key={id}
+                        onClick={() => handleItemClick({ id, label, value })}
+                      >
                         {label}
                       </li>
                     ))}
                   </DropdownMenu>
-                )}<DustTitle>의 대기질 정보(AQI)</DustTitle>
+                )}
+                <DustTitle>의 대기질 정보(AQI)</DustTitle>
               </DustDropdown>
-              
+
               <DustGraph>
-                <Row style={{ fontWeight: 'bold'}}>
+                <Row style={{ fontWeight: "bold" }}>
                   <Line>초미세먼지</Line>
                   <Line>미세먼지</Line>
                   <Line>오존</Line>
@@ -563,7 +659,7 @@ function Community() {
                   <Line>일산화탄소</Line>
                   <Line>아황산가스</Line>
                 </Row>
-                <Row style={{ color: 'gray'}}>
+                <Row style={{ color: "gray" }}>
                   <Line>PM-2.5</Line>
                   <Line>PM-10</Line>
                   <Line>O₃</Line>
@@ -579,20 +675,27 @@ function Community() {
                   <Line>{co}ppm</Line>
                   <Line>{so2}ppm</Line>
                 </Row>
-                <Row4 pm25={pm25} pm10={pm10} o3={o3} no2={no2} co={co} so2={so2}>
-                  <Line className='a'>{pm25info}</Line>
-                  <Line className='b'>{pm10info}</Line>
-                  <Line className='c'>{o3info}</Line>
-                  <Line className='d'>{no2info}</Line>
-                  <Line className='e'>{coinfo}</Line>
-                  <Line className='f'>{so2info}</Line>
+                <Row4
+                  pm25={pm25}
+                  pm10={pm10}
+                  o3={o3}
+                  no2={no2}
+                  co={co}
+                  so2={so2}
+                >
+                  <Line className="a">{pm25info}</Line>
+                  <Line className="b">{pm10info}</Line>
+                  <Line className="c">{o3info}</Line>
+                  <Line className="d">{no2info}</Line>
+                  <Line className="e">{coinfo}</Line>
+                  <Line className="f">{so2info}</Line>
                 </Row4>
               </DustGraph>
             </DustBar>
           )}
           <MileageBar>
             <MileageInfo>
-            <MileageIcon src={saving}/>
+              <MileageIcon src={saving} />
               <MileageTitle>나의 마일리지</MileageTitle>
               <div>300P</div>
             </MileageInfo>

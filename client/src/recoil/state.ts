@@ -9,8 +9,8 @@ interface postList {
   }
 
 export const postListState = atom<postList[]>({
-    key: 'postListState',
-    default: [],
+  key: "postListState",
+  default: [],
 });
 
 export const areaState = atom<string>({
