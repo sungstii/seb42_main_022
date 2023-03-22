@@ -51,6 +51,7 @@ public class MemberService {
         level.setUserName(savedMember.getName()); // 회원이름 연결
         member.setLevel(level); // 레벨 - 회원 테이블 연결
 
+
         return savedMember;
     }
 
