@@ -14,10 +14,11 @@ public class NaverSearchController {
     private final NaverClient naverClient;
     @GetMapping
     public ResponseEntity searchNews(@RequestParam(required = false, defaultValue = "환경") String query,
+                                     @RequestParam(required = false, defaultValue = "1") int start,
                                      @RequestParam(required = false, defaultValue = "20") int display,
                                      @RequestParam(required = false, defaultValue = "sim") String sort){
 
-         SearchNewsDto.Response response = naverClient.searchQuerySet(query, display, sort);
+         SearchNewsDto.Response response = naverClient.searchQuerySet(query, start, display, sort);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
