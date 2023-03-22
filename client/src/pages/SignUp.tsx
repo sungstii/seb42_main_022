@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
-import { ErrorMessage, Formik } from "formik";
+import { Formik } from "formik";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string, ref } from "yup";
@@ -34,6 +34,7 @@ const LogoContainer = styled.div`
   /* border: 1px solid black; */
 `;
 const FormContainer = styled.div`
+  margin-top: 20px;
   width: 100%;
   height: 680px;
   display: flex;
@@ -117,7 +118,7 @@ const SignUp = () => {
             style={{
               fontSize: "30px",
               fontWeight: "700",
-              marginBottom: "30px",
+              marginBottom: "20px",
             }}
           >
             지금 Green Circle에 가입하세요.
