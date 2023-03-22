@@ -39,6 +39,10 @@ cloud:
         secret-key: ENC(PtaZU3cqX2thf4/AeCsoMF+XCJRo3WR8q3U1iGexhAqLXaFIQ5JKn8CKkO3uRyKipF9cb/Qy4W8=)
     stack:
       auto: false
+
+jasypt: #패스워드 암호화/복호화 키
+  encryptor:
+    password: ${{secrets.SECRET_KEY}} # 깃허브액션에 등록된 환경변수 사용
      
       
 #    url: ENC(FeGZdEpU6a8/IVw2kK7bKBtgi5Th5Fn39TOcL1+04lM+sAAF10o6T3s2zlmpEszGD56Ivb3ppuJmTbaT+05G/VGwT3kMl1NIkfUWWWqdSO8nQ5LgUHXhlUl43IrNlpHCy7wUEjapEZU0wKOxxOtQ+S8fuhDXWs/3)
