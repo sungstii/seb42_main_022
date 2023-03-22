@@ -102,7 +102,7 @@ const signUpSchema = object({
     .required("비밀번호를 입력해주세요"),
 });
 
-const SignUp = () => {
+const SignIn = () => {
   const navigate = useNavigate();
   return (
     <InputContainer>
@@ -120,7 +120,7 @@ const SignUp = () => {
               marginBottom: "30px",
             }}
           >
-            지금 Green Circle에 가입하세요.
+            로그인
           </h1>
           <Formik<FormModel>
             initialValues={{
@@ -156,25 +156,6 @@ const SignUp = () => {
                 onSubmit={handleSubmit}
               >
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="name">
-                    이름
-                  </label>
-                  <RadiusInput
-                    type="text"
-                    id="name"
-                    placeholder="이름을 입력해주세요."
-                    value={values.name}
-                    onChange={handleChange}
-                  />
-                  {touched.name && errors.name ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.name}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
                   <label style={{ fontSize: "15px" }} htmlFor="email">
                     이메일
                   </label>
@@ -194,25 +175,6 @@ const SignUp = () => {
                   ) : null}
                 </div>
                 <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="phone">
-                    전화번호
-                  </label>
-                  <RadiusInput
-                    type="tel"
-                    id="phone"
-                    placeholder="전화번호를 입력해주세요."
-                    value={values.phone}
-                    onChange={handleChange}
-                  />
-                  {touched.phone && errors.phone ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.phone}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
                   <label style={{ fontSize: "15px" }} htmlFor="password">
                     비밀번호
                   </label>
@@ -228,25 +190,6 @@ const SignUp = () => {
                       style={{ color: "red", fontSize: "12px", padding: "2px" }}
                     >
                       {errors.password}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="passwordConfirm">
-                    비밀번호 확인
-                  </label>
-                  <RadiusInput
-                    type="password"
-                    id="passwordConfirm"
-                    placeholder="비밀번호를 입력해주세요."
-                    value={values.passwordConfirm}
-                    onChange={handleChange}
-                  />
-                  {touched.passwordConfirm && errors.passwordConfirm ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.passwordConfirm}
                     </ErrorMsg>
                   ) : null}
                 </div>
@@ -271,4 +214,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default SignIn;
