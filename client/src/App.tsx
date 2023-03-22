@@ -8,10 +8,13 @@ import GreenAct from "./pages/GreenAct";
 import News from "./pages/News";
 import GreenCal from "./pages/GreenCal";
 import Ranking from "./pages/Ranking";
-import SignUp from "./pages/SignUp";
-import { Reset } from "styled-reset";
 import { RecoilRoot } from "recoil";
+import Post from "./pages/Post";
+import MyPage from "./pages/MyPage";
+import MypageEdit from "./pages/MypageEdit";
+import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
+import { Reset } from "styled-reset";
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
             <Route path="/news" element={<News />} />
             <Route path="/greencal" element={<GreenCal />} />
             <Route path="/ranking" element={<Ranking />} />
+            <Route path="/:id" element={<Post />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/mypageedit" element={<MypageEdit />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/signin" element={<SignIn />} />
           </Routes>
