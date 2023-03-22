@@ -45,18 +45,16 @@ public class NaverClient {
                 httpEntity,
                 responseType
         );
-
         return responseEntity.getBody();
     }
 
-    public SearchNewsDto.Response searchQuerySet(String query, int display, String sort){
+    public SearchNewsDto.Response searchQuerySet(String query, int start, int display, String sort){
         SearchNewsDto.Post post = new SearchNewsDto.Post();
         post.setQuery(query);
+        post.setStart(start);
         post.setDisplay(display);
         post.setSort(sort);
 
         return searchNews(post);
     }
-
-    
 }
