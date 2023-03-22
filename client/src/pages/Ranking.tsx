@@ -1,11 +1,102 @@
 import React from "react";
+import styled from "styled-components";
+import treeIcon from "../image/treeIcon.png";
+import { useRanking } from "../react-query/useRanking"
 
-const Ranking = () => {
+const MainContainer = styled.div`
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  /* flex-direction: column; */
+  padding: 30px 10px 10px 10px;
+`;
+const SectionContainer = styled.div`
+  flex-direction: column;
+  justify-content: center;
+  margin: 50px 0px 0px 0px;
+`;
+const RankContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  width: 800px;
+  height: 100%;
+  padding: 0px 50px 20px 50px;
+`;
+const Rank = styled.div`
+  display: flex;
+  flex-direction: row;
+  background-color: #F2FFED;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  /* width: 80%; */
+  height: 50px;
+  padding: 20px 50px 20px 50px;
+  margin: 0px 0px 30px 0px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+`;
+const RankIndex = styled.div`
+  font-size: 40px;
+  font-weight: bold;
+  margin: 0px 40px 0px 40px;
+`;
+const RankName = styled.div`
+  font-size: 40px;
+  width: 140px;
+  font-weight: bold;
+  margin: 0px 80px 0px 50px;
+`;
+const RankTreeCount = styled.div`
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0px 40px 0px 80px;
+`;
+const RankIcon = styled.img`
+  width: 50px;
+  margin: 0px 30px 0px 30px;
+`;
+const TreeKingIcon = styled.img`
+  width: 70px;
+  margin: 0px 30px 0px 30px;
+`;
+const Title = styled.div`
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0px 0px 30px 0px;
+`;
+const SubTitle = styled.div`
+  font-size: 60px;
+  text-align: center;
+`;
+function Ranking() {
+  const { data: ranking, isLoading, isError } = useRanking();
   return (
     <>
-      <div>여긴 랭킹페이지입니다.</div>
+      {isLoading && "Error!"}
+      {isError && "Loading..."}
+      <MainContainer>
+        <SectionContainer>
+          <Title>현재 나무킹은 {ranking && (ranking[0].name)}님입니다.</Title>
+          <SubTitle><TreeKingIcon src={treeIcon}/>Tree Ranking<TreeKingIcon src={treeIcon}/></SubTitle>
+          <RankContainer>
+            {ranking?.map((el, index) => {
+              return (
+                <Rank key={index}>
+                  <RankIndex>{index+1}</RankIndex>
+                  <RankName>{el.name}</RankName>
+                  <RankTreeCount>{el.tree_count}&nbsp;그루</RankTreeCount>
+                  <RankIcon src={treeIcon}/>
+                </Rank>
+              )
+            })}
+          </RankContainer>
+        </SectionContainer>
+      </MainContainer>
     </>
   );
-};
+}
 
 export default Ranking;
