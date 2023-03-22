@@ -43,6 +43,7 @@ public class Member{
 
     @Column
     String password;
+    private String likeStatus; // 좋아요 눌렀는지 여부
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private int point;
