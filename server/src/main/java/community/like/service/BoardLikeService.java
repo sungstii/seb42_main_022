@@ -9,8 +9,10 @@ import community.member.repository.MemberRepository;
 import community.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class BoardLikeService {
     private final BoardLikeRepository boardLikeRepository;
@@ -50,19 +52,19 @@ public class BoardLikeService {
         return boardService.findBoard(boardId);
     }
 
-    /*해당 회원에 대한 해당게시판 좋아요 여부 세팅하기*/
-    public void BoardLikeStatus(long memberId, Board board) {
-        Member member = memberService.findMember(memberId); //멤버 정보찾기
-        
-        BoardLike boardLike = boardLikeRepository.findByMemberAndBoard(member, board);
-        
-        if (boardLike == null) { //좋아요를 누르지 않은 상태라면 테이블 생성해주고 상태 세팅
-            boardLike = new BoardLike();
-            boardLike.setBLikeStatus(false);
-            boardLikeRepository.save(boardLike);
-            member.setLikeStatus("FALSE");
-        } else if (boardLike.getBLikeStatus() == true) { //좋아요를 누른 상태라면 좋아요상태 TRUE
-            member.setLikeStatus("TURE");
-        }else member.setLikeStatus("FALSE"); // 좋아요를 취소한 상태라면 FALSE
-    }
+    /*해당 회원에 대한 해당게시판 좋아요 여부 세팅하기*/ // 문제는 게시글 작성자 상태만 뜬다는것 /사용하지 않기로!
+//    public void BoardLikeStatus(long memberId, Board board) {
+//        Member member = memberService.findMember(memberId); //멤버 정보찾기
+//
+//        BoardLike boardLike = boardLikeRepository.findByMemberAndBoard(member, board);
+//
+//        if (boardLike == null) { //좋아요를 누르지 않은 상태라면 테이블 생성해주고 상태 세팅
+//            boardLike = new BoardLike();
+//            boardLike.setBLikeStatus(false);
+//            boardLikeRepository.save(boardLike);
+//             member.setLikeStatus("FALSE");
+//        } else if (boardLike.getBLikeStatus()) { //좋아요를 누른 상태라면 좋아요상태 TRUE
+//            member.setLikeStatus("TURE");
+//        }else member.setLikeStatus("FALSE"); // 좋아요를 취소한 상태라면 FALSE
+//    }
 }

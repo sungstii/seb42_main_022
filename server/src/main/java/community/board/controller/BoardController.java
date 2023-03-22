@@ -171,13 +171,12 @@ public class BoardController {
     }
 
     /*단건조회*/
-    @GetMapping("/{board-id}/{member-id}")
-    public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId,
-                                          @PathVariable("member-id") @Positive long memberId) throws Exception {
+    @GetMapping("/{board-id}")
+    public ResponseEntity<?> getBoardById(@PathVariable("board-id") @Positive long boardId) throws Exception {
         boardService.updateViewCount(boardId); // 조회수 증가
         Board board = boardService.findBoard(boardId);
 
-        boardLikeService.BoardLikeStatus(memberId, board); //게시글에대한 좋아요상태 업데이트
+//        boardLikeService.BoardLikeStatus(memberId, board); //게시글에대한 좋아요상태 업데이트
 
         List<UploadFile> uploadFiles = s3Service.uploadFiles(null, board); // aws s3업로드
         List<UploadDto> uploadResponse = boardMapper.uploadFilesToUploadDtoList(uploadFiles); //업로드 dto생성

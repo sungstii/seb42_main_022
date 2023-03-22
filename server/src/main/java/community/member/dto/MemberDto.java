@@ -61,7 +61,6 @@ public class MemberDto {
         private String email;
         private String name;
         private String phone;
-        private String likeStatus; // 좋아요 눌렀는지 여부
         private String point;
         private String treeCount;
 //        private String boardCount;
