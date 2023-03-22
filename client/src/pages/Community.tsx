@@ -14,9 +14,13 @@ import { useQuery } from "react-query";
 import { atom, useRecoilState } from "recoil";
 import { postListState } from "../recoil/state";
 import { areaState } from "../recoil/state";
-import { usePosts } from "../react-query/usePosts";
-import { useWeatherInfo } from "../react-query/useWeatherInfo";
-import PostModal from "../components/PostModal";
+import { tokenState } from "../recoil/state";
+import { refreshState } from "../recoil/state";
+import { myIdState } from "../recoil/state";
+import { usePosts } from "../react-query/usePosts"
+import { useWeatherInfo } from "../react-query/useWeatherInfo"
+import PostModal from '../components/PostModal';
+import LoginModal from "../components/LoginModal"
 
 const MainContainer = styled.div`
   display: flex;
@@ -32,6 +36,9 @@ const SectionContainer = styled.div`
 const AsideContainer = styled.div`
   flex-direction: column;
   margin: 20px 0px 20px 0px;
+`;
+const SidebarContainer = styled.div`
+    position: fixed;
 `;
 const Aside = styled.div`
   width: 300px;
@@ -81,7 +88,7 @@ const PostBody = styled.div`
 `;
 const SearchBar = styled.div`
   display: flex;
-  position: fixed;
+  position: relative;
   font-weight: bold;
   font-size: 18px;
   background-color: rgb(246, 246, 246);
@@ -119,8 +126,8 @@ const SearchButton = styled.img`
 
 const DustBar = styled.div`
   display: flex;
-  position: fixed;
-  top: 130px;
+  position: relative;
+  /* top: 130px; */
   /* top: 150px; */
   background-color: rgb(246, 246, 246);
   border-radius: 15px;
@@ -134,10 +141,10 @@ const DustBar = styled.div`
 `;
 const MileageBar = styled.div`
   display: flex;
-  position: fixed;
+  position: relative;
   flex-direction: column;
-  top: 480px;
-  background-color: rgb(246, 246, 246);
+  /* top: 480px; */
+  background-color: rgb(246,246,246);
   border-radius: 15px;
   padding: 20px 15px 15px 15px;
   width: 300px;
@@ -354,13 +361,16 @@ function Community() {
   const [no2info, setNo2info] = useState("");
   const [coinfo, setCoinfo] = useState("");
   const [so2info, setSo2info] = useState("");
-  const [logintoken, setLogintoken] = useState(""); // 회원 권한
+  const [logintoken, setLogintoken] = useRecoilState(tokenState); // 회원 권한
+  const [refresh, setRefreshtoken] = useRecoilState(refreshState);
+  const [memberId, setMemberId] = useRecoilState(myIdState);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 드롭다운 open
   const [isSearchbox, setIsSearchbox] = useState<Item | null>(null); // 검색 드롭다운 현재값 (label)
   const [searchValue, setSearchValue] = useState(""); // 검색 input 값
   const [elvalue, setElvalue] = useState("TITLE"); // 검색타입 상태 (제목, 내용)
   const [postList, setPostList] = useRecoilState(postListState); // recoil 상태 선언
   const [showModal, setShowModal] = useState(false);
+  const [loginModal, setLoginModal] = useState(false);
 
   if (posts) setPostList(posts); // 서버에서 데이터 가져왔으면 리코일 상태에 넣기
 
@@ -437,48 +447,66 @@ function Community() {
     { id: 2, label: "내용", value: "CONTENTS" },
   ];
 
-  const login = () => {
-    // 로그인 요청
-    axios
-      .post("http://3.39.150.26:8080/members/login", {
-        email: "jeong@gmail.com",
-        password: "qwer1234",
-      })
-      .then((response) => {
-        const token = response.headers.authorization;
-        const { data } = response;
-        console.log(data);
-        // console.log(token);
-        setLogintoken(token);
-      })
-      .catch((error) => console.log(error));
-  };
-  const membersearch = () => {
-    // 멤버 검색 요청
-    axios
-      .get("http://3.39.150.26:8080/members/2", {
-        headers: { Authorization: logintoken },
-      })
-      .then((response) => {
-        const { data } = response;
-        console.log(data);
-        console.log(response.headers.authorization);
-        // setLogintoken(token);
-      })
-      .catch((error) => console.log(error));
-  };
-  const postsearch = () => {
-    // 게시글 검색
-    axios
-      .get(
-        `http://3.39.150.26:8080/boards?searchType=${elvalue}&searchValue=${searchValue}`,
-      )
-      .then((response) => {
-        const { data } = response;
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  };
+  const token = localStorage.getItem('token') || '';
+  const fresh = localStorage.getItem('fresh') || '';
+
+  const login = () => { // 로그인 요청
+    axios.post('http://3.39.150.26:8080/members/login', { "email" : "jeong@gmail.com", "password" : "qwer1234" })
+    .then((response) => {
+      localStorage.setItem('token', response.headers.authorization);
+      localStorage.setItem('fresh', response.headers.refresh);
+      const { data } = response;
+      console.log(token);
+      setMemberId(data.memberId);
+      setLogintoken(token);
+      setRefreshtoken(fresh)
+    })
+    .catch((error) => console.log(error));
+  }
+  const membersearch = () => { // 멤버 검색 요청
+    axios.get('http://3.39.150.26:8080/members/2', {headers: {Authorization: logintoken,},})
+    .then((response) => {
+      const { data } = response;
+      console.log(data);
+      console.log(response.headers.authorization);
+      // setLogintoken(token);
+    })
+    .catch((error) => console.log(error));
+  }
+  const postsearch = () => { // 게시글 검색
+    axios.get(`http://3.39.150.26:8080/boards?searchType=${elvalue}&searchValue=${searchValue}`)
+    .then((response) => {
+      const { data } = response;
+      console.log(data);
+    })
+    .catch((error) => console.log(error));
+  }
+  const mileage = () => { // 마일리지 증가
+    axios.patch('http://3.39.150.26:8080/members/1', { "point" : "100" },
+    {headers: {Authorization: logintoken, Refresh: refresh}}
+    )
+    .then((response) => {
+      const { data } = response;
+      console.log(data);
+    })
+    .catch((error) => console.log(error));
+  }
+
+  const formData = new FormData();
+  formData.append('memberId', '3');
+  formData.append('title', '테스트');
+  formData.append('contents', '내용 테스트');
+  formData.append('file', '');
+
+  const submit = () => { // 게시글 등록
+    axios.post('http://3.39.150.26:8080/boards',formData, { 
+      headers: {Authorization: logintoken}})
+    .then((response) => {
+      const { data } = response;
+      console.log(data);
+    })
+    .catch((error) => console.log(error));
+  }
 
   const handleClose = () => {
     setShowModal(false);
@@ -488,6 +516,29 @@ function Community() {
     alert("게시물이 등록되었습니다!");
     handleClose();
   };
+
+  function loginhandle(){
+    if(token === ''){
+      setLoginModal(true)
+    }
+    else{
+      setShowModal(true)
+    }
+  }
+  function donationhandle(){
+    if(token === ''){
+      setLoginModal(true)
+    }
+    else{
+      alert('나무를 1그루 심었습니다!');
+    }
+  }
+  function logout(){ //로그아웃
+    window.localStorage.clear();
+    console.log('로그아웃 완료');
+    console.log(token);
+  }
+
 
   useEffect(() => {
     // setPm25(dusts?.rxs.obs[0].msg.iaqi.pm25.v);
@@ -509,7 +560,7 @@ function Community() {
     // console.log(sdata?.title);
     //Optional Chaining
   });
-
+  
   return (
     <>
       {isLoading && "Error!"}
@@ -517,30 +568,35 @@ function Community() {
       <MainContainer>
         <SectionContainer>
           <Posting>
-            <Usericon src={user} alt="user" />
-            <PostButton onClick={() => setShowModal(true)}>
-              오늘 실천하신 회원님의 노력을 알려주세요!
-            </PostButton>
+            <Usericon src={user} alt='user'/>
+            <PostButton onClick={() => loginhandle()}>오늘 실천하신 회원님의 노력을 알려주세요!</PostButton>
+            {loginModal && (
+              <LoginModal/>
+            )}
             {showModal && (
-              <PostModal onClose={handleClose} onConfirm={handleConfirm} />
+              <PostModal
+                onClose={handleClose}
+                onConfirm={handleConfirm}
+                // onSubmit={submit}
+              />
             )}
           </Posting>
           {postList.map((el, index) => {
             return (
               <PostSection key={index}>
                 <Postuser>
-                  <Usericon src={user} alt="user" />
-                  <div style={{ padding: "5px 0px 0px 0px" }}>
-                    <b>{el.member.name}</b>&nbsp;Lv. {el.member.point}
-                  </div>
+                  <Usericon src={user} alt='user'/>
+                  <div style={{padding:"5px 0px 0px 0px"}}><b>{el.board_creator}</b>&nbsp;Lv. {el.creator_level}</div>
                 </Postuser>
                 <PostBody>{el.title}</PostBody>
-                <img src={picture} alt="picture" />
+                {/* <img src={picture} alt='picture'/> */}
+                {el.delegate_image_path && ( <img src={el.delegate_image_path} alt='picture'/>)}
               </PostSection>
             );
           })}
         </SectionContainer>
         <AsideContainer>
+          <SidebarContainer>
           <SearchBar>
             <SearchOption onClick={() => setIsSearchOpen(!isSearchOpen)}>
               {isSearchbox ? isSearchbox.label : "제목"}
@@ -643,12 +699,15 @@ function Community() {
               <MileageTitle>나의 마일리지</MileageTitle>
               <div>300P</div>
             </MileageInfo>
-            <MileageButton>
-              <img src={nature} />내 마일리지로 나무 심기!
-            </MileageButton>
-            {/* <div onClick={membersearch}>회원 검색 버튼</div> */}
+            <MileageButton onClick={donationhandle}><img src={nature}/>내 마일리지로 나무 심기!</MileageButton>
+            <button onClick={membersearch}>회원 검색 버튼</button>
+            <button onClick={login}>로그인 버튼</button>
+            <button onClick={mileage}>마일리지 증가</button>
+            <button onClick={logout}>로그아웃 버튼</button>
           </MileageBar>
-          <Aside />
+          {/* <LoginModal/> */}
+          </SidebarContainer>
+          <Aside/>
         </AsideContainer>
       </MainContainer>
     </>
