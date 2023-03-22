@@ -1,6 +1,8 @@
 package community.auth.handler;
 
+import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import community.member.entity.Member;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -11,6 +13,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,15 +25,18 @@ public class MemberAuthenticationSuccessHandler implements AuthenticationSuccess
                                         Authentication authentication) throws IOException, ServletException {
         Member member = (Member) authentication.getPrincipal();
 
-        ObjectMapper objectMapper = new ObjectMapper();
+        response.setCharacterEncoding("UTF-8"); // objectMapper.writeValueAsString 한글깨지는 것에 대한 대응코드
 
-
+        /*MemberDetails에서 유저정보를 가져와서 리스폰스에 뿌려주는 부분*/
         Map<String, Object> loginResponse = new HashMap<>();
         loginResponse.put("memberId", member.getMemberId());
         loginResponse.put("email", member.getEmail());
         loginResponse.put("roles", member.getRoles());
+        loginResponse.put("level", member.getLevel().getLevel());
+        loginResponse.put("name", member.getName());
 
 
+        ObjectMapper objectMapper = new ObjectMapper();
         String responseBody = objectMapper.writeValueAsString(loginResponse);
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 

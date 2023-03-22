@@ -51,7 +51,7 @@ public class BoardLikeService {
     }
 
     /*해당 회원에 대한 해당게시판 좋아요 여부 세팅하기*/
-    public void findBoardLike(long memberId, Board board) {
+    public void BoardLikeStatus(long memberId, Board board) {
         Member member = memberService.findMember(memberId); //멤버 정보찾기
         
         BoardLike boardLike = boardLikeRepository.findByMemberAndBoard(member, board);
