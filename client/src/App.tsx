@@ -12,10 +12,14 @@ import { RecoilRoot } from "recoil";
 import Post from "./pages/Post";
 import MyPage from "./pages/MyPage";
 import MypageEdit from "./pages/MypageEdit";
+import SignUp from "./pages/SignUp";
+import SignIn from "./pages/SignIn";
+import { Reset } from "styled-reset";
 
 function App() {
   return (
     <div className="App">
+      <Reset />
       <header className="App-header">
         <RecoilRoot>
           <Routes>
@@ -29,6 +33,8 @@ function App() {
             <Route path="/:id" element={<Post />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypageedit" element={<MypageEdit />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
           </Routes>
         </RecoilRoot>
       </header>
