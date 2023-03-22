@@ -1,4 +1,4 @@
-package community.naver;
+package community.naver.service;
 
 import community.naver.dto.SearchNewsDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,6 +49,14 @@ public class NaverClient {
         return responseEntity.getBody();
     }
 
+    public SearchNewsDto.Response searchQuerySet(String query, int display, String sort){
+        SearchNewsDto.Post post = new SearchNewsDto.Post();
+        post.setQuery(query);
+        post.setDisplay(display);
+        post.setSort(sort);
+
+        return searchNews(post);
+    }
 
     
 }
