@@ -17,6 +17,12 @@ interface CommentButtonProps {
   disabled?: boolean;
 }
 
+interface ImageData {
+  file_id: number;
+  file_name: string;
+  image_path: string;
+}
+
 const Container = styled.div`
   display: flex;
 `;
@@ -35,6 +41,7 @@ const Post_wrapper = styled.div`
   height: auto;
   border-radius: 15px;
   background-color: #f6f6f6;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 `;
 const User_container = styled.div`
   display: flex;
@@ -66,7 +73,7 @@ const User_level_wrapper = styled.div`
   margin-left: 10px;
 `;
 const Content_container = styled.div`
-  height: 400px;
+  height: auto;
 `;
 const Content_wrapper = styled.div`
   display: flex;
@@ -77,10 +84,10 @@ const Content_title = styled.div`
   font-size: 25px;
 `;
 const Content_img = styled.div`
-  width: 100%;
-  height: 300px;
-  background-image: url(${Picture});
-  background-size: cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
 `;
 const Content_detail = styled.div`
   font-size: 18px;
@@ -168,6 +175,7 @@ const Featured_container = styled.div`
   margin-left: 70px;
   border-radius: 15px;
   background-color: #f6f6f6;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   @media screen and (max-width: 1024px) {
     display: none;
   }
@@ -236,6 +244,7 @@ const Comment_container = styled.div`
   width: 680px;
   background-color: #f6f6f6;
   border-radius: 15px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 `;
 // 댓글입력창
 const Input_container = styled.div`
@@ -334,6 +343,7 @@ interface BoardData {
 }
 
 function Post() {
+  //
   const { id } = useParams();
   const {
     data: post,
@@ -348,21 +358,20 @@ function Post() {
   const [boardData, setBoardData] = useState<BoardData | undefined>(undefined);
   const [comment, setComment] = useState("");
   const [clicked, setClicked] = useState(false);
-
+  // console.log(boardData ? boardData.upload_dto : null);
+  // console.log(boardData);
   // console.log(boardData);
   // console.log(localStorage.memberid);
   useEffect(() => {
     // 댓글input 수정시 바로 반영
     console.log("Comment updated:", comment);
-    // console.log(boardData);
   }, [comment]);
   useEffect(() => {
     if (post) {
       setBoardData(post);
     }
   }, [post]);
-  // console.log(post);
-  console.log(feat);
+
   if (postLoading) {
     return <div>Loading...</div>;
   }
@@ -409,9 +418,35 @@ function Post() {
   function handleCommentChange(e: React.KeyboardEvent<HTMLInputElement>) {
     setComment(e.currentTarget.value);
   }
-  // 클릭관리
-  function handleClick() {
-    setClicked(!clicked);
+  // 좋아요 클릭관리
+  async function handleLikeClick() {
+    // setClicked(!clicked);
+    try {
+      if (boardData && localStorage.memberid === boardData.member.member_id) {
+        alert("본인 게시글은 추천할 수 없습니다!");
+      } else {
+        await axios.post(`http://3.39.150.26:8080/boards/${id}/Like`, {
+          member_id: localStorage.memberid,
+        });
+        console.log("좋아요를 보냈습니다");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log("좋아요를 실패했습니다:", error);
+    }
+  }
+  async function handleDeleteClick() {
+    try {
+      if (boardData && localStorage.memberid !== boardData.member.member_id) {
+        alert("본인 게시글만 삭제 가능합니다!");
+      } else {
+        await axios.delete(`http://3.39.150.26:8080/boards/${id}`);
+        console.log("게시글이 삭제되었습니다");
+        window.location.reload();
+      }
+    } catch (error) {
+      console.log("게시글 삭제를 실패했습니다:", error);
+    }
   }
   // 댓글 등록 관리
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -442,7 +477,15 @@ function Post() {
                   <Content_title>
                     <div>{boardData.title}</div>
                   </Content_title>
-                  <Content_img></Content_img>
+                  {boardData.upload_dto.map((image, idx) => {
+                    return (
+                      // <Content_img key={idx} imageUrl={image.image_path} />
+                      <Content_img key={idx}>
+                        <img src={image.image_path} alt="picture" />
+                      </Content_img>
+                    );
+                  })}
+
                   <Content_detail>
                     <div>{boardData.contents}</div>
                   </Content_detail>
@@ -457,7 +500,13 @@ function Post() {
                   <Info_wrapper2>
                     <Like_wrapper>
                       <LikeButtonBox>
-                        <LikeButton clicked={clicked} onClick={handleClick}>
+                        <LikeButton
+                          clicked={clicked}
+                          disabled={
+                            localStorage.memberid === boardData.member.member_id
+                          }
+                          onClick={handleLikeClick}
+                        >
                           <LikeIcon width="20px" height="20px" fill="#2C9C2A" />
                         </LikeButton>
                       </LikeButtonBox>
@@ -467,7 +516,7 @@ function Post() {
                       <FixButton>
                         <EditIcon fill="#878484" />
                       </FixButton>
-                      <DeleteButton>
+                      <DeleteButton onClick={handleDeleteClick}>
                         <DelIcon fill="#878484" />
                       </DeleteButton>
                     </Button_wrapper>
