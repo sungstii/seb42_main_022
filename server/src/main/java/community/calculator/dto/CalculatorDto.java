@@ -28,6 +28,7 @@ public class CalculatorDto {
     public static class ResponseList{
         private List<Response> kWhList;
         private String totalFee; //월간 사용량에 따른 전기요금
+        private int kWhTotal;
     }
 
 
