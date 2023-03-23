@@ -1,6 +1,7 @@
 package community.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import community.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,10 @@ public class ErrorResponse {
         this.status = status;
         this.message = message;
     }
+    private ErrorResponse(ExceptionCode exceptionCode, String message) {
+        this.status = exceptionCode.getStatus();
+        this.message = message;
+    }
 
     private ErrorResponse(final List<ValueError> valueErrors) {
         this.status = HttpStatus.BAD_REQUEST.value();
@@ -32,8 +37,12 @@ public class ErrorResponse {
         return new ErrorResponse(httpStatus.value(), httpStatus.getReasonPhrase());
     }
 
-    public static ErrorResponse of(HttpStatus httpStatus, String message) {
-        return new ErrorResponse(httpStatus.value(), message);
+    public static ErrorResponse of(ExceptionCode exceptionCode) {
+        return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
+    }
+
+    public static ErrorResponse of(ExceptionCode exceptionCode, String message) {
+        return new ErrorResponse(exceptionCode, message);
     }
 
     public static ErrorResponse of(BindingResult bindingResult) {
