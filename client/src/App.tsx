@@ -15,13 +15,22 @@ import MypageEdit from "./pages/MypageEdit";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import { Reset } from "styled-reset";
+import Header from "./components/Header";
+import axios from "axios";
 
 function App() {
+  const token = localStorage.token;
+  if (token) {
+    axios.defaults.headers.common["Authorization"] = token;
+  } else {
+    delete axios.defaults.headers.common["Authorization"];
+  }
   return (
     <div className="App">
       <Reset />
       <header className="App-header">
         <RecoilRoot>
+          <Header />
           <Routes>
             <Route path="/" element={<Main />} />
             <Route path="/community" element={<Community />} />
