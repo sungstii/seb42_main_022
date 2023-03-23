@@ -30,7 +30,7 @@ public class Board extends AuditingFields {
     private String title;
 
     @Column(nullable = false)
-    private String contents;
+    private String contents; //텍스트 에디터 text
     @Column(nullable = false)
     private int likeCount;
     private String boardCreator; //게시글 작성자
