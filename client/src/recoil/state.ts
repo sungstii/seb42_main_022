@@ -17,17 +17,3 @@ export const areaState = atom<string>({
     key: 'areaState',
     default: 'seoul',
 });
-
-export const tokenState = atom<string>({
-    key: 'tokenState',
-    default: '',
-});
-export const refreshState = atom<string>({
-    key: 'refreshState',
-    default: '',
-});
-
-export const myIdState = atom<number>({
-    key: 'myIdState',
-    default: 0,
-});
