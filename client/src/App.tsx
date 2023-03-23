@@ -30,7 +30,7 @@ function App() {
             <Route path="/news" element={<News />} />
             <Route path="/greencal" element={<GreenCal />} />
             <Route path="/ranking" element={<Ranking />} />
-            <Route path="/:id" element={<Post />} />
+            <Route path="/:category/:id" element={<Post />} />
             <Route path="/mypage" element={<MyPage />} />
             <Route path="/mypageedit" element={<MypageEdit />} />
             <Route path="/signup" element={<SignUp />} />

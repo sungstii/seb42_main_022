@@ -113,6 +113,7 @@ const SignIn = () => {
                   localStorage.setItem("ref", ref);
                   setAuthorizationToken(token);
                   alert("로그인이 완료되었습니다");
+                  localStorage.setItem("memberid", res.data.memberId);
                   navigate("../");
                 })
                 .catch((e) => {

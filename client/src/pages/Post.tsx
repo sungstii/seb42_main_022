@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
+import { atom, useRecoilState } from "recoil";
+import { postListState } from "../recoil/state";
+import { useOnePost } from "../react-query/useOnePost";
+import { useFeaList } from "../react-query/useFeaList";
+import * as dayjs from "dayjs";
 import accountCircle from "../icon/account_circle.svg";
 import { ReactComponent as DelIcon } from "../icon/delete.svg";
 import { ReactComponent as LikeIcon } from "../icon/thumbup.svg";
 import { ReactComponent as EditIcon } from "../icon/edit.svg";
 import Picture from "../image/Picture.png";
+
+interface CommentButtonProps {
+  disabled?: boolean;
+}
 
 const Container = styled.div`
   display: flex;
@@ -176,9 +185,11 @@ const List_wrapper = styled.div``;
 const List = styled.ul``;
 const List_el = styled.li`
   display: flex;
+
   align-items: center;
   margin-top: 30px;
 `;
+const blank = styled.div``;
 const List_like = styled.button`
   display: flex;
   width: 60px;
@@ -204,6 +215,7 @@ const List_likecnt = styled.span`
   font-size: 18px;
 `;
 const List_title = styled.span`
+  flex-grow: 2;
   font-size: 20px;
   margin-left: 15px;
 `;
@@ -243,6 +255,7 @@ const InputBox = styled.div`
 `;
 const Comment_Input = styled.input`
   font-size: 20px;
+  width: 95%;
   border: none;
   background: transparent;
   outline: none;
@@ -267,6 +280,16 @@ const Comment_Button = styled.button`
   :hover {
     background: #4f8255;
   }
+  ${({ disabled }) =>
+    disabled &&
+    `
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: #757575;
+      :hover {
+        background: #757575;
+      }
+    `}
 `;
 // 댓글 나타나는 창
 const Comments_container = styled.div``;
@@ -274,9 +297,11 @@ const Comments_wrapper = styled.div`
   border-top: 1px solid #cccccc;
 `;
 const Comments_contents_wrapper = styled.div`
-  margin: 0 0 15px 18px;
+  margin: 0 18px 15px 18px;
 `;
-const Comments_contents = styled.div``;
+const Comments_contents = styled.div`
+  line-height: 1.3em;
+`;
 
 interface BoardData {
   title: string;
@@ -310,12 +335,77 @@ interface BoardData {
 
 function Post() {
   const { id } = useParams();
+  const {
+    data: post,
+    isLoading: postLoading,
+    isError: postError,
+  } = useOnePost();
+  const {
+    data: feat,
+    isLoading: featLoading,
+    isError: featError,
+  } = useFeaList();
+  const [boardData, setBoardData] = useState<BoardData | undefined>(undefined);
   const [comment, setComment] = useState("");
   const [clicked, setClicked] = useState(false);
-  const [boardData, setBoardData] = useState<BoardData | null>(null);
+
+  // console.log(boardData);
+  // console.log(localStorage.memberid);
+  useEffect(() => {
+    // 댓글input 수정시 바로 반영
+    console.log("Comment updated:", comment);
+    // console.log(boardData);
+  }, [comment]);
+  useEffect(() => {
+    if (post) {
+      setBoardData(post);
+    }
+  }, [post]);
+  // console.log(post);
+  console.log(feat);
+  if (postLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (postError) {
+    return <div>Error fetching data</div>;
+  }
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get<BoardData>(
+  //         `http://3.39.150.26:8080/boards/${id}`,
+  //       );
+  //       setBoardData(response.data);
+  //       console.log(boardData);
+  //     } catch (error) {
+  //       console.error("Error fetching board data: ", error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  const postComment = async () => {
+    const url = "http://3.39.150.26:8080/comments";
+    const headers = { Authorization: `Bearer ${localStorage.token}` };
+    const body = {
+      member_id: localStorage.memberid,
+      board_id: id,
+      contents: comment,
+    };
+
+    try {
+      const response = await axios.post(url, body, { headers });
+      console.log("Comment posted:", response.data);
+      window.location.reload();
+    } catch (error) {
+      console.error("Error posting comment:", error);
+    }
+  };
 
   //! 핸들러
-  // 댓글 입력
+  // 댓글 입력 내용 관리
   function handleCommentChange(e: React.KeyboardEvent<HTMLInputElement>) {
     setComment(e.currentTarget.value);
   }
@@ -323,26 +413,11 @@ function Post() {
   function handleClick() {
     setClicked(!clicked);
   }
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get<BoardData>(
-          `http://3.39.150.26:8080/boards/${id}`,
-        );
-        setBoardData(response.data);
-        console.log(boardData);
-      } catch (error) {
-        console.error("Error fetching board data: ", error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    console.log("Comment updated:", comment);
-    console.log(boardData);
-  }, [comment]);
+  // 댓글 등록 관리
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    postComment();
+  }
 
   return (
     <Container>
@@ -417,38 +492,51 @@ function Post() {
                   </User_img_wrapper>
                   <InputBox>
                     <Comment_Input
-                      placeholder="댓글을 남겨주세요"
+                      placeholder={
+                        localStorage.token
+                          ? "댓글을 남겨주세요"
+                          : "로그인이 필요합니다"
+                      }
                       type="text"
                       onKeyUp={handleCommentChange}
+                      disabled={!localStorage.token}
                     />
                   </InputBox>
                   <ButtonBox>
-                    <Comment_Button>
-                      <span>등록</span>
-                    </Comment_Button>
+                    <form onSubmit={handleSubmit}>
+                      <Comment_Button disabled={!localStorage.token}>
+                        <span>등록</span>
+                      </Comment_Button>
+                    </form>
                   </ButtonBox>
                 </Input_wrapper>
               </Input_container>
               {/* 댓글표시되는 부분 */}
               <Comments_container>
-                <Comments_wrapper>
-                  {/* 유저정보표시 */}
-                  <User_container>
-                    <User_wrapper style={{ margin: "0 0 0 18px" }}>
-                      <User_img_wrapper>
-                        <img src={accountCircle} />
-                      </User_img_wrapper>
-                      <User_name_wrapper style={{ fontSize: "18px" }}>
-                        김기식
-                      </User_name_wrapper>
-                      <User_level_wrapper>Lv.10</User_level_wrapper>
-                    </User_wrapper>
-                  </User_container>
-                  {/* 댓글내용 */}
-                  <Comments_contents_wrapper>
-                    <Comments_contents>아 그렇군요</Comments_contents>
-                  </Comments_contents_wrapper>
-                </Comments_wrapper>
+                {boardData.comments.map((el) => {
+                  return (
+                    <Comments_wrapper key={el.comment_id}>
+                      {/* 유저정보표시 */}
+                      <User_container>
+                        <User_wrapper style={{ margin: "0 0 0 18px" }}>
+                          <User_img_wrapper>
+                            <img src={accountCircle} />
+                          </User_img_wrapper>
+                          <User_name_wrapper style={{ fontSize: "18px" }}>
+                            {el.member.name}
+                          </User_name_wrapper>
+                          <User_level_wrapper>
+                            Lv.{el.creator_level}
+                          </User_level_wrapper>
+                        </User_wrapper>
+                      </User_container>
+                      {/* 댓글내용 */}
+                      <Comments_contents_wrapper>
+                        <Comments_contents>{el.contents}</Comments_contents>
+                      </Comments_contents_wrapper>
+                    </Comments_wrapper>
+                  );
+                })}
               </Comments_container>
             </Comment_container>
           </Left_wrapper>
@@ -459,51 +547,25 @@ function Post() {
               <Featured_title>추천게시글</Featured_title>
               <List_wrapper>
                 <List>
-                  <List_el>
-                    <List_like>
-                      <List_likeicon>
-                        <LikeIcon width="18px" height="18px" fill="#ffffff" />
-                      </List_likeicon>
-                      <List_likecnt>999</List_likecnt>
-                    </List_like>
-                    <List_title>친환경 물품 사용 후기</List_title>
-                  </List_el>
-                  <List_el>
-                    <List_like>
-                      <List_likeicon>
-                        <LikeIcon width="18px" height="18px" fill="#ffffff" />
-                      </List_likeicon>
-                      <List_likecnt>832</List_likecnt>
-                    </List_like>
-                    <List_title>친환경 물품 사용 후기</List_title>
-                  </List_el>
-                  <List_el>
-                    <List_like>
-                      <List_likeicon>
-                        <LikeIcon width2="18px" height="18px" fill="#ffffff" />
-                      </List_likeicon>
-                      <List_likecnt>103</List_likecnt>
-                    </List_like>
-                    <List_title>제가 키우는 식물입니다</List_title>
-                  </List_el>
-                  <List_el>
-                    <List_like>
-                      <List_likeicon>
-                        <LikeIcon width="18px" height="18px" fill="#ffffff" />
-                      </List_likeicon>
-                      <List_likecnt>55</List_likecnt>
-                    </List_like>
-                    <List_title>친환경 물품 사용 후기</List_title>
-                  </List_el>
-                  <List_el>
-                    <List_like>
-                      <List_likeicon>
-                        <LikeIcon width="18px" height="18px" fill="#ffffff" />
-                      </List_likeicon>
-                      <List_likecnt>2</List_likecnt>
-                    </List_like>
-                    <List_title>친환경 물품 사용 후기</List_title>
-                  </List_el>
+                  {feat
+                    ? feat.map((el, idx) => {
+                        return (
+                          <List_el key={idx}>
+                            <List_like>
+                              <List_likeicon>
+                                <LikeIcon
+                                  width="18px"
+                                  height="18px"
+                                  fill="#ffffff"
+                                />
+                              </List_likeicon>
+                              <List_likecnt>{el.like_count}</List_likecnt>
+                            </List_like>
+                            <List_title>{el.title}</List_title>
+                          </List_el>
+                        );
+                      })
+                    : null}
                 </List>
               </List_wrapper>
             </Featured_wrapper>
