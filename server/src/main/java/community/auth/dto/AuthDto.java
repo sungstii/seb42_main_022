@@ -10,8 +10,9 @@ public class AuthDto {
     @Getter
     static public class Login {
         @Email
+        @NotBlank(message = "이메일을 확인해주세요")
         private String email;
-        @NotBlank
+        @NotBlank(message = "비밀번호를 확인해주세요")
         private String password;
     }
 
