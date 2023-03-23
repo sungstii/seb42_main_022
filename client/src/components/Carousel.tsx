@@ -10,7 +10,7 @@ import arrowback from "../icon/arrowback.svg";
 const Container = styled.div`
   width: 100%;
   overflow: hidden;
-  margin: 60px 0 200px;
+  margin: 0 0 200px;
 `;
 const SliderContainer = styled.div`
   width: 100%;
@@ -83,7 +83,7 @@ function Carousel() {
   }, [currentSlide]);
   useEffect(() => {
     const timer = setInterval(() => {
-      console.log(currentSlide);
+      // console.log(currentSlide);
       nextSlide();
     }, 3000);
 

@@ -358,10 +358,7 @@ function Post() {
   const [boardData, setBoardData] = useState<BoardData | undefined>(undefined);
   const [comment, setComment] = useState("");
   const [clicked, setClicked] = useState(false);
-  // console.log(boardData ? boardData.upload_dto : null);
-  // console.log(boardData);
-  // console.log(boardData);
-  // console.log(localStorage.memberid);
+
   useEffect(() => {
     // 댓글input 수정시 바로 반영
     console.log("Comment updated:", comment);

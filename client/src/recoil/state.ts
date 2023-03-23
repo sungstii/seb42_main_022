@@ -31,8 +31,3 @@ export const myIdState = atom<number>({
   key: "myIdState",
   default: 0,
 });
-
-export const previousLocationState = atom({
-  key: "previousLocationState",
-  default: null,
-});
