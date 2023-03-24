@@ -31,3 +31,4 @@ jobs:
           aws s3 sync \
             --region ap-northeast-2 \
             build s3://seb42main022-minsang
+        working-directory: ./client
