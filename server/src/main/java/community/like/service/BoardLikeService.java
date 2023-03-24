@@ -24,12 +24,13 @@ public class BoardLikeService {
 
         Member member = memberService.findMember(memberId); // 좋아요 누르는 회원
         Board board = boardService.findBoard(boardId); // 좋아요가 눌리는 게시판
+
         Member boardMember = memberService.findMember(board.getMember().getMemberId()); // 게시판 작성자
 
         BoardLike boardLike = boardLikeRepository.findByMemberAndBoard(member, board); // 추천수
 
 
-        if (boardLike == null) {
+        if (boardLike == null) { //좋아요 누른적 없는경우
             boardLike = new BoardLike();
             boardLike.setBoard(board);
             boardLike.setMember(member);

@@ -5,6 +5,7 @@ import community.board.dto.UploadDto;
 import community.board.entity.Board;
 import community.board.entity.UploadFile;
 import community.board.service.S3Service;
+import community.member.entity.Member;
 import community.member.service.MemberService;
 import community.type.SearchType;
 import community.board.mapper.BoardMapper;
@@ -19,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -199,5 +201,11 @@ public class BoardController {
         BoardDto.RankResponse response = boardMapper.boardToBoardRankResponse(likeBoard);
 
         return new ResponseEntity<>(new SingleResponseDto<>(response), HttpStatus.OK);
+    }
+
+    /*토큰값으로 유저정보 찾기*/
+    private Member loginMemberFindByToken(){
+        String loginEmail = SecurityContextHolder.getContext().getAuthentication().getName(); // 토큰에서 유저 email 확인
+        return memberService.findVerifiedEmail(loginEmail);
     }
 }
