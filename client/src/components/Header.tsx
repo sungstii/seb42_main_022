@@ -7,7 +7,7 @@ import HideHeader from "../utils/hideHeader";
 
 const Container = styled.div`
   width: 100%;
-  height: 170px;
+  height: 70px;
 `;
 const HeaderContainer = styled.div`
   display: flex;

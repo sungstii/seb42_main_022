@@ -3,11 +3,10 @@ import styled from "styled-components";
 import Add from "../icon/add_circle.svg"
 import Cancel from "../icon/cancel.svg"
 import user from "../icon/user.svg";
-import { useState } from "react";
-import { tokenState } from "../recoil/state";
-import { myIdState } from "../recoil/state";
-import { useRecoilValue } from 'recoil';
+import { useState, useEffect } from "react";
 import axios from "axios";
+import dayjs from 'dayjs';
+import 'dayjs/locale/ko'
 
 const ModalWrapper = styled.div`
     display: flex;
@@ -141,12 +140,12 @@ interface modal{
     onConfirm: any;
 }
 function PostModal({ onClose, onConfirm }: modal) {
-    const token = useRecoilValue(tokenState);
-    const memberId: any = useRecoilValue(myIdState);
     const [imageSrc, setImageSrc]: any = useState(null);
     const [imageFile, setImageFile]: any = useState(null)
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
+    const [currentTime, setCurrentTime] = useState<string>('');
+
     const onUpload = (e: any) => {
         const file = e.target.files[0];
         setImageFile(file);
@@ -159,15 +158,20 @@ function PostModal({ onClose, onConfirm }: modal) {
             };
         });
     }
+    const token = localStorage.getItem('token') || '';
+    const ref = localStorage.getItem('ref') || '';
+    const id =localStorage.getItem('memberid') || '';
+    const name =localStorage.getItem('name') || '';
+
     const formData = new FormData();
-    formData.append('memberId', memberId);
+    formData.append('memberId', id);
     formData.append('title', title);
     formData.append('contents', contents);
     formData.append('files', imageFile);
 
     const submit = () => { // 게시글 등록
         axios.post('http://3.39.150.26:8080/boards/free',formData, { 
-        headers: {Authorization: token}})
+        headers: {Authorization: token, Refresh: ref}})
         .then((response) => {
         const { data } = response;
         console.log(data);
@@ -179,6 +183,14 @@ function PostModal({ onClose, onConfirm }: modal) {
         onConfirm()
         submit()
     }
+    useEffect(() => {
+        const interval = setInterval(() => {
+          setCurrentTime(dayjs().locale('ko').format('YYYY년 M월 D일 ddd HH:mm:ss'));
+        }, 1000);
+    
+        return () => clearInterval(interval);
+      }, []);
+
     return (
         <>
             <ModalWrapper>
@@ -191,8 +203,8 @@ function PostModal({ onClose, onConfirm }: modal) {
                     <Postuser>
                         <Usericon src={user} alt='user'/>
                         <UserInfo>
-                            <UserText style={{padding:"5px 0px 0px 0px"}}><b>정민상</b>&nbsp;Lv.5</UserText>
-                            <UserText>2023년 3월 6일</UserText>
+                            <UserText style={{padding:"5px 0px 0px 0px"}}><b>{name}</b>&nbsp;Lv.{id}</UserText>
+                            <UserText>{currentTime}</UserText>
                         </UserInfo>
                     </Postuser>
                     <ModalInput placeholder="제목을 입력하세요" onChange={(e) => setTitle(e.target.value)}/>

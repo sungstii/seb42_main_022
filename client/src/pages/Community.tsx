@@ -14,20 +14,18 @@ import { useQuery } from "react-query";
 import { atom, useRecoilState } from "recoil";
 import { postListState } from "../recoil/state";
 import { areaState } from "../recoil/state";
-import { tokenState } from "../recoil/state";
-import { refreshState } from "../recoil/state";
-import { myIdState } from "../recoil/state";
-import { usePosts } from "../react-query/usePosts";
-import { useWeatherInfo } from "../react-query/useWeatherInfo";
-import PostModal from "../components/PostModal";
-import LoginModal from "../components/LoginModal";
+import { usePosts } from "../react-query/usePosts"
+import { useWeatherInfo } from "../react-query/useWeatherInfo"
+import PostModal from '../components/PostModal';
+import LoginModal from "../components/LoginModal"
+
 
 const MainContainer = styled.div`
   display: flex;
   margin: 0 auto;
   justify-content: center;
   /* flex-direction: row; */
-  padding: 30px 10px 10px 10px;
+  padding: 0px 10px 10px 10px;
 `;
 const SectionContainer = styled.div`
   flex-direction: column;
@@ -343,7 +341,8 @@ export interface Item {
 function Community() {
   const [itemvalue, setItemvalue] = useRecoilState(areaState); // 지역 상태 (서울, 부산 등)
   const { data, loading, error } = apiFetch(
-    `https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`,
+    `https://api.waqi.info/v2/feed/${itemvalue}/?token=a85f9e4ea2f2e1efa4cecb4806a6909e520368df`,
+    // `https://cors-anywhere.herokuapp.com/https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`,
   );
   // const { data: dusts, isLoading: dustLoading, error } = useWeatherInfo();
   const { data: posts, isLoading, isError } = usePosts();
@@ -361,9 +360,6 @@ function Community() {
   const [no2info, setNo2info] = useState("");
   const [coinfo, setCoinfo] = useState("");
   const [so2info, setSo2info] = useState("");
-  const [logintoken, setLogintoken] = useRecoilState(tokenState); // 회원 권한
-  const [refresh, setRefreshtoken] = useRecoilState(refreshState);
-  const [memberId, setMemberId] = useRecoilState(myIdState);
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 드롭다운 open
   const [isSearchbox, setIsSearchbox] = useState<Item | null>(null); // 검색 드롭다운 현재값 (label)
   const [searchValue, setSearchValue] = useState(""); // 검색 input 값
@@ -447,86 +443,54 @@ function Community() {
     { id: 2, label: "내용", value: "CONTENTS" },
   ];
 
-  const token = localStorage.getItem("token") || "";
-  const fresh = localStorage.getItem("fresh") || "";
+  const token = localStorage.getItem('token') || '';
+  const ref = localStorage.getItem('ref') || '';
+  const id = localStorage.getItem('memberid') || '';
+  const point = localStorage.getItem('point') || '';
 
-  const login = () => {
-    // 로그인 요청
-    axios
-      .post("http://3.39.150.26:8080/members/login", {
-        email: "jeong@gmail.com",
-        password: "qwer1234",
-      })
-      .then((response) => {
-        localStorage.setItem("token", response.headers.authorization);
-        localStorage.setItem("fresh", response.headers.refresh);
-        const { data } = response;
-        console.log(token);
-        setMemberId(data.memberId);
-        setLogintoken(token);
-        setRefreshtoken(fresh);
-      })
-      .catch((error) => console.log(error));
-  };
-  const membersearch = () => {
-    // 멤버 검색 요청
-    axios
-      .get("http://3.39.150.26:8080/members/2", {
-        headers: { Authorization: logintoken },
-      })
-      .then((response) => {
-        const { data } = response;
-        console.log(data);
-        console.log(response.headers.authorization);
-        // setLogintoken(token);
-      })
-      .catch((error) => console.log(error));
-  };
-  const postsearch = () => {
-    // 게시글 검색
-    axios
-      .get(
-        `http://3.39.150.26:8080/boards?searchType=${elvalue}&searchValue=${searchValue}`,
-      )
-      .then((response) => {
-        const { data } = response;
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  };
-  const mileage = () => {
-    // 마일리지 증가
-    axios
-      .patch(
-        "http://3.39.150.26:8080/members/1",
-        { point: "100" },
-        { headers: { Authorization: logintoken, Refresh: refresh } },
-      )
-      .then((response) => {
-        const { data } = response;
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  };
+  const login = () => { // 로그인 요청
+    axios.post('http://3.39.150.26:8080/members/login', { "email" : "jeong@gmail.com", "password" : "qwer1234" })
+    .then((response) => {
+      localStorage.setItem('token', response.headers.authorization);
+      localStorage.setItem('ref', response.headers.refresh);
+      const { data } = response;
+      localStorage.setItem('memberid', data.memberId);
+      localStorage.setItem('name', data.name);
+      console.log(token);
+    })
+    .catch((error) => console.log(error));
+  }
+  const membersearch = () => { // 멤버 검색
+    axios.get(`http://3.39.150.26:8080/members/${id}`, {headers: {Authorization: token, Refresh: ref}})
+    .then((response) => {
+      const { data } = response;
+      localStorage.setItem('point', data.point);
+    })
+    .catch(() => console.log('로그인 해라'));
+  }
+  const postsearch = () => { // 게시글 검색
+    axios.get(`http://3.39.150.26:8080/boards?searchType=${elvalue}&searchValue=${searchValue}`)
+    .then((response) => {
+      const { data } = response;
+      console.log(data);
+    })
+    .catch((error) => console.log(error));
+  }
+  const mileagedone = () => { // 마일리지로 나무심기
+    axios.post(`http://3.39.150.26:8080/members/donation/${id}`,
+    {headers: {Authorization: token, Refresh: ref}}
+    )
+    .then((response) => {
+      const { data } = response;
+    })
+    .catch((error) => console.log(error));
+  }
 
   const formData = new FormData();
   formData.append("memberId", "3");
   formData.append("title", "테스트");
   formData.append("contents", "내용 테스트");
   formData.append("file", "");
-
-  const submit = () => {
-    // 게시글 등록
-    axios
-      .post("http://3.39.150.26:8080/boards", formData, {
-        headers: { Authorization: logintoken },
-      })
-      .then((response) => {
-        const { data } = response;
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  };
 
   const handleClose = () => {
     setShowModal(false);
@@ -544,15 +508,7 @@ function Community() {
       setShowModal(true);
     }
   }
-  function donationhandle() {
-    if (token === "") {
-      setLoginModal(true);
-    } else {
-      alert("나무를 1그루 심었습니다!");
-    }
-  }
-  function logout() {
-    //로그아웃
+  function logout(){ //로그아웃
     window.localStorage.clear();
     console.log("로그아웃 완료");
     console.log(token);
@@ -577,6 +533,7 @@ function Community() {
     // posthandle();
     // console.log(sdata?.title);
     //Optional Chaining
+    membersearch();
   });
 
   return (
@@ -719,17 +676,14 @@ function Community() {
               <MileageInfo>
                 <MileageIcon src={saving} />
                 <MileageTitle>나의 마일리지</MileageTitle>
-                <div>300P</div>
+                <div>{token ? point : 0}P</div>
               </MileageInfo>
-              <MileageButton onClick={donationhandle}>
+              <MileageButton onClick={mileagedone}>
                 <img src={nature} />내 마일리지로 나무 심기!
               </MileageButton>
-              <button onClick={membersearch}>회원 검색 버튼</button>
               <button onClick={login}>로그인 버튼</button>
-              <button onClick={mileage}>마일리지 증가</button>
               <button onClick={logout}>로그아웃 버튼</button>
             </MileageBar>
-            {/* <LoginModal/> */}
           </SidebarContainer>
           <Aside />
         </AsideContainer>

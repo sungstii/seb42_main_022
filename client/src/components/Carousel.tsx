@@ -13,6 +13,7 @@ const Container = styled.div`
   margin: 0 0 200px;
 `;
 const SliderContainer = styled.div`
+  margin-top: 30px;
   width: 100%;
   height: 480px;
   display: flex;
@@ -23,23 +24,25 @@ const Img = styled.img`
   object-fit: contain;
 `;
 const CarouselBack = styled.img`
-  position: absolute;
-  top: 300px;
+  position: relative;
+  top: 280px;
   left: 20px;
   z-index: 1;
   cursor: pointer;
 `;
 const CarouselFront = styled.img`
   position: absolute;
-  top: 300px;
+  top: 350px;
   right: 10px;
+  /* bottom: 300px; */
   z-index: 1;
   cursor: pointer;
 `;
 const InputContainer = styled.div`
-  position: absolute;
-  top: 400px;
-  left: 45%;
+  position: relative;
+  /* top: 0px; */
+  bottom: 30px;
+  left: 47%;
   z-index: 1;
 `;
 const Input = styled.input`
@@ -95,37 +98,38 @@ function Carousel() {
   return (
     <>
       <Container>
+        <CarouselBack src={arrowback} onClick={prevSlide} />
         <SliderContainer ref={slideRef}>
           <Img src={Earth} />
           <Img src={Trees} />
           <Img src={Cow} />
         </SliderContainer>
-      </Container>
-      <CarouselBack src={arrowback} onClick={prevSlide} />
-      <CarouselFront src={arrowfront} onClick={nextSlide} />
-      <InputContainer>
-        <Input
-          onClick={(e) => handle(0)}
-          type="radio"
-          checked={currentSlide === 0 ? true : false}
-          name="slider"
-          id="slider1"
-        />
-        <Input
-          onClick={(e) => handle(1)}
-          type="radio"
-          checked={currentSlide === 1 ? true : false}
-          name="slider"
-          id="slider2"
-        />
-        <Input
-          onClick={(e) => handle(2)}
-          type="radio"
-          checked={currentSlide === 2 ? true : false}
-          name="slider"
-          id="slider3"
-        />
+        <InputContainer>
+          <Input
+            onClick={(e) => handle(0)}
+            type="radio"
+            checked={currentSlide === 0 ? true : false}
+            name="slider"
+            id="slider1"
+          />
+          <Input
+            onClick={(e) => handle(1)}
+            type="radio"
+            checked={currentSlide === 1 ? true : false}
+            name="slider"
+            id="slider2"
+          />
+          <Input
+            onClick={(e) => handle(2)}
+            type="radio"
+            checked={currentSlide === 2 ? true : false}
+            name="slider"
+            id="slider3"
+          />
       </InputContainer>
+      <CarouselFront src={arrowfront} onClick={nextSlide} />
+      </Container>
+      
     </>
   );
 }
