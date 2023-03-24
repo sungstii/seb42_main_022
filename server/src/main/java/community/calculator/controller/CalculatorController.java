@@ -24,7 +24,7 @@ public class CalculatorController {
     @PostMapping
     public ResponseEntity<?> postPartialCalculation(@RequestBody @Valid Calculator partialCalculator) {
 
-//        CalculatorDto.PartialCalculator partialCalculation = calculatorMapper.partialPostToPartial(partialCalculator);
+
         log.info(partialCalculator.toString());
         Calculator calculation = calculatorService.Calculation(partialCalculator);
 
