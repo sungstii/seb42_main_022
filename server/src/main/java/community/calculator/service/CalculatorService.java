@@ -1,6 +1,6 @@
 package community.calculator.service;
 
-import community.calculator.dto.CalculatorDto;
+import community.calculator.dto.Calculator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,49 +13,47 @@ import javax.transaction.Transactional;
 public class CalculatorService {
 
 
-    /* 계산식  1.  100 <= inputNum  (inputNum == 70)
-                BaseFees[0] + (inputNum * UseFees[0])
-              2.  300 <= inputNum (inputNum == 220)
-                BasFees[2] + {inputNum 중 100 (inputNum의 남은 값은 120) * UseFees[0]}
-                + {inputNum 중 100 (inputNum의 남은 값은 20) * UseFees[1]}
-                + {inputNum 남은 값 (20) * UseFees[2]}
-     */
-    public int calculation(int usage) {
-        CalculatorDto calculatorDto = new CalculatorDto();
+    public Calculator Calculation( Calculator calculator) {
+        int hour = Integer.parseInt(calculator.getHour());
+        int powerConsumption = Integer.parseInt(calculator.getPowerConsumption());
 
-        calculatorDto.setInputNum(usage);
-        int inputNum = calculatorDto.getInputNum();
+        int totalUsage = (int) ((hour * powerConsumption * 30) * 0.001); // kWH
 
-        double totalUsage = 0;
+        calculator.setTotalUsage(totalUsage);
+
+        int electricCharges;
 
         int[] baseFees = { 400, 890, 1560, 3750, 7110, 12600 };
         double[] useFees = { 59.1, 122.6, 183.0, 273.2, 406.7, 690.8 };
 
-        if (inputNum <= 0) {
-            totalUsage = 0;
+        if (totalUsage == 0) {
+            electricCharges = 0;
 
-        } else if (inputNum <= 100) {
-            totalUsage = baseFees[0] + (inputNum * useFees[0]);
+        } else if (totalUsage <= 100) {
+            electricCharges = (int) (baseFees[0] + (totalUsage * useFees[0]));
 
-        } else if (inputNum <= 200) {
-            totalUsage = baseFees[1] + (100 * useFees[0]) + ((inputNum - 100) * useFees[1]);
+        } else if (totalUsage <= 200) {
+            electricCharges = (int) (baseFees[1] + (100 * useFees[0]) + ((totalUsage - 100) * useFees[1]));
 
-        } else if (inputNum <= 300) {
-            totalUsage = baseFees[2] + (100 * useFees[0]) + (200 * useFees[1]) + ((inputNum - 200) * useFees[2]);
+        } else if (totalUsage <= 300) {
+            electricCharges = (int) (baseFees[2] + (100 * useFees[0]) + (200 * useFees[1]) + ((totalUsage - 200) * useFees[2]));
 
-        } else if (inputNum <= 400) {
-            totalUsage = baseFees[3] + (100 * useFees[0]) + (200 * useFees[1]) + (300 * useFees[2]) + ((inputNum - 300) * useFees[3]);
+        } else if (totalUsage <= 400) {
+            electricCharges = (int) (baseFees[3] + (100 * useFees[0]) + (200 * useFees[1]) + (300 * useFees[2]) + ((totalUsage - 300) * useFees[3]));
 
-        } else if (inputNum <= 500) {
-            totalUsage = baseFees[4] + (100 * useFees[0]) + (200 * useFees[1]) + (300 * useFees[2]) + (400 * useFees[3])
-                    + ((inputNum - 400) * useFees[4]);
+        } else if (totalUsage <= 500) {
+            electricCharges = (int) (baseFees[4] + (100 * useFees[0]) + (200 * useFees[1]) + (300 * useFees[2]) + (400 * useFees[3])
+                                + ((totalUsage - 400) * useFees[4]));
 
-        } else if (inputNum > 500)
+        } else {
 
-            totalUsage = baseFees[5] + (100 * useFees[0]) + (200 * useFees[1]) + (300 * useFees[2]) + (400 * useFees[3])
+            electricCharges = (int) (baseFees[5] + (100 * useFees[0]) + (200 * useFees[1]) + (300 * useFees[2]) + (400 * useFees[3])
 
-                    + (500 * useFees[4]) + ((inputNum - 500) * useFees[5]);
+                                + (500 * useFees[4]) + ((totalUsage - 500) * useFees[5]));
+        }
 
-        return (int)totalUsage;
+        calculator.setElectricCharges(electricCharges);
+
+        return calculator;
     }
 }
