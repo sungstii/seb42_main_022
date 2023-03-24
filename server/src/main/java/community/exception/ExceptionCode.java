@@ -19,7 +19,6 @@ public enum ExceptionCode {
     COMMENT_EXISTS(409,"댓글이 이미 존재합니다."),
 
     LIKE_NOT_ACCEPTED(400, "회원당 한번만 좋아요를 누를 수 있습니다.");
-
     @Getter
     private final int status;
 
