@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +11,8 @@ import accountCircle from "../icon/account_circle.svg";
 import { ReactComponent as DelIcon } from "../icon/delete.svg";
 import { ReactComponent as LikeIcon } from "../icon/thumbup.svg";
 import { ReactComponent as EditIcon } from "../icon/edit.svg";
+import { ReactComponent as ArrowBackIcon } from "../icon/arrowback.svg";
+import { ReactComponent as ArrowForwardIcon } from "../icon/arrowforward.svg";
 import Picture from "../image/Picture.png";
 
 interface CommentButtonProps {
@@ -21,6 +23,36 @@ interface ImageData {
   file_id: number;
   file_name: string;
   image_path: string;
+}
+
+interface BoardData {
+  title: string;
+  contents: string;
+  member: {
+    email: string;
+    name: string;
+    phone: string;
+    point: string;
+    tree_count: string;
+    level_dto: null | {
+      level_name: string;
+      min_point: string;
+    };
+    member_id: number;
+    member_status: string;
+  };
+  creator_level: number;
+  upload_dto: {
+    file_id: number;
+    file_name: string;
+    image_path: string;
+  }[];
+  comments: any[];
+  board_id: number;
+  like_count: number;
+  view_count: number;
+  created_at: string;
+  modified_at: string;
 }
 
 const Container = styled.div`
@@ -83,11 +115,42 @@ const Content_wrapper = styled.div`
 const Content_title = styled.div`
   font-size: 25px;
 `;
+
+const Content_CarouselContainer = styled.div`
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+`;
 const Content_img = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 20px 0;
+  width: 100%;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
+const Content_imgButton = styled.button`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  :hover {
+    svg {
+      fill: #609966;
+    }
+  }
+  &:first-child {
+    left: 10px;
+  }
+  &:last-child {
+    right: 10px;
+  }
 `;
 const Content_detail = styled.div`
   font-size: 18px;
@@ -312,36 +375,6 @@ const Comments_contents = styled.div`
   line-height: 1.3em;
 `;
 
-interface BoardData {
-  title: string;
-  contents: string;
-  member: {
-    email: string;
-    name: string;
-    phone: string;
-    point: string;
-    tree_count: string;
-    level_dto: null | {
-      level_name: string;
-      min_point: string;
-    };
-    member_id: number;
-    member_status: string;
-  };
-  creator_level: number;
-  upload_dto: {
-    file_id: number;
-    file_name: string;
-    image_path: string;
-  }[];
-  comments: any[];
-  board_id: number;
-  like_count: number;
-  view_count: number;
-  created_at: string;
-  modified_at: string;
-}
-
 function Post() {
   //
   const { id } = useParams();
@@ -358,6 +391,8 @@ function Post() {
   const [boardData, setBoardData] = useState<BoardData | undefined>(undefined);
   const [comment, setComment] = useState("");
   const [clicked, setClicked] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState<number>(0);
+  const totalSlides = boardData ? boardData.upload_dto.length : null;
 
   useEffect(() => {
     // 댓글input 수정시 바로 반영
@@ -376,21 +411,6 @@ function Post() {
   if (postError) {
     return <div>Error fetching data</div>;
   }
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get<BoardData>(
-  //         `http://3.39.150.26:8080/boards/${id}`,
-  //       );
-  //       setBoardData(response.data);
-  //       console.log(boardData);
-  //     } catch (error) {
-  //       console.error("Error fetching board data: ", error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
 
   const postComment = async () => {
     const url = "http://3.39.150.26:8080/comments";
@@ -415,7 +435,7 @@ function Post() {
   function handleCommentChange(e: React.KeyboardEvent<HTMLInputElement>) {
     setComment(e.currentTarget.value);
   }
-  // 좋아요 클릭관리
+  // 좋아요 클릭 관리
   async function handleLikeClick() {
     // setClicked(!clicked);
     try {
@@ -432,6 +452,7 @@ function Post() {
       console.log("좋아요를 실패했습니다:", error);
     }
   }
+  // 게시글 삭제 관리
   async function handleDeleteClick() {
     try {
       if (boardData && localStorage.memberid !== boardData.member.member_id) {
@@ -449,6 +470,14 @@ function Post() {
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     postComment();
+  }
+  // 이미지 좌우 버튼 관리
+  function nextSlide() {
+    totalSlides && setCurrentSlide((currentSlide + 1) % totalSlides);
+  }
+  function prevSlide() {
+    totalSlides &&
+      setCurrentSlide((currentSlide - 1 + totalSlides) % totalSlides);
   }
 
   return (
@@ -474,15 +503,29 @@ function Post() {
                   <Content_title>
                     <div>{boardData.title}</div>
                   </Content_title>
-                  {boardData.upload_dto.map((image, idx) => {
-                    return (
-                      // <Content_img key={idx} imageUrl={image.image_path} />
-                      <Content_img key={idx}>
-                        <img src={image.image_path} alt="picture" />
-                      </Content_img>
-                    );
-                  })}
-
+                  <Content_CarouselContainer>
+                    <Content_img>
+                      {boardData.upload_dto.map((image, idx) => {
+                        return (
+                          // <Content_img key={idx} imageUrl={image.image_path} />
+                          <img
+                            key={idx}
+                            src={image.image_path}
+                            alt="picture"
+                            style={{
+                              display: idx === currentSlide ? "block" : "none",
+                            }}
+                          />
+                        );
+                      })}
+                    </Content_img>
+                    <Content_imgButton onClick={prevSlide}>
+                      <ArrowBackIcon />
+                    </Content_imgButton>
+                    <Content_imgButton onClick={nextSlide}>
+                      <ArrowForwardIcon />
+                    </Content_imgButton>
+                  </Content_CarouselContainer>
                   <Content_detail>
                     <div>{boardData.contents}</div>
                   </Content_detail>
