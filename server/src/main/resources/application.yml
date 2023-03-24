@@ -54,8 +54,4 @@ naver:  #naver API 설정
 #jasypt: #패스워드 암호화/복호화 키
 #  encryptor:
 #    password: ${{secrets.SECRET_KEY}} # 깃허브액션에 등록된 환경변수 사용
-     
-      
-#    url: ENC(KOJYp5cZrH/nCCK9QhrHkPlllOPz2ffKx9qRpYqbhAjt710ZKbFVoZPscIxXppOY2hzU47MLjdw/pSMsvxU+aLZoeEyh9hbC)
-#    username: ENC(ftblJ4dJ9eOSUzjIhBv4PQ==)
-#    password: ENC(DH+YYoF0hb1qCCUby6fo+Cz6CErcdLk+)
+
