@@ -2,7 +2,7 @@ name: client deploy
 on:
   push:
     branches:
-      - ranking
+      - frontend
 jobs:
   build:
     runs-on: ubuntu-latest
