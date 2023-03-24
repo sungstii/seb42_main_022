@@ -1,11 +1,15 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { ReactComponent as ProfileIcon } from "../icon/account_circle.svg";
 import styled from "styled-components";
+import HideHeader from "../utils/hideHeader";
 
+const Container = styled.div`
+  width: 100%;
+  height: 70px;
+`;
 const HeaderContainer = styled.div`
-  position: sticky;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -42,42 +46,155 @@ const HeaderTap = styled(Link)`
   color: black;
   font-size: 18px;
 `;
-const ProfileLink = styled(Link)``;
-
+const ModalContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  width: 100%;
+`;
+const ModalWrapper = styled.div`
+  margin-right: 12px;
+  width: 140px;
+  height: 80px;
+  border: 1px solid #eaeaea;
+  border-radius: 8px;
+`;
+const MoveLoginPage = styled(Link)`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  height: 30px;
+  margin-top: 10px;
+  text-decoration: none;
+  color: black;
+  &:hover {
+    background-color: #eaf9f9;
+  }
+`;
+const MoveSignUpPage = styled(Link)`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  height: 30px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: black;
+  &:hover {
+    background-color: #eaf9f9;
+  }
+`;
+const MoveMyPage = styled(Link)`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  height: 30px;
+  margin-top: 10px;
+  text-decoration: none;
+  color: black;
+  &:hover {
+    background-color: #eaf9f9;
+  }
+`;
+const LogoutBtn = styled.div`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  height: 30px;
+  margin-bottom: 10px;
+  text-decoration: none;
+  color: black;
+  &:hover {
+    background-color: #eaf9f9;
+  }
+`;
 const Header = () => {
+  const navigate = useNavigate();
+  const modalWrapperRef = useRef<any>(null);
+  const [modal, setModal] = useState<boolean>(false);
+  const token = localStorage.token;
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("ref");
+    navigate("./");
+    alert("로그아웃이 완료되었습니다.");
+  };
+  const handleClickOutside = (e: any) => {
+    if (modalWrapperRef && !modalWrapperRef.current.contains(e.target)) {
+      setModal(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [modalWrapperRef]);
+  if (HideHeader()) return null;
   return (
-    <HeaderContainer>
-      <LogoWrapper>
-        <LogoLink to="./">
-          <LogoImg width="60px" height="60px" />
-        </LogoLink>
-      </LogoWrapper>
-      <EmptySpace style={{ flexGrow: "0.2" }} />
-      <TapWrapper>
-        <HeaderTap to="./community">녹색활동</HeaderTap>
-      </TapWrapper>
-      <TapWrapper>
-        <HeaderTap to="./community">친환경 물품후기</HeaderTap>
-      </TapWrapper>
-      <TapWrapper>
-        <HeaderTap to="./community">자유게시판</HeaderTap>
-      </TapWrapper>
-      <TapWrapper>
-        <HeaderTap to="./community">세계환경뉴스</HeaderTap>
-      </TapWrapper>
-      <TapWrapper>
-        <HeaderTap to="./community">환경계산기</HeaderTap>
-      </TapWrapper>
-      <TapWrapper>
-        <HeaderTap to="./community">랭킹</HeaderTap>
-      </TapWrapper>
-      <EmptySpace />
-      <ProfileWrapper>
-        <ProfileLink to="./signup">
-          <ProfileIcon width="35px" height="35px" />
-        </ProfileLink>
-      </ProfileWrapper>
-    </HeaderContainer>
+    <Container>
+      <HeaderContainer>
+        <LogoWrapper>
+          <LogoLink to="./">
+            <LogoImg width="60px" height="60px" />
+          </LogoLink>
+        </LogoWrapper>
+        <EmptySpace style={{ flexGrow: "0.2" }} />
+        <TapWrapper>
+          <HeaderTap to="./greenact">녹색활동</HeaderTap>
+        </TapWrapper>
+        <TapWrapper>
+          <HeaderTap to="./review">친환경 물품후기</HeaderTap>
+        </TapWrapper>
+        <TapWrapper>
+          <HeaderTap to="./community">자유게시판</HeaderTap>
+        </TapWrapper>
+        <TapWrapper>
+          <HeaderTap to="./news">세계환경뉴스</HeaderTap>
+        </TapWrapper>
+        <TapWrapper>
+          <HeaderTap to="./greencal">환경계산기</HeaderTap>
+        </TapWrapper>
+        <TapWrapper>
+          <HeaderTap to="./ranking">랭킹</HeaderTap>
+        </TapWrapper>
+        <EmptySpace />
+        <ProfileWrapper>
+          <ProfileIcon
+            width="35px"
+            height="35px"
+            style={{ cursor: "pointer" }}
+            onClick={() => setModal(!modal)}
+          />
+        </ProfileWrapper>
+      </HeaderContainer>
+      <ModalContainer>
+        {token ? (
+          modal ? (
+            <ModalWrapper ref={modalWrapperRef}>
+              <MoveMyPage to="./mypage">
+                &nbsp;&nbsp;&nbsp;마이페이지
+              </MoveMyPage>
+              <LogoutBtn onClick={logout}>&nbsp;&nbsp;&nbsp;로그아웃</LogoutBtn>
+            </ModalWrapper>
+          ) : null
+        ) : modal ? (
+          <ModalWrapper ref={modalWrapperRef}>
+            <MoveLoginPage to="./signin">
+              &nbsp;&nbsp;&nbsp;로그인
+            </MoveLoginPage>
+            <MoveSignUpPage to="./signup">
+              &nbsp;&nbsp;&nbsp;회원가입
+            </MoveSignUpPage>
+          </ModalWrapper>
+        ) : null}
+      </ModalContainer>
+    </Container>
   );
 };
 

@@ -5,7 +5,6 @@ import { Formik } from "formik";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
-import setAuthorizationToken from "../utils/setAuthorizationToken";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -108,11 +107,12 @@ const SignIn = () => {
                 .post("http://3.39.150.26:8080/members/login", values)
                 .then((res) => {
                   const token = res.headers.authorization;
-                  const ref = res.headers.authorization;
+                  const ref = res.headers.refresh;
                   localStorage.setItem("token", token);
                   localStorage.setItem("ref", ref);
-                  setAuthorizationToken(token);
                   alert("로그인이 완료되었습니다");
+                  localStorage.setItem("memberid", res.data.memberId);
+                  localStorage.setItem("name", res.data.name);
                   navigate("../");
                 })
                 .catch((e) => {

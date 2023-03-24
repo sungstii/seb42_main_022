@@ -25,7 +25,7 @@ const MainContainer = styled.div`
   margin: 0 auto;
   justify-content: center;
   /* flex-direction: row; */
-  padding: 30px 10px 10px 10px;
+  padding: 0px 10px 10px 10px;
 `;
 const SectionContainer = styled.div`
   flex-direction: column;
@@ -36,7 +36,7 @@ const AsideContainer = styled.div`
   margin: 20px 0px 20px 0px;
 `;
 const SidebarContainer = styled.div`
-    position: fixed;
+  position: fixed;
 `;
 const Aside = styled.div`
   width: 300px;
@@ -142,7 +142,7 @@ const MileageBar = styled.div`
   position: relative;
   flex-direction: column;
   /* top: 480px; */
-  background-color: rgb(246,246,246);
+  background-color: rgb(246, 246, 246);
   border-radius: 15px;
   padding: 20px 15px 15px 15px;
   width: 300px;
@@ -444,24 +444,24 @@ function Community() {
   ];
 
   const token = localStorage.getItem('token') || '';
-  const fresh = localStorage.getItem('fresh') || '';
-  const Id = localStorage.getItem('Id') || '';
-  const Point = localStorage.getItem('point') || '';
+  const ref = localStorage.getItem('ref') || '';
+  const id = localStorage.getItem('memberid') || '';
+  const point = localStorage.getItem('point') || '';
 
   const login = () => { // 로그인 요청
     axios.post('http://3.39.150.26:8080/members/login', { "email" : "jeong@gmail.com", "password" : "qwer1234" })
     .then((response) => {
       localStorage.setItem('token', response.headers.authorization);
-      localStorage.setItem('fresh', response.headers.refresh);
+      localStorage.setItem('ref', response.headers.refresh);
       const { data } = response;
-      localStorage.setItem('Id', data.memberId);
-      localStorage.setItem('Name', data.name);
+      localStorage.setItem('memberid', data.memberId);
+      localStorage.setItem('name', data.name);
       console.log(token);
     })
     .catch((error) => console.log(error));
   }
   const membersearch = () => { // 멤버 검색
-    axios.get(`http://3.39.150.26:8080/members/${Id}`, {headers: {Authorization: token, Refresh: fresh}})
+    axios.get(`http://3.39.150.26:8080/members/${id}`, {headers: {Authorization: token, Refresh: ref}})
     .then((response) => {
       const { data } = response;
       localStorage.setItem('point', data.point);
@@ -477,8 +477,8 @@ function Community() {
     .catch((error) => console.log(error));
   }
   const mileagedone = () => { // 마일리지로 나무심기
-    axios.post(`http://3.39.150.26:8080/members/donation/${Id}`,
-    {headers: {Authorization: token, Refresh: fresh}}
+    axios.post(`http://3.39.150.26:8080/members/donation/${id}`,
+    {headers: {Authorization: token, Refresh: ref}}
     )
     .then((response) => {
       const { data } = response;
@@ -487,10 +487,10 @@ function Community() {
   }
 
   const formData = new FormData();
-  formData.append('memberId', '3');
-  formData.append('title', '테스트');
-  formData.append('contents', '내용 테스트');
-  formData.append('file', '');
+  formData.append("memberId", "3");
+  formData.append("title", "테스트");
+  formData.append("contents", "내용 테스트");
+  formData.append("file", "");
 
   const handleClose = () => {
     setShowModal(false);
@@ -501,20 +501,18 @@ function Community() {
     handleClose();
   };
 
-  function loginhandle(){
-    if(token === ''){
-      setLoginModal(true)
-    }
-    else{
-      setShowModal(true)
+  function loginhandle() {
+    if (token === "") {
+      setLoginModal(true);
+    } else {
+      setShowModal(true);
     }
   }
   function logout(){ //로그아웃
     window.localStorage.clear();
-    console.log('로그아웃 완료');
+    console.log("로그아웃 완료");
     console.log(token);
   }
-
 
   useEffect(() => {
     // setPm25(dusts?.rxs.obs[0].msg.iaqi.pm25.v);
@@ -537,7 +535,7 @@ function Community() {
     //Optional Chaining
     membersearch();
   });
-  
+
   return (
     <>
       {isLoading && "Error!"}
@@ -545,11 +543,11 @@ function Community() {
       <MainContainer>
         <SectionContainer>
           <Posting>
-            <Usericon src={user} alt='user'/>
-            <PostButton onClick={() => loginhandle()}>오늘 실천하신 회원님의 노력을 알려주세요!</PostButton>
-            {loginModal && (
-              <LoginModal/>
-            )}
+            <Usericon src={user} alt="user" />
+            <PostButton onClick={() => loginhandle()}>
+              오늘 실천하신 회원님의 노력을 알려주세요!
+            </PostButton>
+            {loginModal && <LoginModal />}
             {showModal && (
               <PostModal
                 onClose={handleClose}
@@ -562,126 +560,132 @@ function Community() {
             return (
               <PostSection key={index}>
                 <Postuser>
-                  <Usericon src={user} alt='user'/>
-                  <div style={{padding:"5px 0px 0px 0px"}}><b>{el.board_creator}</b>&nbsp;Lv. {el.creator_level}</div>
+                  <Usericon src={user} alt="user" />
+                  <div style={{ padding: "5px 0px 0px 0px" }}>
+                    <b>{el.board_creator}</b>&nbsp;Lv. {el.creator_level}
+                  </div>
                 </Postuser>
                 <PostBody>{el.title}</PostBody>
                 {/* <img src={picture} alt='picture'/> */}
-                {el.delegate_image_path && ( <img src={el.delegate_image_path} alt='picture'/>)}
+                {el.delegate_image_path && (
+                  <img src={el.delegate_image_path} alt="picture" />
+                )}
               </PostSection>
             );
           })}
         </SectionContainer>
         <AsideContainer>
           <SidebarContainer>
-          <SearchBar>
-            <SearchOption onClick={() => setIsSearchOpen(!isSearchOpen)}>
-              {isSearchbox ? isSearchbox.label : "제목"}
-              {isSearchOpen === false ? (
-                <ExpandButton src={more} />
-              ) : (
-                <ExpandButton src={less} />
-              )}
-            </SearchOption>
-            {isSearchOpen && (
-              <SearchdownMenu>
-                {searchbox.map(({ id, label, value }) => (
-                  <li
-                    key={id}
-                    onClick={() => searchbarClick({ id, label, value })}
-                  >
-                    {label}
-                  </li>
-                ))}
-              </SearchdownMenu>
-            )}
-
-            <SearchInput
-              placeholder="검색"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-            />
-            <SearchButton src={search} onClick={() => postsearch()} />
-          </SearchBar>
-          {/* {error && 'Error!'}
-          {loading && 'Loading...'} */}
-          {data && (
-            <DustBar>
-              <DustDropdown>
-                <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
-                  {selectedItem ? selectedItem.label : "서울"}
-                  {isOpen === false ? <img src={more} /> : <img src={less} />}
-                </DropdownHeader>
-                {isOpen && (
-                  <DropdownMenu>
-                    {items.map(({ id, label, value }) => (
-                      <li
-                        key={id}
-                        onClick={() => handleItemClick({ id, label, value })}
-                      >
-                        {label}
-                      </li>
-                    ))}
-                  </DropdownMenu>
+            <SearchBar>
+              <SearchOption onClick={() => setIsSearchOpen(!isSearchOpen)}>
+                {isSearchbox ? isSearchbox.label : "제목"}
+                {isSearchOpen === false ? (
+                  <ExpandButton src={more} />
+                ) : (
+                  <ExpandButton src={less} />
                 )}
-                <DustTitle>의 대기질 정보(AQI)</DustTitle>
-              </DustDropdown>
+              </SearchOption>
+              {isSearchOpen && (
+                <SearchdownMenu>
+                  {searchbox.map(({ id, label, value }) => (
+                    <li
+                      key={id}
+                      onClick={() => searchbarClick({ id, label, value })}
+                    >
+                      {label}
+                    </li>
+                  ))}
+                </SearchdownMenu>
+              )}
 
-              <DustGraph>
-                <Row style={{ fontWeight: "bold" }}>
-                  <Line>초미세먼지</Line>
-                  <Line>미세먼지</Line>
-                  <Line>오존</Line>
-                  <Line>이산화질소</Line>
-                  <Line>일산화탄소</Line>
-                  <Line>아황산가스</Line>
-                </Row>
-                <Row style={{ color: "gray" }}>
-                  <Line>PM-2.5</Line>
-                  <Line>PM-10</Line>
-                  <Line>O₃</Line>
-                  <Line>NO₂</Line>
-                  <Line>CO</Line>
-                  <Line>SO₂</Line>
-                </Row>
-                <Row>
-                  <Line>{pm25}㎍/㎥</Line>
-                  <Line>{pm10}㎍/㎥</Line>
-                  <Line>{o3}ppm</Line>
-                  <Line>{no2}ppm</Line>
-                  <Line>{co}ppm</Line>
-                  <Line>{so2}ppm</Line>
-                </Row>
-                <Row4
-                  pm25={pm25}
-                  pm10={pm10}
-                  o3={o3}
-                  no2={no2}
-                  co={co}
-                  so2={so2}
-                >
-                  <Line className="a">{pm25info}</Line>
-                  <Line className="b">{pm10info}</Line>
-                  <Line className="c">{o3info}</Line>
-                  <Line className="d">{no2info}</Line>
-                  <Line className="e">{coinfo}</Line>
-                  <Line className="f">{so2info}</Line>
-                </Row4>
-              </DustGraph>
-            </DustBar>
-          )}
-          <MileageBar>
-            <MileageInfo>
-              <MileageIcon src={saving} />
-              <MileageTitle>나의 마일리지</MileageTitle>
-              <div>{token ? Point : 0}P</div>
-            </MileageInfo>
-            <MileageButton onClick={mileagedone}><img src={nature}/>내 마일리지로 나무 심기!</MileageButton>
-            <button onClick={login}>로그인 버튼</button>
-            <button onClick={logout}>로그아웃 버튼</button>
-          </MileageBar>
+              <SearchInput
+                placeholder="검색"
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+              <SearchButton src={search} onClick={() => postsearch()} />
+            </SearchBar>
+            {/* {error && 'Error!'}
+          {loading && 'Loading...'} */}
+            {data && (
+              <DustBar>
+                <DustDropdown>
+                  <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
+                    {selectedItem ? selectedItem.label : "서울"}
+                    {isOpen === false ? <img src={more} /> : <img src={less} />}
+                  </DropdownHeader>
+                  {isOpen && (
+                    <DropdownMenu>
+                      {items.map(({ id, label, value }) => (
+                        <li
+                          key={id}
+                          onClick={() => handleItemClick({ id, label, value })}
+                        >
+                          {label}
+                        </li>
+                      ))}
+                    </DropdownMenu>
+                  )}
+                  <DustTitle>의 대기질 정보(AQI)</DustTitle>
+                </DustDropdown>
+
+                <DustGraph>
+                  <Row style={{ fontWeight: "bold" }}>
+                    <Line>초미세먼지</Line>
+                    <Line>미세먼지</Line>
+                    <Line>오존</Line>
+                    <Line>이산화질소</Line>
+                    <Line>일산화탄소</Line>
+                    <Line>아황산가스</Line>
+                  </Row>
+                  <Row style={{ color: "gray" }}>
+                    <Line>PM-2.5</Line>
+                    <Line>PM-10</Line>
+                    <Line>O₃</Line>
+                    <Line>NO₂</Line>
+                    <Line>CO</Line>
+                    <Line>SO₂</Line>
+                  </Row>
+                  <Row>
+                    <Line>{pm25}㎍/㎥</Line>
+                    <Line>{pm10}㎍/㎥</Line>
+                    <Line>{o3}ppm</Line>
+                    <Line>{no2}ppm</Line>
+                    <Line>{co}ppm</Line>
+                    <Line>{so2}ppm</Line>
+                  </Row>
+                  <Row4
+                    pm25={pm25}
+                    pm10={pm10}
+                    o3={o3}
+                    no2={no2}
+                    co={co}
+                    so2={so2}
+                  >
+                    <Line className="a">{pm25info}</Line>
+                    <Line className="b">{pm10info}</Line>
+                    <Line className="c">{o3info}</Line>
+                    <Line className="d">{no2info}</Line>
+                    <Line className="e">{coinfo}</Line>
+                    <Line className="f">{so2info}</Line>
+                  </Row4>
+                </DustGraph>
+              </DustBar>
+            )}
+            <MileageBar>
+              <MileageInfo>
+                <MileageIcon src={saving} />
+                <MileageTitle>나의 마일리지</MileageTitle>
+                <div>{token ? point : 0}P</div>
+              </MileageInfo>
+              <MileageButton onClick={mileagedone}>
+                <img src={nature} />내 마일리지로 나무 심기!
+              </MileageButton>
+              <button onClick={login}>로그인 버튼</button>
+              <button onClick={logout}>로그아웃 버튼</button>
+            </MileageBar>
           </SidebarContainer>
-          <Aside/>
+          <Aside />
         </AsideContainer>
       </MainContainer>
     </>

@@ -159,19 +159,19 @@ function PostModal({ onClose, onConfirm }: modal) {
         });
     }
     const token = localStorage.getItem('token') || '';
-    const fresh = localStorage.getItem('fresh') || '';
-    const ID =localStorage.getItem('Id') || '';
-    const NAME =localStorage.getItem('Name') || '';
+    const ref = localStorage.getItem('ref') || '';
+    const id =localStorage.getItem('memberid') || '';
+    const name =localStorage.getItem('name') || '';
 
     const formData = new FormData();
-    formData.append('memberId', ID);
+    formData.append('memberId', id);
     formData.append('title', title);
     formData.append('contents', contents);
     formData.append('files', imageFile);
 
     const submit = () => { // 게시글 등록
         axios.post('http://3.39.150.26:8080/boards/free',formData, { 
-        headers: {Authorization: token, Refresh: fresh}})
+        headers: {Authorization: token, Refresh: ref}})
         .then((response) => {
         const { data } = response;
         console.log(data);
@@ -203,7 +203,7 @@ function PostModal({ onClose, onConfirm }: modal) {
                     <Postuser>
                         <Usericon src={user} alt='user'/>
                         <UserInfo>
-                            <UserText style={{padding:"5px 0px 0px 0px"}}><b>{NAME}</b>&nbsp;Lv.{ID}</UserText>
+                            <UserText style={{padding:"5px 0px 0px 0px"}}><b>{name}</b>&nbsp;Lv.{id}</UserText>
                             <UserText>{currentTime}</UserText>
                         </UserInfo>
                     </Postuser>
