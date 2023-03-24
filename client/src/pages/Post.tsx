@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { atom, useRecoilState } from "recoil";
-import { postListState } from "../recoil/state";
 import { useOnePost } from "../react-query/useOnePost";
 import { useFeaList } from "../react-query/useFeaList";
 import * as dayjs from "dayjs";
@@ -13,7 +11,6 @@ import { ReactComponent as LikeIcon } from "../icon/thumbup.svg";
 import { ReactComponent as EditIcon } from "../icon/edit.svg";
 import { ReactComponent as ArrowBackIcon } from "../icon/arrowback.svg";
 import { ReactComponent as ArrowForwardIcon } from "../icon/arrowforward.svg";
-import Picture from "../image/Picture.png";
 
 interface CommentButtonProps {
   disabled?: boolean;
@@ -60,7 +57,7 @@ const Container = styled.div`
 `;
 const Wrapper = styled.div`
   display: flex;
-  margin: 51px auto;
+  margin: 0 auto 100px auto;
 `;
 const Left_wrapper = styled.div`
   display: flex;
@@ -114,12 +111,25 @@ const Content_wrapper = styled.div`
 `;
 const Content_title = styled.div`
   font-size: 25px;
+  textarea {
+    width: 99%;
+    height: auto;
+    resize: none;
+    font-size: 25px;
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+    margin-bottom: 10px;
+    &:focus {
+      outline: 1px solid #609966;
+    }
+  }
 `;
 
 const Content_CarouselContainer = styled.div`
   position: relative;
   width: 100%;
-  margin: 0 auto;
+  margin: 15px auto;
 `;
 const Content_img = styled.div`
   display: flex;
@@ -154,6 +164,17 @@ const Content_imgButton = styled.button`
 `;
 const Content_detail = styled.div`
   font-size: 18px;
+  textarea {
+    width: 99%;
+    font-size: 18px;
+    resize: none;
+    border: none;
+    background-color: transparent;
+    margin-bottom: 10px;
+    &:focus {
+      outline: 1px solid #609966;
+    }
+  }
 `;
 const Info_container = styled.div`
   display: flex;
@@ -376,7 +397,6 @@ const Comments_contents = styled.div`
 `;
 
 function Post() {
-  //
   const { id } = useParams();
   const {
     data: post,
@@ -389,20 +409,31 @@ function Post() {
     isError: featError,
   } = useFeaList();
   const [boardData, setBoardData] = useState<BoardData | undefined>(undefined);
+  const [title, setTitle] = useState<string | undefined>(undefined);
+  const [content, setContent] = useState<string | undefined>(undefined);
   const [comment, setComment] = useState("");
+  const [fixclicked, setFixclicked] = useState<boolean | undefined>(false);
   const [clicked, setClicked] = useState(false);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const totalSlides = boardData ? boardData.upload_dto.length : null;
+  const textarea = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (post) {
+      setBoardData(post);
+      setTitle(post.title);
+      setContent(post.contents);
+    }
+  }, [post]);
 
   useEffect(() => {
     // 댓글input 수정시 바로 반영
     console.log("Comment updated:", comment);
   }, [comment]);
   useEffect(() => {
-    if (post) {
-      setBoardData(post);
-    }
-  }, [post]);
+    // 댓글input 수정시 바로 반영
+    console.log("title updated:", title);
+  }, [title]);
 
   if (postLoading) {
     return <div>Loading...</div>;
@@ -431,15 +462,35 @@ function Post() {
   };
 
   //! 핸들러
+  // 제목 입력 내용 관리
+  function handleTitleChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setTitle(e.currentTarget.value);
+  }
+  // 콘텐츠 입력 내용 관리
+  function handleContentChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setContent(e.currentTarget.value);
+  }
   // 댓글 입력 내용 관리
-  function handleCommentChange(e: React.KeyboardEvent<HTMLInputElement>) {
+  function handleCommentChange(e: React.ChangeEvent<HTMLInputElement>) {
     setComment(e.currentTarget.value);
+  }
+  // textarea 크기 자동조절
+  function handleResizeHeight() {
+    if (textarea.current) {
+      textarea.current.style.height = "auto";
+      textarea.current.style.height = textarea.current.scrollHeight + "px";
+    }
   }
   // 좋아요 클릭 관리
   async function handleLikeClick() {
     // setClicked(!clicked);
     try {
-      if (boardData && localStorage.memberid === boardData.member.member_id) {
+      if (!localStorage.token) {
+        alert("로그인을 해주세요");
+      } else if (
+        boardData &&
+        localStorage.memberid === boardData.member.member_id
+      ) {
         alert("본인 게시글은 추천할 수 없습니다!");
       } else {
         await axios.post(`http://3.39.150.26:8080/boards/${id}/Like`, {
@@ -455,7 +506,12 @@ function Post() {
   // 게시글 삭제 관리
   async function handleDeleteClick() {
     try {
-      if (boardData && localStorage.memberid !== boardData.member.member_id) {
+      if (!localStorage.token) {
+        alert("로그인을 해주세요");
+      } else if (
+        boardData &&
+        localStorage.memberid !== boardData.member.member_id
+      ) {
         alert("본인 게시글만 삭제 가능합니다!");
       } else {
         await axios.delete(`http://3.39.150.26:8080/boards/${id}`);
@@ -464,6 +520,37 @@ function Post() {
       }
     } catch (error) {
       console.log("게시글 삭제를 실패했습니다:", error);
+    }
+  }
+  // 게시글 수정 관리
+  async function handlePatchPost() {
+    const headers = {
+      Authorization: localStorage.token,
+      "Content-Type": "multipart/form-data",
+    };
+    const formData = new FormData();
+    formData.append("title", `${title}`);
+    formData.append("contents", `${content}`);
+    formData.append("files", "");
+
+    try {
+      if (!localStorage.token) {
+        alert("로그인을 해주세요");
+      } else if (
+        boardData &&
+        localStorage.memberid !== boardData.member.member_id
+      ) {
+        alert("본인 게시글만 수정 가능합니다!");
+      } else {
+        const response = await axios.patch(
+          `http://3.39.150.26:8080/freeboards/${id}`,
+          formData,
+          { headers },
+        );
+        console.log(response.data);
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
   // 댓글 등록 관리
@@ -501,7 +588,14 @@ function Post() {
               <Content_container>
                 <Content_wrapper>
                   <Content_title>
-                    <div>{boardData.title}</div>
+                    <textarea
+                      ref={textarea}
+                      value={title}
+                      onChange={(e) => {
+                        handleTitleChange(e);
+                        handleResizeHeight();
+                      }}
+                    />
                   </Content_title>
                   <Content_CarouselContainer>
                     <Content_img>
@@ -519,15 +613,28 @@ function Post() {
                         );
                       })}
                     </Content_img>
-                    <Content_imgButton onClick={prevSlide}>
-                      <ArrowBackIcon />
-                    </Content_imgButton>
-                    <Content_imgButton onClick={nextSlide}>
-                      <ArrowForwardIcon />
-                    </Content_imgButton>
+                    {boardData.upload_dto[0] ? (
+                      <>
+                        <Content_imgButton onClick={prevSlide}>
+                          <ArrowBackIcon />
+                        </Content_imgButton>
+                        <Content_imgButton onClick={nextSlide}>
+                          <ArrowForwardIcon />
+                        </Content_imgButton>
+                      </>
+                    ) : null}
                   </Content_CarouselContainer>
                   <Content_detail>
-                    <div>{boardData.contents}</div>
+                    <div>
+                      <textarea
+                        ref={textarea}
+                        value={content}
+                        onChange={(e) => {
+                          handleContentChange(e);
+                          handleResizeHeight();
+                        }}
+                      />
+                    </div>
                   </Content_detail>
                 </Content_wrapper>
               </Content_container>
@@ -553,6 +660,9 @@ function Post() {
                       <LikeCount>좋아요 {boardData.like_count}</LikeCount>
                     </Like_wrapper>
                     <Button_wrapper>
+                      <FixButton onClick={handlePatchPost}>
+                        <EditIcon fill="#878484" />
+                      </FixButton>
                       <FixButton>
                         <EditIcon fill="#878484" />
                       </FixButton>
@@ -587,7 +697,7 @@ function Post() {
                           : "로그인이 필요합니다"
                       }
                       type="text"
-                      onKeyUp={handleCommentChange}
+                      onChange={handleCommentChange}
                       disabled={!localStorage.token}
                     />
                   </InputBox>
