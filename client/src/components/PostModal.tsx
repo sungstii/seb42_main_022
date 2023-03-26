@@ -57,6 +57,9 @@ const PlusButton = styled.img`
 
 const ModalTitle = styled.h2`
     color: #595959;
+    padding: 10px 0px 0px 0px;
+    font-size: 20px;
+    font-weight: 600;
     margin-top: 0;
 `;
 

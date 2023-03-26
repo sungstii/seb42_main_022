@@ -6,6 +6,8 @@ interface postList {
   delegate_image_path: string;
   title: string;
   contents: string;
+  board_id: number;
+  created_at: string;
 }
 
 export const postListState = atom<postList[]>({
