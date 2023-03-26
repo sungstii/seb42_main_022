@@ -55,9 +55,10 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
 
     // Querydsl 설정부
-    def generated = 'src/main/generated'  //파일경로
+        def generated = 'src/main/generated'  //파일경로
 // build디렉터리 안에 있는걸 눈에 보이게 꺼내옴
 // ide같은 툴을 사용해서 발생할 수 있는 잠재적 문제를 해결하기위함
 
@@ -75,4 +76,3 @@ tasks.named('test') {
     clean {
         delete file(generated)  //build clean할때 해당 파일도 같이 삭제
     }
-}
