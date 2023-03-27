@@ -17,6 +17,7 @@ import SignIn from "./pages/SignIn";
 import { Reset } from "styled-reset";
 import Header from "./components/Header";
 import axios from "axios";
+import GreenCalResult from "./pages/GreenCalResult";
 
 function App() {
   const token = localStorage.token;
@@ -43,6 +44,7 @@ function App() {
           <Route path="/mypageedit" element={<MypageEdit />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
+          <Route path="/greencalresult" element={<GreenCalResult />} />
         </Routes>
       </RecoilRoot>
     </Fragment>

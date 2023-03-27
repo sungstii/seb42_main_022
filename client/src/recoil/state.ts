@@ -19,3 +19,13 @@ export const areaState = atom<string>({
   key: "areaState",
   default: "seoul",
 });
+
+export const electricChargesState = atom<number>({
+  key: "electricChargesState",
+  default: 0,
+});
+
+export const totalUsageState = atom<number>({
+  key: "totalUsageState",
+  default: 0,
+});
