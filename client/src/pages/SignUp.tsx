@@ -47,11 +47,8 @@ const FormWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-<<<<<<< HEAD
-=======
   width: 70%;
   height: 75%;
->>>>>>> 934561c27bf8122b877f482f1dcaf5a77e4467f0
 `;
 const RadiusInput = styled.input`
   border-radius: 12px;
