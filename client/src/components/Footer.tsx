@@ -10,7 +10,7 @@ const FooterContainer = styled.div`
   align-items: center;
   justify-content: center;
   background-color: #f6f6f6;
-  padding: 8px;
+  padding: 8px 0;
   width: 100%;
   height: 250px;
   background-color: white;

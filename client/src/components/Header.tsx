@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { ReactComponent as ProfileIcon } from "../icon/account_circle.svg";
 import styled from "styled-components";
-import HideHeader from "../utils/hideHeader";
+import useHideHeader from "../utils/useHideHeader";
 
 const Container = styled.div`
   width: 100%;
@@ -13,8 +13,7 @@ const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 8px;
-  width: 100%;
+  padding: 8px 0;
   height: 50px;
   background-color: white;
   border: 1px solid #f6f6f6;
@@ -46,74 +45,75 @@ const HeaderTap = styled(Link)`
   color: black;
   font-size: 18px;
 `;
-const ModalContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  width: 100%;
-`;
-const ModalWrapper = styled.div`
-  margin-right: 12px;
-  width: 140px;
-  height: 80px;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
-`;
-const MoveLoginPage = styled(Link)`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
-  height: 30px;
-  margin-top: 10px;
-  text-decoration: none;
-  color: black;
-  &:hover {
-    background-color: #eaf9f9;
-  }
-`;
-const MoveSignUpPage = styled(Link)`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
-  height: 30px;
-  margin-bottom: 10px;
-  text-decoration: none;
-  color: black;
-  &:hover {
-    background-color: #eaf9f9;
-  }
-`;
-const MoveMyPage = styled(Link)`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
-  height: 30px;
-  margin-top: 10px;
-  text-decoration: none;
-  color: black;
-  &:hover {
-    background-color: #eaf9f9;
-  }
-`;
-const LogoutBtn = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
-  height: 30px;
-  margin-bottom: 10px;
-  text-decoration: none;
-  color: black;
-  &:hover {
-    background-color: #eaf9f9;
-  }
-`;
+// const ModalContainer = styled.div`
+//   display: flex;
+//   justify-content: flex-end;
+//   align-items: flex-start;
+//   width: 100%;
+// `;
+// const ModalWrapper = styled.div`
+//   margin-right: 12px;
+//   width: 140px;
+//   height: 80px;
+//   border: 1px solid #eaeaea;
+//   border-radius: 8px;
+// `;
+// const MoveLoginPage = styled(Link)`
+//   display: flex;
+//   align-items: center;
+//   cursor: pointer;
+//   width: 100%;
+//   height: 30px;
+//   margin-top: 10px;
+//   text-decoration: none;
+//   color: black;
+//   &:hover {
+//     background-color: #eaf9f9;
+//   }
+// `;
+// const MoveSignUpPage = styled(Link)`
+//   display: flex;
+//   align-items: center;
+//   cursor: pointer;
+//   width: 100%;
+//   height: 30px;
+//   margin-bottom: 10px;
+//   text-decoration: none;
+//   color: black;
+//   &:hover {
+//     background-color: #eaf9f9;
+//   }
+// `;
+// const MoveMyPage = styled(Link)`
+//   display: flex;
+//   align-items: center;
+//   cursor: pointer;
+//   width: 100%;
+//   height: 30px;
+//   margin-top: 10px;
+//   text-decoration: none;
+//   color: black;
+//   &:hover {
+//     background-color: #eaf9f9;
+//   }
+// `;
+// const LogoutBtn = styled.div`
+//   display: flex;
+//   align-items: center;
+//   cursor: pointer;
+//   width: 100%;
+//   height: 30px;
+//   margin-bottom: 10px;
+//   text-decoration: none;
+//   color: black;
+//   &:hover {
+//     background-color: #eaf9f9;
+//   }
+// `;
 const Header = () => {
   const navigate = useNavigate();
-  const modalWrapperRef = useRef<any>(null);
+  // type지정 HTMLdivElement
+  const modalWrapperRef = useRef<HTMLDivElement>(null);
   const [modal, setModal] = useState<boolean>(false);
   const token = localStorage.token;
   const logout = () => {
@@ -123,11 +123,14 @@ const Header = () => {
     alert("로그아웃이 완료되었습니다.");
   };
   const handleClickOutside = (e: any) => {
-    if (modalWrapperRef && !modalWrapperRef.current.contains(e.target)) {
+    if (
+      modalWrapperRef.current &&
+      !modalWrapperRef.current.contains(e.target)
+    ) {
       setModal(false);
     }
   };
-
+  // click으로 이벤트 처리시 동작 안되는 이유
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
 
@@ -135,7 +138,7 @@ const Header = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [modalWrapperRef]);
-  if (HideHeader()) return null;
+  if (useHideHeader()) return null;
   return (
     <Container>
       <HeaderContainer>
