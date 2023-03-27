@@ -1,20 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from "react";
+import { Link } from "react-router-dom";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { ReactComponent as ProfileIcon } from "../icon/account_circle.svg";
-import styled from "styled-components";
-import HideHeader from "../utils/hideHeader";
+import styled, { css } from "styled-components";
+import useHideHeader from "../utils/useHideHeader";
+import useDetectClose from "../utils/useDetectClose";
 
 const Container = styled.div`
   width: 100%;
-  height: 170px;
+  height: 70px;
 `;
 const HeaderContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 8px;
-  width: 100%;
+  padding: 8px 0;
   height: 50px;
   background-color: white;
   border: 1px solid #f6f6f6;
@@ -26,6 +26,7 @@ const TapWrapper = styled.div`
 const ProfileWrapper = styled.div`
   display: flex;
   justify-content: center;
+  position: relative;
   margin: auto;
   flex-grow: 0.4;
 `;
@@ -46,96 +47,63 @@ const HeaderTap = styled(Link)`
   color: black;
   font-size: 18px;
 `;
-const ModalContainer = styled.div`
+const Menu = styled.div<HTMLDivElement>`
+  background: white;
+  position: absolute;
+  top: 48px;
+  left: 5%;
+  width: 110px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -20px);
+  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  z-index: 9;
+
+  ${({ isDropped }) =>
+    isDropped &&
+    css`
+      opacity: 1;
+      visibility: visible;
+      transform: translate(-50%, 0);
+      left: 5%;
+    `};
+`;
+
+const Ul = styled.ul`
+  & > li:last-of-type {
+    margin-bottom: 10px;
+  }
+
+  & > li:first-of-type {
+    margin-top: 10px;
+  }
+
+  list-style-type: none;
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-  width: 100%;
+  flex-direction: column;
 `;
-const ModalWrapper = styled.div`
-  margin-right: 12px;
-  width: 140px;
-  height: 80px;
-  border: 1px solid #eaeaea;
-  border-radius: 8px;
-`;
-const MoveLoginPage = styled(Link)`
+
+const Li = styled.li`
   display: flex;
   align-items: center;
-  cursor: pointer;
   width: 100%;
   height: 30px;
-  margin-top: 10px;
-  text-decoration: none;
-  color: black;
   &:hover {
-    background-color: #eaf9f9;
+    background-color: #e6ffff;
   }
 `;
-const MoveSignUpPage = styled(Link)`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
-  height: 30px;
-  margin-bottom: 10px;
+
+const LinkWrapper = styled(Link)`
+  font-size: 16px;
   text-decoration: none;
   color: black;
-  &:hover {
-    background-color: #eaf9f9;
-  }
 `;
-const MoveMyPage = styled(Link)`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
-  height: 30px;
-  margin-top: 10px;
-  text-decoration: none;
-  color: black;
-  &:hover {
-    background-color: #eaf9f9;
-  }
-`;
-const LogoutBtn = styled.div`
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  width: 100%;
-  height: 30px;
-  margin-bottom: 10px;
-  text-decoration: none;
-  color: black;
-  &:hover {
-    background-color: #eaf9f9;
-  }
-`;
+
 const Header = () => {
-  const navigate = useNavigate();
-  const modalWrapperRef = useRef<any>(null);
-  const [modal, setModal] = useState<boolean>(false);
-  const token = localStorage.token;
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("ref");
-    navigate("./");
-    alert("로그아웃이 완료되었습니다.");
-  };
-  const handleClickOutside = (e: any) => {
-    if (modalWrapperRef && !modalWrapperRef.current.contains(e.target)) {
-      setModal(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [modalWrapperRef]);
-  if (HideHeader()) return null;
+  const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
+  if (useHideHeader()) return null;
   return (
     <Container>
       <HeaderContainer>
@@ -169,11 +137,26 @@ const Header = () => {
             width="35px"
             height="35px"
             style={{ cursor: "pointer" }}
-            onClick={() => setModal(!modal)}
+            onClick={myPageHandler}
+            ref={myPageRef}
           />
+          <Menu<any> isDropped={myPageIsOpen}>
+            <Ul>
+              <Li>
+                <LinkWrapper to="./signin">
+                  &nbsp;&nbsp;&nbsp;로그인
+                </LinkWrapper>
+              </Li>
+              <Li>
+                <LinkWrapper to="./signup">
+                  &nbsp;&nbsp;&nbsp;회원가입
+                </LinkWrapper>
+              </Li>
+            </Ul>
+          </Menu>
         </ProfileWrapper>
       </HeaderContainer>
-      <ModalContainer>
+      {/* <ModalContainer>
         {token ? (
           modal ? (
             <ModalWrapper ref={modalWrapperRef}>
@@ -193,7 +176,7 @@ const Header = () => {
             </MoveSignUpPage>
           </ModalWrapper>
         ) : null}
-      </ModalContainer>
+      </ModalContainer> */}
     </Container>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Main from "./pages/Main";
@@ -26,28 +26,26 @@ function App() {
     delete axios.defaults.headers.common["Authorization"];
   }
   return (
-    <div className="App">
+    <Fragment>
       <Reset />
-      <header className="App-header">
-        <RecoilRoot>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Main />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/review" element={<Review />} />
-            <Route path="/greenact" element={<GreenAct />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/greencal" element={<GreenCal />} />
-            <Route path="/ranking" element={<Ranking />} />
-            <Route path="/:category/:id" element={<Post />} />
-            <Route path="/mypage" element={<MyPage />} />
-            <Route path="/mypageedit" element={<MypageEdit />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/signin" element={<SignIn />} />
-          </Routes>
-        </RecoilRoot>
-      </header>
-    </div>
+      <RecoilRoot>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/review" element={<Review />} />
+          <Route path="/greenact" element={<GreenAct />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/greencal" element={<GreenCal />} />
+          <Route path="/ranking" element={<Ranking />} />
+          <Route path="/:category/:id" element={<Post />} />
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypageedit" element={<MypageEdit />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/signin" element={<SignIn />} />
+        </Routes>
+      </RecoilRoot>
+    </Fragment>
   );
 }
 

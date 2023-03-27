@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 
-function HideHeader() {
+function useHideHeader() {
   const locationName = useLocation().pathname;
 
   switch (locationName) {
@@ -12,4 +12,4 @@ function HideHeader() {
   }
 }
 
-export default HideHeader;
+export default useHideHeader;
