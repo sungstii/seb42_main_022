@@ -8,21 +8,31 @@ const MainContainer = styled.div`
   display: flex;
   margin: 0 auto;
   justify-content: center;
-  padding: 30px 10px 10px 10px;
+  width: 100%;
+  @media screen and (max-width: 920px) {
+    width: 100%;
+    padding: 0px;
+  }
 `;
 const SectionContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   margin: 50px 0px 0px 0px;
+  width: 100%;
 `;
 const NewsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-content: center;
+  margin: 0 auto;
   width: 800px;
   height: 100%;
   padding: 0px 50px 20px 50px;
+  @media screen and (max-width: 920px) {
+    width: 100%;
+    padding: 0px;
+  }
 `;
 const NewsBox = styled.div`
   display: flex;
@@ -31,7 +41,7 @@ const NewsBox = styled.div`
   justify-content: center;
   align-items: center;
   border-radius: 15px;
-  height: 100px;
+  height: 120px;
   padding: 20px 50px 20px 50px;
   margin: 0px 0px 30px 0px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
@@ -68,13 +78,13 @@ function News () {
       {isError && "Loading..."}
       <MainContainer>
         <SectionContainer>
-          <Text>여긴 환경뉴스 페이지입니다</Text>
+          <Text>환경 뉴스를 실시간으로 만나보세요!</Text>
           <NewsContainer>
             {news?.items.map((el, index) => {
               return (
                 <NewsBox key={index} onClick={() => window.open(`${el.originallink}`, "_blank")}>
-                  <Title>{el.title.replace(/<\/?[^>]+(>|$)/g, "")}</Title>
-                  <Contents>{el.description.replace(/<\/?[^>]+(>|$)/g, "")}</Contents>
+                  <Title>{el.title.replace(/<\/?(b|[^>]+|("|'))>|(&apos;)|(&quot;)/g, "")}</Title>
+                  <Contents>{el.description.replace(/<\/?(b|[^>]+|("|'))>|(&apos;)|(&quot;)/g, "")}</Contents>
                   <div>{dayjs(el.pub_date).locale('ko').format('YYYY년 M월 D일 ddd HH:mm')}</div>
                 </NewsBox>
               )
