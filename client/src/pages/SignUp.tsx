@@ -41,7 +41,6 @@ const FormContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* border: 1px solid black; */
 `;
 const RadiusInput = styled.input`
   border-radius: 12px;

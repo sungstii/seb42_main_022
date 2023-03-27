@@ -113,7 +113,7 @@ const LogoutBtn = styled.div`
 `;
 const Header = () => {
   const navigate = useNavigate();
-  const modalWrapperRef = useRef<any>(null);
+  const modalWrapperRef = useRef<HTMLDivElement>(null);
   const [modal, setModal] = useState<boolean>(false);
   const token = localStorage.token;
   const logout = () => {
@@ -123,16 +123,22 @@ const Header = () => {
     alert("로그아웃이 완료되었습니다.");
   };
   const handleClickOutside = (e: any) => {
-    if (modalWrapperRef && !modalWrapperRef.current.contains(e.target)) {
+    if (
+      modalWrapperRef.current &&
+      modalWrapperRef &&
+      !modalWrapperRef.current.contains(e.target)
+    ) {
+      console.log("false");
+      console.log(e.target);
       setModal(false);
     }
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mouseup", handleClickOutside);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mouseup", handleClickOutside);
     };
   }, [modalWrapperRef]);
   if (HideHeader()) return null;

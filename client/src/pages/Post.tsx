@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import { useOnePost } from "../react-query/useOnePost";
-import { useFeaList } from "../react-query/useFeaList";
+import { useFeatList } from "../react-query/useFeatList";
 import * as dayjs from "dayjs";
 import accountCircle from "../icon/account_circle.svg";
 import { ReactComponent as DelIcon } from "../icon/delete.svg";
@@ -11,6 +11,7 @@ import { ReactComponent as LikeIcon } from "../icon/thumbup.svg";
 import { ReactComponent as EditIcon } from "../icon/edit.svg";
 import { ReactComponent as ArrowBackIcon } from "../icon/arrowback.svg";
 import { ReactComponent as ArrowForwardIcon } from "../icon/arrowforward.svg";
+import { ReactComponent as Done } from "../icon/donesmall.svg";
 
 interface CommentButtonProps {
   disabled?: boolean;
@@ -52,6 +53,9 @@ interface BoardData {
   modified_at: string;
 }
 
+const Featlink = styled(Link)`
+  text-decoration: none;
+`;
 const Container = styled.div`
   display: flex;
 `;
@@ -109,7 +113,7 @@ const Content_wrapper = styled.div`
   flex-direction: column;
   margin: 10px 20px;
 `;
-const Content_title = styled.div`
+const Content_title = styled.div<{ disabled: boolean }>`
   font-size: 25px;
   textarea {
     width: 99%;
@@ -118,11 +122,14 @@ const Content_title = styled.div`
     font-size: 25px;
     font-weight: bold;
     border: none;
+    border-radius: 15px;
     background-color: transparent;
     margin-bottom: 10px;
+    overflow-y: hidden;
     &:focus {
       outline: 1px solid #609966;
     }
+    ${(props) => !props.disabled && "outline: 2px solid #609966"};
   }
 `;
 
@@ -162,18 +169,17 @@ const Content_imgButton = styled.button`
     right: 10px;
   }
 `;
-const Content_detail = styled.div`
+const Content_detail = styled.div<{ disabled: boolean }>`
   font-size: 18px;
   textarea {
     width: 99%;
     font-size: 18px;
     resize: none;
     border: none;
+    border-radius: 15px;
     background-color: transparent;
     margin-bottom: 10px;
-    &:focus {
-      outline: 1px solid #609966;
-    }
+    ${(props) => !props.disabled && "outline: 2px solid #609966"};
   }
 `;
 const Info_container = styled.div`
@@ -396,8 +402,10 @@ const Comments_contents = styled.div`
   line-height: 1.3em;
 `;
 
+//!-------------------------------------------------------------------------------------------------------------- //
+
 function Post() {
-  const { id } = useParams();
+  const { id, category } = useParams();
   const {
     data: post,
     isLoading: postLoading,
@@ -407,16 +415,18 @@ function Post() {
     data: feat,
     isLoading: featLoading,
     isError: featError,
-  } = useFeaList();
+  } = useFeatList();
+
   const [boardData, setBoardData] = useState<BoardData | undefined>(undefined);
   const [title, setTitle] = useState<string | undefined>(undefined);
   const [content, setContent] = useState<string | undefined>(undefined);
   const [comment, setComment] = useState("");
-  const [fixclicked, setFixclicked] = useState<boolean | undefined>(false);
+  const [isFixed, setisFixed] = useState<boolean>(false);
   const [clicked, setClicked] = useState(false);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const totalSlides = boardData ? boardData.upload_dto.length : null;
   const textarea = useRef<HTMLTextAreaElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (post) {
@@ -424,8 +434,7 @@ function Post() {
       setTitle(post.title);
       setContent(post.contents);
     }
-  }, [post]);
-
+  }, [post, id]);
   useEffect(() => {
     // 댓글input 수정시 바로 반영
     console.log("Comment updated:", comment);
@@ -510,23 +519,29 @@ function Post() {
         alert("로그인을 해주세요");
       } else if (
         boardData &&
-        localStorage.memberid !== boardData.member.member_id
+        +localStorage.memberid !== +boardData.member.member_id
       ) {
         alert("본인 게시글만 삭제 가능합니다!");
       } else {
         await axios.delete(`http://3.39.150.26:8080/boards/${id}`);
         console.log("게시글이 삭제되었습니다");
+        alert("게시글이 삭제되었습니다!");
+        navigate(`../${category}`);
         window.location.reload();
       }
     } catch (error) {
       console.log("게시글 삭제를 실패했습니다:", error);
     }
   }
+  // 게시글 수정 버튼 관리
+  function handleFixClick() {
+    setisFixed(!isFixed);
+  }
   // 게시글 수정 관리
   async function handlePatchPost() {
     const headers = {
       Authorization: localStorage.token,
-      "Content-Type": "multipart/form-data",
+      // "Content-Type": "multipart/form-data",
     };
     const formData = new FormData();
     formData.append("title", `${title}`);
@@ -538,7 +553,7 @@ function Post() {
         alert("로그인을 해주세요");
       } else if (
         boardData &&
-        localStorage.memberid !== boardData.member.member_id
+        +localStorage.memberid !== +boardData.member.member_id
       ) {
         alert("본인 게시글만 수정 가능합니다!");
       } else {
@@ -548,9 +563,10 @@ function Post() {
           { headers },
         );
         console.log(response.data);
+        console.log("게시글을 수정하였습니다");
       }
     } catch (error) {
-      console.error(error);
+      console.log("게시글 수정을 실패하였습니다", error);
     }
   }
   // 댓글 등록 관리
@@ -566,7 +582,9 @@ function Post() {
     totalSlides &&
       setCurrentSlide((currentSlide - 1 + totalSlides) % totalSlides);
   }
-
+  function handleFeatClick() {
+    console.log("clicked FeatPost", `postid :${id}`);
+  }
   return (
     <Container>
       {boardData ? (
@@ -587,7 +605,7 @@ function Post() {
               </User_container>
               <Content_container>
                 <Content_wrapper>
-                  <Content_title>
+                  <Content_title disabled={!isFixed}>
                     <textarea
                       ref={textarea}
                       value={title}
@@ -595,6 +613,7 @@ function Post() {
                         handleTitleChange(e);
                         handleResizeHeight();
                       }}
+                      disabled={!isFixed}
                     />
                   </Content_title>
                   <Content_CarouselContainer>
@@ -613,7 +632,8 @@ function Post() {
                         );
                       })}
                     </Content_img>
-                    {boardData.upload_dto[0] ? (
+                    {boardData.upload_dto.length > 1 &&
+                    boardData.upload_dto[0] ? (
                       <>
                         <Content_imgButton onClick={prevSlide}>
                           <ArrowBackIcon />
@@ -624,7 +644,7 @@ function Post() {
                       </>
                     ) : null}
                   </Content_CarouselContainer>
-                  <Content_detail>
+                  <Content_detail disabled={!isFixed}>
                     <div>
                       <textarea
                         ref={textarea}
@@ -633,6 +653,7 @@ function Post() {
                           handleContentChange(e);
                           handleResizeHeight();
                         }}
+                        disabled={!isFixed}
                       />
                     </div>
                   </Content_detail>
@@ -650,7 +671,8 @@ function Post() {
                         <LikeButton
                           clicked={clicked}
                           disabled={
-                            localStorage.memberid === boardData.member.member_id
+                            +localStorage.memberid ===
+                            +boardData.member.member_id
                           }
                           onClick={handleLikeClick}
                         >
@@ -660,10 +682,13 @@ function Post() {
                       <LikeCount>좋아요 {boardData.like_count}</LikeCount>
                     </Like_wrapper>
                     <Button_wrapper>
-                      <FixButton onClick={handlePatchPost}>
-                        <EditIcon fill="#878484" />
-                      </FixButton>
-                      <FixButton>
+                      {isFixed && (
+                        <FixButton onClick={handlePatchPost}>
+                          <Done fill="#878484" />
+                        </FixButton>
+                      )}
+
+                      <FixButton onClick={handleFixClick}>
                         <EditIcon fill="#878484" />
                       </FixButton>
                       <DeleteButton onClick={handleDeleteClick}>
@@ -675,7 +700,7 @@ function Post() {
               </Info_container>
             </Post_wrapper>
             <CommentCnt>
-              <span>댓글 1</span>
+              <span>댓글 {boardData.comments.length}</span>
             </CommentCnt>
 
             {/* 댓글창 부분 */}
@@ -760,7 +785,12 @@ function Post() {
                               </List_likeicon>
                               <List_likecnt>{el.like_count}</List_likecnt>
                             </List_like>
-                            <List_title>{el.title}</List_title>
+                            <Featlink
+                              onClick={handleFeatClick}
+                              to={`../${category}/${el.board_id}`}
+                            >
+                              <List_title>{el.title}</List_title>
+                            </Featlink>
                           </List_el>
                         );
                       })

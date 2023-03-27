@@ -9,7 +9,7 @@ interface FeatPost {
   view_count: number;
 }
 
-export const useFeaList = () => {
+export const useFeatList = () => {
   const { category } = useParams();
   const fetchPost = async () => {
     let url = "";
