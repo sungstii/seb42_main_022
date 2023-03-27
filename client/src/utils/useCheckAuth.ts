@@ -7,6 +7,7 @@ import { sessionState } from "../recoil/state";
 function useCheckAuth(token: string | null) {
   const location = useLocation();
   const refresh = localStorage.refresh;
+  // useRecoilState사용시 렌더링 발생함으로 useSetRecoilState를 사용하여 불필요한 렌더링 방지
   const setSession = useSetRecoilState(sessionState);
   const getAccessToken = () => {
     axios

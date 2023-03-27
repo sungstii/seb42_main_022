@@ -1,5 +1,5 @@
-import React, { ComponentType, HtmlHTMLAttributes, ReactElement } from "react";
-import { Link } from "react-router-dom";
+import React, { ComponentType } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { ReactComponent as ProfileIcon } from "../icon/account_circle.svg";
 import styled, { css } from "styled-components";
@@ -96,14 +96,32 @@ const Li = styled.li`
 `;
 
 const LinkWrapper = styled(Link)`
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
   text-decoration: none;
   color: black;
 `;
+const LogoutBtn = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  color: black;
+  cursor: pointer;
+`;
 
 const Header = () => {
+  const navigate = useNavigate();
   const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
-  const aaa = true;
+  const aaa = false;
+  const logout = () => {
+    localStorage.removeItem("refresh");
+    navigate("/");
+  };
   if (useHideHeader()) return null;
   return (
     <Container>
@@ -163,36 +181,15 @@ const Header = () => {
                   </LinkWrapper>
                 </Li>
                 <Li>
-                  <LinkWrapper to="./logout">
+                  <LogoutBtn onClick={logout}>
                     &nbsp;&nbsp;&nbsp;로그아웃
-                  </LinkWrapper>
+                  </LogoutBtn>
                 </Li>
               </Ul>
             )}
           </Menu>
         </ProfileWrapper>
       </HeaderContainer>
-      {/* <ModalContainer>
-        {token ? (
-          modal ? (
-            <ModalWrapper ref={modalWrapperRef}>
-              <MoveMyPage to="./mypage">
-                &nbsp;&nbsp;&nbsp;마이페이지
-              </MoveMyPage>
-              <LogoutBtn onClick={logout}>&nbsp;&nbsp;&nbsp;로그아웃</LogoutBtn>
-            </ModalWrapper>
-          ) : null
-        ) : modal ? (
-          <ModalWrapper ref={modalWrapperRef}>
-            <MoveLoginPage to="./signin">
-              &nbsp;&nbsp;&nbsp;로그인
-            </MoveLoginPage>
-            <MoveSignUpPage to="./signup">
-              &nbsp;&nbsp;&nbsp;회원가입
-            </MoveSignUpPage>
-          </ModalWrapper>
-        ) : null}
-      </ModalContainer> */}
     </Container>
   );
 };
