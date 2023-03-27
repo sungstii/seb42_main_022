@@ -10,7 +10,13 @@ interface postList {
   created_at: string;
 }
 interface userToken {
+  /**
+   * 로그인 유무
+   */
   authenticated: boolean;
+  /**
+   * 토큰 값
+   */
   token: string | null;
 }
 

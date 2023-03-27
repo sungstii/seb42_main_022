@@ -112,23 +112,19 @@ const SignIn = () => {
               }}
               validationSchema={signInSchema}
               onSubmit={(values) => {
+                console.log("로그인");
                 axios
                   .post("http://3.39.150.26:8080/members/login", values)
                   .then((res) => {
+                    console.log(res);
                     const token = res.headers.authorization;
                     const ref = res.headers.refresh;
                     localStorage.setItem("token", token);
                     localStorage.setItem("refresh", ref);
-                    axios
-                      .get("http://3.39.150.26:8080/auth/reissue", {
-                        headers: { Refresh: ref },
-                      })
-                      .then((res) => {
-                        console.log(res);
-                      });
+                    delete axios.defaults.headers.common["Authorization"];
                     localStorage.setItem("memberid", res.data.memberId);
                     localStorage.setItem("name", res.data.name);
-                    navigate("/");
+                    navigate("../");
                   })
                   .catch((e) => {
                     alert("로그인 실패");
