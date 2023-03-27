@@ -1,11 +1,11 @@
 import React, { ReactElement } from "react";
 import { Navigate } from "react-router-dom";
 
-interface user {
+interface AuthRouteModel {
   auth: boolean;
   children: ReactElement;
 }
-function Protected({ auth, children }: user) {
+function Protected({ auth, children }: AuthRouteModel) {
   if (!auth) {
     return <Navigate to="/" replace />;
   }

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { Formik } from "formik";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { object, string, ref } from "yup";
 
 const InputContainer = styled.div`
@@ -73,6 +73,7 @@ const SignUpBtn = styled.button`
 const LogoLink = styled(Link)`
   display: flex;
 `;
+const SignInLink = styled(Link)``;
 
 interface FormModel {
   // 이름은 공백이 아니여야 합니다.
@@ -289,7 +290,7 @@ const SignUp = () => {
             </Formik>
             <span style={{ textAlign: "center", marginTop: "20px" }}>
               이미회원이신가요?&nbsp;&nbsp;&nbsp;
-              <a href="../signin">로그인</a>
+              <SignInLink to="../signin">로그인</SignInLink>
             </span>
           </FormWrapper>
           {/* <SignUpBtn

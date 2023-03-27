@@ -73,6 +73,7 @@ const SignUpBtn = styled.button`
 const LogoLink = styled(Link)`
   display: flex;
 `;
+const SignUpLink = styled(Link)``;
 
 interface LoginModel {
   email: string;
@@ -196,7 +197,7 @@ const SignIn = () => {
             </Formik>
             <span style={{ textAlign: "center", marginTop: "20px" }}>
               계정이없으신가요?&nbsp;&nbsp;&nbsp;
-              <a href="../signup">회원가입</a>
+              <SignUpLink to="../signup">회원가입</SignUpLink>
             </span>
           </FormWrapper>
         </FormContainer>

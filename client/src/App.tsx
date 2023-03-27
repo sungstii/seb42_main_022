@@ -21,7 +21,7 @@ import useCheckAuth from "./utils/useCheckAuth";
 
 function App() {
   const { authenticated, token } = useRecoilValue(sessionState);
-  // useCheckAuth(token);
+  useCheckAuth(token);
   return (
     <Fragment>
       <Reset />
@@ -39,9 +39,18 @@ function App() {
           path="/mypage"
           element={<Protected auth={authenticated}>{<MyPage />}</Protected>}
         />
-        <Route path="/mypageedit" element={<MypageEdit />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/signin" element={<SignIn />} />
+        <Route
+          path="/mypageedit"
+          element={<Protected auth={authenticated}>{<MypageEdit />}</Protected>}
+        />
+        <Route
+          path="/signup"
+          element={<Protected auth={!authenticated}>{<SignUp />}</Protected>}
+        />
+        <Route
+          path="/signin"
+          element={<Protected auth={!authenticated}>{<SignIn />}</Protected>}
+        />
       </Routes>
     </Fragment>
   );

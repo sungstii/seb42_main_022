@@ -9,7 +9,7 @@ interface postList {
   board_id: number;
   created_at: string;
 }
-interface userToken {
+interface SessionModel {
   /**
    * 로그인 유무
    */
@@ -30,7 +30,7 @@ export const areaState = atom<string>({
   default: "seoul",
 });
 
-export const sessionState = atom<userToken>({
+export const sessionState = atom<SessionModel>({
   key: "sessionState",
   default: {
     authenticated: false,

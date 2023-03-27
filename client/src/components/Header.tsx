@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentType, HtmlHTMLAttributes, ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { ReactComponent as ProfileIcon } from "../icon/account_circle.svg";
@@ -103,6 +103,7 @@ const LinkWrapper = styled(Link)`
 
 const Header = () => {
   const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
+  const aaa = true;
   if (useHideHeader()) return null;
   return (
     <Container>
@@ -140,19 +141,34 @@ const Header = () => {
             onClick={myPageHandler}
             ref={myPageRef}
           />
-          <Menu<any> isDropped={myPageIsOpen}>
-            <Ul>
-              <Li>
-                <LinkWrapper to="./signin">
-                  &nbsp;&nbsp;&nbsp;로그인
-                </LinkWrapper>
-              </Li>
-              <Li>
-                <LinkWrapper to="./signup">
-                  &nbsp;&nbsp;&nbsp;회원가입
-                </LinkWrapper>
-              </Li>
-            </Ul>
+          <Menu<ComponentType<any>> isDropped={myPageIsOpen}>
+            {aaa ? (
+              <Ul>
+                <Li>
+                  <LinkWrapper to="./signin">
+                    &nbsp;&nbsp;&nbsp;로그인
+                  </LinkWrapper>
+                </Li>
+                <Li>
+                  <LinkWrapper to="./signup">
+                    &nbsp;&nbsp;&nbsp;회원가입
+                  </LinkWrapper>
+                </Li>
+              </Ul>
+            ) : (
+              <Ul>
+                <Li>
+                  <LinkWrapper to="./mypage">
+                    &nbsp;&nbsp;&nbsp;마이페이지
+                  </LinkWrapper>
+                </Li>
+                <Li>
+                  <LinkWrapper to="./logout">
+                    &nbsp;&nbsp;&nbsp;로그아웃
+                  </LinkWrapper>
+                </Li>
+              </Ul>
+            )}
           </Menu>
         </ProfileWrapper>
       </HeaderContainer>
