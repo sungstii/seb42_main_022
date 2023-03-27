@@ -95,7 +95,6 @@ const SignIn = () => {
           </LogoLink>
         </LogoContainer>
         <FormContainer>
-
           <FormWrapper>
             <h1
               style={{
@@ -198,7 +197,6 @@ const SignIn = () => {
               <a href="../signup">회원가입</a>
             </span>
           </FormWrapper>
->>>>>>> 934561c27bf8122b877f482f1dcaf5a77e4467f0
         </FormContainer>
       </LeftContainer>
       <RightContainer>
