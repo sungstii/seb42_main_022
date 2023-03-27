@@ -17,6 +17,9 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+### api key 관련 ###
+/src/main/resources/application-API-KEY.yml
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
