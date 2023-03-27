@@ -16,7 +16,7 @@ const LeftContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
-  height: 100%;
+  height: 100vh;
 `;
 const RightContainer = styled.div`
   display: flex;
@@ -24,7 +24,7 @@ const RightContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 50%;
-  height: 821px;
+  height: 100vh;
   background: linear-gradient(#52797a, #365b68);
 `;
 const LogoContainer = styled.div`
@@ -34,14 +34,21 @@ const LogoContainer = styled.div`
   /* border: 1px solid black; */
 `;
 const FormContainer = styled.div`
-  margin-top: 20px;
   width: 100%;
-  height: 680px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* border: 1px solid black; */
+`;
+const FormWrapper = styled.div`
+  margin-top: 10vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* border: 1px solid black; */
+  width: 70%;
+  height: 75%;
 `;
 const RadiusInput = styled.input`
   border-radius: 12px;
@@ -54,13 +61,14 @@ const ErrorMsg = styled.div`
   margin-top: 2px;
 `;
 const SignUpBtn = styled.button`
-  margin-top: 20px;
+  margin-top: 3vh;
   color: white;
   font-size: 16px;
   background: #609966;
   border-radius: 12px;
   padding: 8px;
   border: none;
+  cursor: pointer;
 `;
 const LogoLink = styled(Link)`
   display: flex;
@@ -114,151 +122,176 @@ const SignUp = () => {
           </LogoLink>
         </LogoContainer>
         <FormContainer>
-          <h1
-            style={{
-              fontSize: "30px",
-              fontWeight: "700",
-              marginBottom: "20px",
-            }}
-          >
-            지금 Green Circle에 가입하세요.
-          </h1>
-          <Formik<FormModel>
-            initialValues={{
-              name: "",
-              email: "",
-              phone: "",
-              password: "",
-              passwordConfirm: "",
-            }}
-            validationSchema={signUpSchema}
-            onSubmit={(values) => {
-              axios
-                .post("http://3.39.150.26:8080/members", values)
-                .then((res) => {
-                  alert("회원가입이 완료되었습니다.");
-                  navigate("../signin");
-                })
-                .catch((e) => {
-                  console.log("회원가입 실패", e.response);
-                });
-            }}
-          >
-            {({ handleSubmit, values, handleChange, errors, touched }) => (
-              <form
-                style={{
-                  width: "50%",
-                  height: "70%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-around",
-                  padding: "12px",
-                }}
-                onSubmit={handleSubmit}
-              >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="name">
-                    이름
-                  </label>
-                  <RadiusInput
-                    type="text"
-                    id="name"
-                    placeholder="이름을 입력해주세요."
-                    value={values.name}
-                    onChange={handleChange}
-                  />
-                  {touched.name && errors.name ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
+          <FormWrapper>
+            <h1
+              style={{
+                fontSize: "30px",
+                fontWeight: "700",
+                marginBottom: "20px",
+              }}
+            >
+              지금 Green Circle에 가입하세요.
+            </h1>
+            <Formik<FormModel>
+              initialValues={{
+                name: "",
+                email: "",
+                phone: "",
+                password: "",
+                passwordConfirm: "",
+              }}
+              validationSchema={signUpSchema}
+              onSubmit={(values) => {
+                axios
+                  .post("http://3.39.150.26:8080/members", values)
+                  .then((res) => {
+                    alert("회원가입이 완료되었습니다.");
+                    navigate("../signin");
+                  })
+                  .catch((e) => {
+                    console.log("회원가입 실패", e.response);
+                  });
+              }}
+            >
+              {({ handleSubmit, values, handleChange, errors, touched }) => (
+                <form
+                  style={{
+                    width: "50%",
+                    height: "70%",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "space-around",
+                    padding: "12px",
+                  }}
+                  onSubmit={handleSubmit}
+                >
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label style={{ fontSize: "15px" }} htmlFor="name">
+                      이름
+                    </label>
+                    <RadiusInput
+                      type="text"
+                      id="name"
+                      placeholder="이름을 입력해주세요."
+                      value={values.name}
+                      onChange={handleChange}
+                    />
+                    {touched.name && errors.name ? (
+                      <ErrorMsg
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          padding: "2px",
+                        }}
+                      >
+                        {errors.name}
+                      </ErrorMsg>
+                    ) : null}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label style={{ fontSize: "15px" }} htmlFor="email">
+                      이메일
+                    </label>
+                    <RadiusInput
+                      type="email"
+                      id="email"
+                      placeholder="이메일을 입력해주세요."
+                      value={values.email}
+                      onChange={handleChange}
+                    />
+                    {touched.email && errors.email ? (
+                      <ErrorMsg
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          padding: "2px",
+                        }}
+                      >
+                        {errors.email}
+                      </ErrorMsg>
+                    ) : null}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label style={{ fontSize: "15px" }} htmlFor="phone">
+                      전화번호
+                    </label>
+                    <RadiusInput
+                      type="tel"
+                      id="phone"
+                      placeholder="전화번호를 입력해주세요."
+                      value={values.phone}
+                      onChange={handleChange}
+                    />
+                    {touched.phone && errors.phone ? (
+                      <ErrorMsg
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          padding: "2px",
+                        }}
+                      >
+                        {errors.phone}
+                      </ErrorMsg>
+                    ) : null}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label style={{ fontSize: "15px" }} htmlFor="password">
+                      비밀번호
+                    </label>
+                    <RadiusInput
+                      type="password"
+                      id="password"
+                      placeholder="비밀번호를 입력해주세요."
+                      value={values.password}
+                      onChange={handleChange}
+                    />
+                    {touched.password && errors.password ? (
+                      <ErrorMsg
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          padding: "2px",
+                        }}
+                      >
+                        {errors.password}
+                      </ErrorMsg>
+                    ) : null}
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column" }}>
+                    <label
+                      style={{ fontSize: "15px" }}
+                      htmlFor="passwordConfirm"
                     >
-                      {errors.name}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="email">
-                    이메일
-                  </label>
-                  <RadiusInput
-                    type="email"
-                    id="email"
-                    placeholder="이메일을 입력해주세요."
-                    value={values.email}
-                    onChange={handleChange}
-                  />
-                  {touched.email && errors.email ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.email}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="phone">
-                    전화번호
-                  </label>
-                  <RadiusInput
-                    type="tel"
-                    id="phone"
-                    placeholder="전화번호를 입력해주세요."
-                    value={values.phone}
-                    onChange={handleChange}
-                  />
-                  {touched.phone && errors.phone ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.phone}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="password">
-                    비밀번호
-                  </label>
-                  <RadiusInput
-                    type="password"
-                    id="password"
-                    placeholder="비밀번호를 입력해주세요."
-                    value={values.password}
-                    onChange={handleChange}
-                  />
-                  {touched.password && errors.password ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.password}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="passwordConfirm">
-                    비밀번호 확인
-                  </label>
-                  <RadiusInput
-                    type="password"
-                    id="passwordConfirm"
-                    placeholder="비밀번호를 입력해주세요."
-                    value={values.passwordConfirm}
-                    onChange={handleChange}
-                  />
-                  {touched.passwordConfirm && errors.passwordConfirm ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.passwordConfirm}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <SignUpBtn type="submit">회원가입</SignUpBtn>
-              </form>
-            )}
-          </Formik>
-          <span style={{ textAlign: "center", marginTop: "20px" }}>
-            이미회원이신가요?&nbsp;&nbsp;&nbsp;
-            <a href="../signin">로그인</a>
-          </span>
+                      비밀번호 확인
+                    </label>
+                    <RadiusInput
+                      type="password"
+                      id="passwordConfirm"
+                      placeholder="비밀번호를 입력해주세요."
+                      value={values.passwordConfirm}
+                      onChange={handleChange}
+                    />
+                    {touched.passwordConfirm && errors.passwordConfirm ? (
+                      <ErrorMsg
+                        style={{
+                          color: "red",
+                          fontSize: "12px",
+                          padding: "2px",
+                        }}
+                      >
+                        {errors.passwordConfirm}
+                      </ErrorMsg>
+                    ) : null}
+                  </div>
+                  <SignUpBtn type="submit">회원가입</SignUpBtn>
+                </form>
+              )}
+            </Formik>
+            <span style={{ textAlign: "center", marginTop: "20px" }}>
+              이미회원이신가요?&nbsp;&nbsp;&nbsp;
+              <a href="../signin">로그인</a>
+            </span>
+          </FormWrapper>
         </FormContainer>
       </LeftContainer>
       <RightContainer>
