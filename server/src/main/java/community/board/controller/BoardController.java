@@ -85,7 +85,7 @@ public class BoardController {
     @PatchMapping("/{board-id}")
     public ResponseEntity<?> updateBoard(@PathVariable("board-id") @Positive long boardId,
                                          @ModelAttribute MultipartFile[] files,
-                                         @Valid @ModelAttribute BoardDto.Patch boardPatchDto) throws Exception {
+                                         @ModelAttribute BoardDto.Patch boardPatchDto) throws Exception {
         Board board = boardMapper.boardPatchToBoard(boardPatchDto);
         board.setBoardId(boardId);
         Board updateBoard = boardService.updateBoard(board);
