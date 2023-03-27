@@ -122,6 +122,7 @@ const SignIn = () => {
                     alert("로그인이 완료되었습니다");
                     localStorage.setItem("memberid", res.data.memberId);
                     localStorage.setItem("name", res.data.name);
+                    localStorage.setItem('point', res.data.point);
                     navigate("../");
                   })
                   .catch((e) => {
