@@ -51,7 +51,7 @@ const Menu = styled.div<HTMLDivElement>`
   background: white;
   position: absolute;
   top: 48px;
-  left: 10%;
+  left: 5%;
   width: 110px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 3px;
@@ -67,12 +67,12 @@ const Menu = styled.div<HTMLDivElement>`
       opacity: 1;
       visibility: visible;
       transform: translate(-50%, 0);
-      left: 10%;
+      left: 5%;
     `};
 `;
 
 const Ul = styled.ul`
-  & > li {
+  & > li:last-of-type {
     margin-bottom: 10px;
   }
 
@@ -81,17 +81,18 @@ const Ul = styled.ul`
   }
 
   list-style-type: none;
-  padding: 0;
-  margin: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
 `;
 
 const Li = styled.li`
-  padding: 6px;
+  display: flex;
+  align-items: center;
   width: 100%;
+  height: 30px;
+  &:hover {
+    background-color: #e6ffff;
+  }
 `;
 
 const LinkWrapper = styled(Link)`
@@ -142,10 +143,14 @@ const Header = () => {
           <Menu<any> isDropped={myPageIsOpen}>
             <Ul>
               <Li>
-                <LinkWrapper to="./signin">로그인</LinkWrapper>
+                <LinkWrapper to="./signin">
+                  &nbsp;&nbsp;&nbsp;로그인
+                </LinkWrapper>
               </Li>
               <Li>
-                <LinkWrapper to="./signup">회원가입</LinkWrapper>
+                <LinkWrapper to="./signup">
+                  &nbsp;&nbsp;&nbsp;회원가입
+                </LinkWrapper>
               </Li>
             </Ul>
           </Menu>
