@@ -9,7 +9,7 @@ import arrowback from "../icon/arrowback.svg";
 
 const Container = styled.div`
   width: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
   margin: 0 0 200px;
   @media screen and (max-width: 1200px) {
     height: 100%;
