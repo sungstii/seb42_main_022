@@ -52,8 +52,7 @@ const Menu = styled.div<HTMLDivElement>`
   position: absolute;
   top: 48px;
   left: 10%;
-  width: 100px;
-  text-align: left;
+  width: 110px;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   border-radius: 3px;
   opacity: 0;
@@ -90,7 +89,10 @@ const Ul = styled.ul`
   align-items: center;
 `;
 
-const Li = styled.li``;
+const Li = styled.li`
+  padding: 6px;
+  width: 100%;
+`;
 
 const LinkWrapper = styled(Link)`
   font-size: 16px;
