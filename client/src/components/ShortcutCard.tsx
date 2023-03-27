@@ -15,10 +15,10 @@ const Container = styled.div`
 `;
 
 interface SquareProps {
-  greenact?: boolean;
-  review?: boolean;
-  greencal?: boolean;
-  news?: boolean;
+  greenact?: string;
+  review?: string;
+  greencal?: string;
+  news?: string;
 }
 const Square = styled(Link)<SquareProps>`
   display: flex;
@@ -108,7 +108,7 @@ const ShortcutCard = () => {
   return (
     <>
       <Container>
-        <Square greenact to="./greenact">
+        <Square greenact="true" to="./greenact">
           <Wrapper>
             <TextBox>
               <RotateText>녹색활동</RotateText>
@@ -119,7 +119,7 @@ const ShortcutCard = () => {
             </TextBox>
           </Wrapper>
         </Square>
-        <Square review to="./review">
+        <Square review="true" to="./review">
           <Wrapper>
             <TextBox>
               <RotateText>친환경물품후기</RotateText>
@@ -130,7 +130,7 @@ const ShortcutCard = () => {
             </TextBox>
           </Wrapper>
         </Square>
-        <Square greencal to="./greencal">
+        <Square greencal="true" to="./greencal">
           <Wrapper>
             <TextBox>
               <RotateText>환경계산기</RotateText>
@@ -139,7 +139,7 @@ const ShortcutCard = () => {
             </TextBox>
           </Wrapper>
         </Square>
-        <Square news to="./news">
+        <Square news="true" to="./news">
           <Wrapper>
             <TextBox>
               <RotateText>세계환경뉴스</RotateText>
