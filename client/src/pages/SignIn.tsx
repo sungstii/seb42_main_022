@@ -118,11 +118,17 @@ const SignIn = () => {
                     const token = res.headers.authorization;
                     const ref = res.headers.refresh;
                     localStorage.setItem("token", token);
-                    localStorage.setItem("ref", ref);
-                    alert("로그인이 완료되었습니다");
+                    localStorage.setItem("refresh", ref);
+                    axios
+                      .get("http://3.39.150.26:8080/auth/reissue", {
+                        headers: { Refresh: ref },
+                      })
+                      .then((res) => {
+                        console.log(res);
+                      });
                     localStorage.setItem("memberid", res.data.memberId);
                     localStorage.setItem("name", res.data.name);
-                    navigate("../");
+                    navigate("/");
                   })
                   .catch((e) => {
                     alert("로그인 실패");
