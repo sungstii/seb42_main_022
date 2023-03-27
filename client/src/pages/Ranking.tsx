@@ -80,6 +80,9 @@ const RankIcon = styled.img`
 const TreeKingIcon = styled.img`
   width: 70px;
   margin: 0px 30px 0px 30px;
+  @media screen and (max-width: 920px) {
+    width: 50px;
+  }
 `;
 const Title = styled.div`
   font-size: 30px;
