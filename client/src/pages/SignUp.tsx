@@ -292,6 +292,17 @@ const SignUp = () => {
               <a href="../signin">로그인</a>
             </span>
           </FormWrapper>
+          {/* <SignUpBtn
+            onClick={() => {
+              axios
+                .post("http://3.39.150.26:8080/oauth2/authorization/google")
+                .then((res) => {
+                  console.log(res);
+                });
+            }}
+          >
+            구글로그인
+          </SignUpBtn> */}
         </FormContainer>
       </LeftContainer>
       <RightContainer>
