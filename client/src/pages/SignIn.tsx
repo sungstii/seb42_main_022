@@ -112,6 +112,7 @@ const SignIn = () => {
                   localStorage.setItem("ref", ref);
                   alert("로그인이 완료되었습니다");
                   localStorage.setItem("memberid", res.data.memberId);
+                  localStorage.setItem("name", res.data.name);
                   navigate("../");
                 })
                 .catch((e) => {

@@ -6,6 +6,8 @@ interface postList {
   delegate_image_path: string;
   title: string;
   contents: string;
+  board_id: number;
+  created_at: string;
 }
 
 export const postListState = atom<postList[]>({
@@ -16,18 +18,4 @@ export const postListState = atom<postList[]>({
 export const areaState = atom<string>({
   key: "areaState",
   default: "seoul",
-});
-
-export const tokenState = atom<string>({
-  key: "tokenState",
-  default: "",
-});
-export const refreshState = atom<string>({
-  key: "refreshState",
-  default: "",
-});
-
-export const myIdState = atom<number>({
-  key: "myIdState",
-  default: 0,
 });
