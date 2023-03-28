@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ReactComponent as GithubIcon } from "../icon/github.svg";
 import { ReactComponent as NotionIcon } from "../icon/notion.svg";
 
 const FooterContainer = styled.div`
@@ -12,7 +13,7 @@ const FooterContainer = styled.div`
   background-color: #f6f6f6;
   padding: 8px 0;
   width: 100%;
-  height: 250px;
+  height: 200px;
   background-color: white;
   border-top: 1px solid #f6f6f6; ;
 `;
@@ -22,23 +23,23 @@ const FooterTopWrapper = styled.div`
   flex-wrap: nowrap;
   align-items: flex-start;
   width: 50%;
-  height: 70px;
+  height: 65px;
   /* border: 1px solid gray; */
 `;
 const FooterBottomWrapper = styled.div`
   text-align: left;
   margin-top: 20px;
   width: 50%;
-  height: 20px;
+  height: 30px;
   /* border: 1px solid gray; */
 `;
 const TopLeftContentsWrapper = styled.div`
-  margin-right: 8px;
+  margin-right: 30px;
   display: flex;
   flex-direction: column;
   /* border: 1px solid gray; */
-  width: 111px;
-  height: 100%;
+  width: 80px;
+  height: 92%;
 `;
 const TopCenterContentsWrapper = styled.div`
   margin-right: 20px;
@@ -77,7 +78,7 @@ const RightTextWrapper = styled.div`
   height: 32%;
 `;
 const Text = styled.span`
-  font-size: 12px;
+  font-size: 16px;
 `;
 
 const Footer = () => {
@@ -86,13 +87,20 @@ const Footer = () => {
       <FooterTopWrapper>
         <TopLeftContentsWrapper>
           <LeftTopTextWrapper>
-            <Text style={{ fontSize: "20px", fontWeight: "bold" }}>
+            <Text style={{ fontSize: "23px", fontWeight: "bold" }}>
               고객센터
             </Text>
           </LeftTopTextWrapper>
           <LeftBottomTextWrapper>
-            <NotionIcon width="32" height="32" />
-            <NotionIcon width="32" height="32" />
+            <a href="https://github.com/" target="blank">
+              <GithubIcon width="22" height="22" />
+            </a>
+            <a
+              href="https://www.notion.so/ko-kr/product?utm_source=google&utm_campaign=10805039169&utm_medium=104440699817&utm_content=455555244419&utm_term=%EB%85%B8%EC%85%98&targetid=kwd-827502875973&gclid=CjwKCAjw_YShBhAiEiwAMomsEGPW6JPzZ2PuYzm0ttCbWnQcKxH21ilhRDnxUDEzE-159i7Ga0zkUBoCjqgQAvD_BwE"
+              target="blank"
+            >
+              <NotionIcon width="22" height="22" />
+            </a>
           </LeftBottomTextWrapper>
         </TopLeftContentsWrapper>
         <TopCenterContentsWrapper>

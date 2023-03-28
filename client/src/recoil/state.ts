@@ -9,6 +9,16 @@ interface postList {
   board_id: number;
   created_at: string;
 }
+interface SessionModel {
+  /**
+   * 로그인 유무
+   */
+  authenticated: boolean;
+  /**
+   * 토큰 값
+   */
+  token: string | null;
+}
 
 export const postListState = atom<postList[]>({
   key: "postListState",
@@ -18,4 +28,12 @@ export const postListState = atom<postList[]>({
 export const areaState = atom<string>({
   key: "areaState",
   default: "seoul",
+});
+
+export const sessionState = atom<SessionModel>({
+  key: "sessionState",
+  default: {
+    authenticated: false,
+    token: null,
+  },
 });
