@@ -113,7 +113,6 @@ const SignIn = () => {
               }}
               validationSchema={signInSchema}
               onSubmit={(values) => {
-                console.log("로그인");
                 axios
                   .post("http://3.39.150.26:8080/members/login", values)
                   .then((res) => {
@@ -127,9 +126,9 @@ const SignIn = () => {
                     localStorage.setItem("name", res.data.name);
                     navigate("../");
                   })
-                  .catch((e) => {
+                  .catch((error) => {
                     alert("로그인 실패");
-                    console.log("로그인", e.response);
+                    console.log("로그인", error);
                   });
               }}
             >

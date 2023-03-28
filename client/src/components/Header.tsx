@@ -117,7 +117,7 @@ const LogoutBtn = styled.div`
 const Header = () => {
   const navigate = useNavigate();
   const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
-  const aaa = false;
+  const aaa = true;
   const logout = () => {
     localStorage.removeItem("refresh");
     navigate("/");
