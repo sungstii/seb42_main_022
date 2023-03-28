@@ -5,6 +5,8 @@ import { Formik } from "formik";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
+import { useSetRecoilState } from "recoil";
+import { sessionState } from "../recoil/state";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -73,6 +75,7 @@ const SignUpBtn = styled.button`
 const LogoLink = styled(Link)`
   display: flex;
 `;
+const SignUpLink = styled(Link)``;
 
 interface LoginModel {
   email: string;
@@ -86,6 +89,7 @@ const signInSchema = object({
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const setSession = useSetRecoilState(sessionState);
   return (
     <InputContainer>
       <LeftContainer>
@@ -117,16 +121,18 @@ const SignIn = () => {
                   .then((res) => {
                     const token = res.headers.authorization;
                     const ref = res.headers.refresh;
+                    console.log(token);
                     localStorage.setItem("token", token);
-                    localStorage.setItem("ref", ref);
-                    alert("로그인이 완료되었습니다");
-                    localStorage.setItem("memberid", res.data.memberId);
-                    localStorage.setItem("name", res.data.name);
+                    setSession({ authenticated: true, token: token });
+                    axios.defaults.headers.common["Authorization"] = token;
+                    localStorage.setItem("refresh", ref);
+                    // localStorage.setItem("memberid", res.data.memberId);
+                    // localStorage.setItem("name", res.data.name);
                     navigate("../");
                   })
-                  .catch((e) => {
+                  .catch((error) => {
                     alert("로그인 실패");
-                    console.log("로그인", e.response);
+                    console.log("로그인", error);
                   });
               }}
             >
@@ -194,7 +200,7 @@ const SignIn = () => {
             </Formik>
             <span style={{ textAlign: "center", marginTop: "20px" }}>
               계정이없으신가요?&nbsp;&nbsp;&nbsp;
-              <a href="../signup">회원가입</a>
+              <SignUpLink to="../signup">회원가입</SignUpLink>
             </span>
           </FormWrapper>
         </FormContainer>
