@@ -143,23 +143,27 @@ interface modal{
     onConfirm: any;
 }
 function PostModal({ onClose, onConfirm }: modal) {
-    const [imageSrc, setImageSrc]: any = useState(null);
-    const [imageFile, setImageFile]: any = useState(null)
+    const [imageSrc, setImageSrc] = useState<string | undefined>(undefined);
+    const [imageFile, setImageFile] = useState<File[]>([])
     const [title, setTitle] = useState("");
     const [contents, setContents] = useState("");
     const [currentTime, setCurrentTime] = useState<string>('');
 
-    const onUpload = (e: any) => {
-        const file = e.target.files[0];
-        setImageFile(file);
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        return new Promise<void>((resolve) => { 
-            reader.onload = () => {	
-                setImageSrc(reader.result || null);
-                resolve();
-            };
-        });
+    const onUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files: FileList | null = e.target.files;
+        if (files) {
+            const fileList: File[] = Array.from(files);
+            console.log(fileList);
+            setImageFile(fileList);
+            const reader = new FileReader();
+            reader.readAsDataURL(fileList[0]);
+            return new Promise<void>((resolve) => { 
+                reader.onload = () => {	
+                    setImageSrc(reader.result as string | undefined);
+                    resolve();
+                };
+            });
+        }
     }
     const token = localStorage.getItem('token') || '';
     const ref = localStorage.getItem('ref') || '';
@@ -170,7 +174,10 @@ function PostModal({ onClose, onConfirm }: modal) {
     formData.append('memberId', id);
     formData.append('title', title);
     formData.append('contents', contents);
-    formData.append('files', imageFile);
+    // formData.append('files', imageFile); 단일 이미지 넣을때
+    for (let i = 0; i < imageFile.length; i++) { 
+        formData.append("files", imageFile[i]);
+    }
 
     const submit = () => { // 게시글 등록
         axios.post('http://3.39.150.26:8080/boards/free',formData, { 
@@ -221,7 +228,6 @@ function PostModal({ onClose, onConfirm }: modal) {
                         <PlusButton src={Add}/>
                     </label>
                     <Testinput type="file" multiple={true} id="fileUpload" onChange={e => onUpload(e)}/>
-                        {/* <PlusButton src={Add}/> */}
                         <ModalButton onClick={handleSubmit}>알려주기</ModalButton>
                     </SubmitContainer>
                 </ModalContent>

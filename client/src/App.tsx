@@ -7,7 +7,7 @@ import GreenAct from "./pages/GreenAct";
 import News from "./pages/News";
 import GreenCal from "./pages/GreenCal";
 import Ranking from "./pages/Ranking";
-import { useRecoilValue } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
 import Post from "./pages/Post";
 import MyPage from "./pages/MyPage";
 import MypageEdit from "./pages/MypageEdit";
@@ -15,6 +15,8 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import { Reset } from "styled-reset";
 import Header from "./components/Header";
+import axios from "axios";
+import GreenCalResult from "./pages/GreenCalResult";
 import Protected from "./components/privateRoute";
 import { sessionState } from "./recoil/state";
 import useCheckAuth from "./utils/useCheckAuth";
@@ -27,6 +29,7 @@ function App() {
   return (
     <Fragment>
       <Reset />
+      <RecoilRoot>
       <Header />
       <Routes>
         <Route path="/" element={<Main />} />
@@ -53,7 +56,9 @@ function App() {
           path="/signin"
           element={<Protected auth={!token}>{<SignIn />}</Protected>}
         />
+        <Route path="/greencalresult" element={<GreenCalResult />} />
       </Routes>
+      </RecoilRoot>
     </Fragment>
   );
 }
