@@ -15,7 +15,7 @@ import { usePosts } from "../react-query/usePosts"
 import PostModal from '../components/PostModal';
 import LoginModal from "../components/LoginModal"
 import { Link } from "react-router-dom";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -48,7 +48,7 @@ const SectionContainer = styled.div`
 const AsideContainer = styled.div`
   flex-direction: column;
   margin: 20px 0px 20px 0px;
-  width: 387px;
+  width: 357px;
   @media screen and (max-width: 1000px) {
     width: 80%;
     /* margin: 20px 0px 0px 0px; */
@@ -646,10 +646,10 @@ function Community() {
     { id: 2, label: "내용", value: "CONTENTS" },
   ];
 
-  const token = localStorage.getItem('token') || '';
-  const ref = localStorage.getItem('ref') || '';
-  const memberid = localStorage.getItem('memberid') || '';
-  const point: any = localStorage.getItem('point') || '';
+  const token = localStorage.getItem("token") || "";
+  const ref = localStorage.getItem("ref") || "";
+  const memberid = localStorage.getItem("memberid") || "";
+  const point: any = localStorage.getItem("point") || "";
 
   const login = () => { // 로그인 요청
     axios.post('http://3.39.150.26:8080/members/login', { "email" : "jeong@gmail.com", "password" : "qwer1234" })
@@ -711,12 +711,10 @@ function Community() {
   function mileagebuttonhandle() {
     if (token === "") {
       setLoginModal(true);
-    } 
-    else {
-      if ( point < 300 ){
+    } else {
+      if (point < 300) {
         setPointlack(!pointlack);
-      }
-      else{
+      } else {
         mileagedone();
         setShowToast(true);
       }
@@ -736,7 +734,8 @@ function Community() {
       setShowModal(true);
     }
   }
-  function logout(){ //로그아웃
+  function logout() {
+    //로그아웃
     window.localStorage.clear();
     console.log("로그아웃 완료");
     console.log(token);
@@ -761,7 +760,6 @@ function Community() {
       setPointlack(false);
     }, 1500);
     return () => clearTimeout(timer);
-    
   }, [showToast, pointlack]);
 
   return (
@@ -823,7 +821,7 @@ function Community() {
           )
           }
 
-            {/* {searchpost?.map((el, index) => {
+          {/* {searchpost?.map((el, index) => {
               return (
                 <PostSection to={`/category/${el.board_id}`} key={index}>
                   <Postuser>
@@ -898,7 +896,11 @@ function Community() {
                 <DustDropdown>
                   <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
                     {selectedItem ? selectedItem.label : "서울"}
-                    {isOpen === false ? <DustExpandButton src={more} /> : <DustExpandButton src={less} />}
+                    {isOpen === false ? (
+                      <DustExpandButton src={more} />
+                    ) : (
+                      <DustExpandButton src={less} />
+                    )}
                   </DropdownHeader>
                   {isOpen && (
                     <DropdownMenu>
@@ -967,7 +969,7 @@ function Community() {
               <MileageButton onClick={mileagebuttonhandle}>
                 <TreeIcon src={nature} />내 마일리지로 나무 심기!
               </MileageButton>
-              
+
               <button onClick={login}>로그인 버튼</button>
               <button onClick={logout}>로그아웃 버튼</button>
             </MileageBar>
@@ -977,9 +979,7 @@ function Community() {
         {showToast && (
           <Toast>회원님의 마일리지로 나무를 1그루 심었습니다.</Toast>
         )}
-        {pointlack && (
-          <Toast>마일리지가 부족합니다.</Toast>
-        )}
+        {pointlack && <Toast>마일리지가 부족합니다.</Toast>}
       </MainContainer>
     </>
   );

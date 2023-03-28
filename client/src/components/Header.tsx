@@ -1,10 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { ComponentType } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { ReactComponent as ProfileIcon } from "../icon/account_circle.svg";
 import styled, { css } from "styled-components";
 import useHideHeader from "../utils/useHideHeader";
 import useDetectClose from "../utils/useDetectClose";
+import axios from "axios";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { sessionState } from "../recoil/state";
+import { replace } from "formik";
 
 const Container = styled.div`
   width: 100%;
@@ -96,13 +100,38 @@ const Li = styled.li`
 `;
 
 const LinkWrapper = styled(Link)`
-  font-size: 16px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
   text-decoration: none;
   color: black;
 `;
+const LogoutBtn = styled.div`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  color: black;
+  cursor: pointer;
+`;
 
 const Header = () => {
+  const navigate = useNavigate();
   const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
+  // const { authenticated } = useRecoilValue(sessionState);
+  const [session, setSession] = useRecoilState(sessionState);
+  const logout = () => {
+    axios
+      .post("http://3.39.150.26:8080/members/logout")
+      .then((res) => console.log(res));
+    setSession({ authenticated: false, token: null });
+    delete axios.defaults.headers.common["Authorization"];
+    localStorage.clear();
+    navigate("/");
+  };
   if (useHideHeader()) return null;
   return (
     <Container>
@@ -140,43 +169,37 @@ const Header = () => {
             onClick={myPageHandler}
             ref={myPageRef}
           />
-          <Menu<any> isDropped={myPageIsOpen}>
-            <Ul>
-              <Li>
-                <LinkWrapper to="./signin">
-                  &nbsp;&nbsp;&nbsp;로그인
-                </LinkWrapper>
-              </Li>
-              <Li>
-                <LinkWrapper to="./signup">
-                  &nbsp;&nbsp;&nbsp;회원가입
-                </LinkWrapper>
-              </Li>
-            </Ul>
+          <Menu<ComponentType<any>> isDropped={myPageIsOpen}>
+            {!session.authenticated ? (
+              <Ul>
+                <Li>
+                  <LinkWrapper to="./signin">
+                    &nbsp;&nbsp;&nbsp;로그인
+                  </LinkWrapper>
+                </Li>
+                <Li>
+                  <LinkWrapper to="./signup">
+                    &nbsp;&nbsp;&nbsp;회원가입
+                  </LinkWrapper>
+                </Li>
+              </Ul>
+            ) : (
+              <Ul>
+                <Li>
+                  <LinkWrapper to="./mypage">
+                    &nbsp;&nbsp;&nbsp;마이페이지
+                  </LinkWrapper>
+                </Li>
+                <Li>
+                  <LogoutBtn onClick={logout}>
+                    &nbsp;&nbsp;&nbsp;로그아웃
+                  </LogoutBtn>
+                </Li>
+              </Ul>
+            )}
           </Menu>
         </ProfileWrapper>
       </HeaderContainer>
-      {/* <ModalContainer>
-        {token ? (
-          modal ? (
-            <ModalWrapper ref={modalWrapperRef}>
-              <MoveMyPage to="./mypage">
-                &nbsp;&nbsp;&nbsp;마이페이지
-              </MoveMyPage>
-              <LogoutBtn onClick={logout}>&nbsp;&nbsp;&nbsp;로그아웃</LogoutBtn>
-            </ModalWrapper>
-          ) : null
-        ) : modal ? (
-          <ModalWrapper ref={modalWrapperRef}>
-            <MoveLoginPage to="./signin">
-              &nbsp;&nbsp;&nbsp;로그인
-            </MoveLoginPage>
-            <MoveSignUpPage to="./signup">
-              &nbsp;&nbsp;&nbsp;회원가입
-            </MoveSignUpPage>
-          </ModalWrapper>
-        ) : null}
-      </ModalContainer> */}
     </Container>
   );
 };

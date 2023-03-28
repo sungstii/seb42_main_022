@@ -1,5 +1,4 @@
 import React, { Fragment } from "react";
-import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import Main from "./pages/Main";
 import Community from "./pages/Community";
@@ -8,7 +7,7 @@ import GreenAct from "./pages/GreenAct";
 import News from "./pages/News";
 import GreenCal from "./pages/GreenCal";
 import Ranking from "./pages/Ranking";
-import { RecoilRoot } from "recoil";
+import { RecoilRoot, useRecoilValue } from "recoil";
 import Post from "./pages/Post";
 import MyPage from "./pages/MyPage";
 import MypageEdit from "./pages/MypageEdit";
@@ -18,34 +17,47 @@ import { Reset } from "styled-reset";
 import Header from "./components/Header";
 import axios from "axios";
 import GreenCalResult from "./pages/GreenCalResult";
+import Protected from "./components/privateRoute";
+import { sessionState } from "./recoil/state";
+import useCheckAuth from "./utils/useCheckAuth";
 
 function App() {
+  // const { authenticated } = useRecoilValue(sessionState);
   const token = localStorage.token;
-  if (token) {
-    axios.defaults.headers.common["Authorization"] = token;
-  } else {
-    delete axios.defaults.headers.common["Authorization"];
-  }
+  console.log("앱입니다!");
+  useCheckAuth();
   return (
     <Fragment>
       <Reset />
       <RecoilRoot>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Main />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/review" element={<Review />} />
-          <Route path="/greenact" element={<GreenAct />} />
-          <Route path="/news" element={<News />} />
-          <Route path="/greencal" element={<GreenCal />} />
-          <Route path="/ranking" element={<Ranking />} />
-          <Route path="/:category/:id" element={<Post />} />
-          <Route path="/mypage" element={<MyPage />} />
-          <Route path="/mypageedit" element={<MypageEdit />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/greencalresult" element={<GreenCalResult />} />
-        </Routes>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/community" element={<Community />} />
+        <Route path="/review" element={<Review />} />
+        <Route path="/greenact" element={<GreenAct />} />
+        <Route path="/news" element={<News />} />
+        <Route path="/greencal" element={<GreenCal />} />
+        <Route path="/ranking" element={<Ranking />} />
+        <Route path="/:category/:id" element={<Post />} />
+        <Route
+          path="/mypage"
+          element={<Protected auth={token}>{<MyPage />}</Protected>}
+        />
+        <Route
+          path="/mypageedit"
+          element={<Protected auth={token}>{<MypageEdit />}</Protected>}
+        />
+        <Route
+          path="/signup"
+          element={<Protected auth={!token}>{<SignUp />}</Protected>}
+        />
+        <Route
+          path="/signin"
+          element={<Protected auth={!token}>{<SignIn />}</Protected>}
+        />
+        <Route path="/greencalresult" element={<GreenCalResult />} />
+      </Routes>
       </RecoilRoot>
     </Fragment>
   );
