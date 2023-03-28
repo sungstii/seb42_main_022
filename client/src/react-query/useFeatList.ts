@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import { defaultInstance } from "../utils/api";
 
 interface FeatPost {
   title: string;
@@ -14,13 +14,13 @@ export const useFeatList = () => {
   const fetchPost = async () => {
     let url = "";
     if (category === "community") {
-      url = "http://3.39.150.26:8080/boards/rankFreeBoards";
+      url = "/boards/rankFreeBoards";
     } else if (category === "review") {
-      url = "http://3.39.150.26:8080/boards/rankEcoBoards";
+      url = "/boards/rankEcoBoards";
     } else if (category === "greenact") {
-      url = "http://3.39.150.26:8080/boards/rankGreenBoards";
+      url = "/boards/rankGreenBoards";
     }
-    const response = await axios.get<FeatPost[]>(url);
+    const response = await defaultInstance.get<FeatPost[]>(url);
     return response.data;
   };
 
