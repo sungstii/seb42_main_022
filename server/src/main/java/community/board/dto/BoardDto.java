@@ -25,7 +25,8 @@ public class BoardDto {
         @NotBlank(message = "제목을 작성해주세요")
         @Size(max = 100, message = "100자 이내로 작성해 주세요.")
         private String title;
-        @NotBlank(message = "내용은 공백이 아니어야 합니다.")
+        //        @NotBlank(message = "내용은 공백이 아니어야 합니다.")
+        @Size(max = 5000, message = "5000자 이내로 작성해주세요.")
         private String contents;
         public Post(Long memberId, String title, String contents) {
             this.memberId = memberId;
