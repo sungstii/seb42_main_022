@@ -95,100 +95,6 @@ const SignIn = () => {
           </LogoLink>
         </LogoContainer>
         <FormContainer>
-<<<<<<< HEAD
-          <h1
-            style={{
-              fontSize: "30px",
-              fontWeight: "700",
-              marginBottom: "20px",
-            }}
-          >
-            로그인
-          </h1>
-          <Formik<LoginModel>
-            initialValues={{
-              email: "",
-              password: "",
-            }}
-            validationSchema={signInSchema}
-            onSubmit={(values) => {
-              axios
-                .post("http://3.39.150.26:8080/members/login", values)
-                .then((res) => {
-                  const token = res.headers.authorization;
-                  const ref = res.headers.refresh;
-                  localStorage.setItem("token", token);
-                  localStorage.setItem("ref", ref);
-                  alert("로그인이 완료되었습니다");
-                  // 로그인 시 localStorage memberid
-                  localStorage.setItem("memberid", res.data.memberId);
-                  navigate("../");
-                })
-                .catch((e) => {
-                  alert("로그인 실패");
-                  console.log("로그인", e.response);
-                });
-            }}
-          >
-            {({ handleSubmit, values, handleChange, errors, touched }) => (
-              <form
-                style={{
-                  width: "50%",
-                  height: "70%",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-around",
-                  padding: "12px",
-                }}
-                onSubmit={handleSubmit}
-              >
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="email">
-                    이메일
-                  </label>
-                  <RadiusInput
-                    type="email"
-                    id="email"
-                    placeholder="이메일을 입력해주세요."
-                    value={values.email}
-                    onChange={handleChange}
-                  />
-                  {touched.email && errors.email ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.email}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <div style={{ display: "flex", flexDirection: "column" }}>
-                  <label style={{ fontSize: "15px" }} htmlFor="password">
-                    비밀번호
-                  </label>
-                  <RadiusInput
-                    type="password"
-                    id="password"
-                    placeholder="비밀번호를 입력해주세요."
-                    value={values.password}
-                    onChange={handleChange}
-                  />
-                  {touched.password && errors.password ? (
-                    <ErrorMsg
-                      style={{ color: "red", fontSize: "12px", padding: "2px" }}
-                    >
-                      {errors.password}
-                    </ErrorMsg>
-                  ) : null}
-                </div>
-                <SignUpBtn type="submit">로그인</SignUpBtn>
-              </form>
-            )}
-          </Formik>
-          <span style={{ textAlign: "center", marginTop: "20px" }}>
-            계정이없으신가요?&nbsp;&nbsp;&nbsp;
-            <a href="../signup">회원가입</a>
-          </span>
-=======
           <FormWrapper>
             <h1
               style={{
@@ -291,7 +197,6 @@ const SignIn = () => {
               <a href="../signup">회원가입</a>
             </span>
           </FormWrapper>
->>>>>>> 934561c27bf8122b877f482f1dcaf5a77e4467f0
         </FormContainer>
       </LeftContainer>
       <RightContainer>
