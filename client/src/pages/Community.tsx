@@ -664,14 +664,6 @@ function Community() {
     })
     .catch((error) => console.log(error));
   }
-  const membersearch = () => { // 멤버 검색, 이건 포인트 가져오는건데 로그인할때 같이 가져오면 좋을듯
-    axios.get(`http://3.39.150.26:8080/members/${memberid}`, {headers: {Authorization: token, Refresh: ref}})
-    .then((response) => {
-      const { data } = response;
-      localStorage.setItem('point', data.point);
-    })
-    .catch(() => console.log('로그인 해라'));
-  }
   const postsearch = () => { // 게시글 검색
     axios.get(`http://3.39.150.26:8080/boards/free?searchType=${elvalue}&searchValue=${searchValue}&page=&size=`)
     .then((response) => {
@@ -752,7 +744,6 @@ function Community() {
   useEffect(() => {
     AQIhandle();
     //Optional Chaining
-    membersearch();
   }, []);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -820,42 +811,6 @@ function Community() {
             })
           )
           }
-
-          {/* {searchpost?.map((el, index) => {
-              return (
-                <PostSection to={`/category/${el.board_id}`} key={index}>
-                  <Postuser>
-                    <Usericon src={user} alt="user" />
-                    <UserInfo>
-                      <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                      <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                    </UserInfo>
-                  </Postuser>
-                  <PostBody>{el.title}</PostBody>
-                  {el.delegate_image_path && (
-                    <img src={el.delegate_image_path} alt="picture" />
-                  )}
-                </PostSection>
-              );
-            })} */}
-
-          {/* {posts?.map((el, index) => {
-            return (
-              <PostSection to={`/category/${el.board_id}`} key={index}>
-                <Postuser>
-                  <Usericon src={user} alt="user" />
-                  <UserInfo>
-                    <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                    <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                  </UserInfo>
-                </Postuser>
-                <PostBody>{el.title}</PostBody>
-                {el.delegate_image_path && (
-                  <img src={el.delegate_image_path} alt="picture" />
-                )}
-              </PostSection>
-            );
-          })} */}
         </SectionContainer>
         <AsideContainer>
           <SidebarContainer>
