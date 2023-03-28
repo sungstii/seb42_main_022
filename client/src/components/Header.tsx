@@ -5,6 +5,10 @@ import { ReactComponent as ProfileIcon } from "../icon/account_circle.svg";
 import styled, { css } from "styled-components";
 import useHideHeader from "../utils/useHideHeader";
 import useDetectClose from "../utils/useDetectClose";
+import axios from "axios";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { sessionState } from "../recoil/state";
+import { replace } from "formik";
 
 const Container = styled.div`
   width: 100%;
@@ -117,9 +121,15 @@ const LogoutBtn = styled.div`
 const Header = () => {
   const navigate = useNavigate();
   const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
-  const aaa = true;
+  // const { authenticated } = useRecoilValue(sessionState);
+  const [session, setSession] = useRecoilState(sessionState);
   const logout = () => {
-    localStorage.removeItem("refresh");
+    axios
+      .post("http://3.39.150.26:8080/members/logout")
+      .then((res) => console.log(res));
+    setSession({ authenticated: false, token: null });
+    delete axios.defaults.headers.common["Authorization"];
+    localStorage.clear();
     navigate("/");
   };
   if (useHideHeader()) return null;
@@ -160,7 +170,7 @@ const Header = () => {
             ref={myPageRef}
           />
           <Menu<ComponentType<any>> isDropped={myPageIsOpen}>
-            {aaa ? (
+            {!session.authenticated ? (
               <Ul>
                 <Li>
                   <LinkWrapper to="./signin">

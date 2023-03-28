@@ -5,6 +5,8 @@ import { Formik } from "formik";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { object, string } from "yup";
+import { useSetRecoilState } from "recoil";
+import { sessionState } from "../recoil/state";
 
 const InputContainer = styled.div`
   width: 100%;
@@ -87,6 +89,7 @@ const signInSchema = object({
 
 const SignIn = () => {
   const navigate = useNavigate();
+  const setSession = useSetRecoilState(sessionState);
   return (
     <InputContainer>
       <LeftContainer>
@@ -116,14 +119,15 @@ const SignIn = () => {
                 axios
                   .post("http://3.39.150.26:8080/members/login", values)
                   .then((res) => {
-                    console.log(res);
                     const token = res.headers.authorization;
                     const ref = res.headers.refresh;
+                    console.log(token);
                     localStorage.setItem("token", token);
+                    setSession({ authenticated: true, token: token });
+                    axios.defaults.headers.common["Authorization"] = token;
                     localStorage.setItem("refresh", ref);
-                    delete axios.defaults.headers.common["Authorization"];
-                    localStorage.setItem("memberid", res.data.memberId);
-                    localStorage.setItem("name", res.data.name);
+                    // localStorage.setItem("memberid", res.data.memberId);
+                    // localStorage.setItem("name", res.data.name);
                     navigate("../");
                   })
                   .catch((error) => {

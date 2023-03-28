@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { ReactComponent as LogoImg } from "../icon/main_logo.svg";
 import { Formik } from "formik";
 import axios from "axios";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { object, string, ref } from "yup";
 
 const InputContainer = styled.div`

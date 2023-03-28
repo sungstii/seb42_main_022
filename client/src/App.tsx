@@ -20,8 +20,10 @@ import { sessionState } from "./recoil/state";
 import useCheckAuth from "./utils/useCheckAuth";
 
 function App() {
-  const { authenticated, token } = useRecoilValue(sessionState);
-  useCheckAuth(token);
+  // const { authenticated } = useRecoilValue(sessionState);
+  const token = localStorage.token;
+  console.log("앱입니다!");
+  useCheckAuth();
   return (
     <Fragment>
       <Reset />
@@ -37,19 +39,19 @@ function App() {
         <Route path="/:category/:id" element={<Post />} />
         <Route
           path="/mypage"
-          element={<Protected auth={authenticated}>{<MyPage />}</Protected>}
+          element={<Protected auth={token}>{<MyPage />}</Protected>}
         />
         <Route
           path="/mypageedit"
-          element={<Protected auth={authenticated}>{<MypageEdit />}</Protected>}
+          element={<Protected auth={token}>{<MypageEdit />}</Protected>}
         />
         <Route
           path="/signup"
-          element={<Protected auth={!authenticated}>{<SignUp />}</Protected>}
+          element={<Protected auth={!token}>{<SignUp />}</Protected>}
         />
         <Route
           path="/signin"
-          element={<Protected auth={!authenticated}>{<SignIn />}</Protected>}
+          element={<Protected auth={!token}>{<SignIn />}</Protected>}
         />
       </Routes>
     </Fragment>
