@@ -126,8 +126,8 @@ const SignIn = () => {
                     setSession({ authenticated: true, token: token });
                     axios.defaults.headers.common["Authorization"] = token;
                     localStorage.setItem("refresh", ref);
-                    // localStorage.setItem("memberid", res.data.memberId);
-                    // localStorage.setItem("name", res.data.name);
+                    localStorage.setItem("memberid", res.data.memberId);
+                    localStorage.setItem("name", res.data.name);
                     navigate("../");
                   })
                   .catch((error) => {
