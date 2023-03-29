@@ -250,7 +250,7 @@ function LoginModal() {
               <ModalTitle>로그인/회원가입을 하고 Green Circle를 만나보세요.</ModalTitle>
               <ModalMessage>Green Circle에 가입하시면 다양한 게시글 열람과 직접 게시글 게시가 가능합니다</ModalMessage>
               <ModalButton to="/SignUp" onClick={handleCloseModal}>로그인</ModalButton>
-              <button onClick={handleCloseModal}>닫기(이건 나중에 없앨거)</button>
+              {/* <button onClick={handleCloseModal}>닫기(이건 나중에 없앨거)</button> */}
             </ModalContent>
           </ModalContainer>
         )}
