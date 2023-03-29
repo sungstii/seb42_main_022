@@ -334,7 +334,7 @@ const TitleBox = styled.div`
 `;
 const List_title = styled.span`
   flex-grow: 2;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   margin-left: 15px;
 `;
 
@@ -566,7 +566,7 @@ function Post() {
   }
   // 게시글 수정 관리
   async function handlePatchPost() {
-    const url = `/freeboards/${id}`;
+    const url = `/boards/${id}`;
     const formData = new FormData();
     formData.append("title", `${title}`);
     formData.append("contents", `${content}`);
@@ -634,12 +634,16 @@ function Post() {
   }
   // 시간 변환 관리
   function setConvertTime(time: string) {
-    // console.log(time);
     const formattedDate = dayjs(time)
       .add(9, "h")
       .tz("Asia/Seoul")
       .format("YYYY년 MM월 DD일 HH:mm");
     return formattedDate;
+  }
+  // 게시글 길이 관리
+  function setTitleLength(title: string): string {
+    if (title.length > 18) return title.slice(0, 18) + "...";
+    return title;
   }
   return (
     <Container>
@@ -652,7 +656,6 @@ function Post() {
                 <User_wrapper>
                   <User_img_wrapper>
                     <UserIcon />
-                    {/* <img src={accountCircle} /> */}
                   </User_img_wrapper>
                   <User_name_wrapper>{boardData.member.name}</User_name_wrapper>
                   <User_level_wrapper>
@@ -677,7 +680,6 @@ function Post() {
                     <Content_img>
                       {boardData.upload_dto.map((image, idx) => {
                         return (
-                          // <Content_img key={idx} imageUrl={image.image_path} />
                           <img
                             key={idx}
                             src={image.image_path}
@@ -725,14 +727,7 @@ function Post() {
                   <Info_wrapper2>
                     <Like_wrapper>
                       <LikeButtonBox>
-                        <LikeButton
-                          clicked={clicked}
-                          // disabled={
-                          //   +localStorage.memberid ===
-                          //   +boardData.member.member_id
-                          // }
-                          onClick={handleLikeClick}
-                        >
+                        <LikeButton clicked={clicked} onClick={handleLikeClick}>
                           <LikeIcon width="20px" height="20px" fill="#2C9C2A" />
                         </LikeButton>
                       </LikeButtonBox>
@@ -800,7 +795,7 @@ function Post() {
                           <User_img_wrapper>
                             <UserIcon />
                           </User_img_wrapper>
-                          <User_name_wrapper style={{ fontSize: "18px" }}>
+                          <User_name_wrapper style={{ fontSize: "1.125rem" }}>
                             {el.member.name}
                           </User_name_wrapper>
                           <User_level_wrapper>
@@ -855,7 +850,9 @@ function Post() {
                                   onClick={handleFeatClick}
                                   to={`../${category}/${el.board_id}`}
                                 >
-                                  <List_title>{el.title}</List_title>
+                                  <List_title>
+                                    {setTitleLength(el.title)}
+                                  </List_title>
                                 </Featlink>
                               </TitleBox>
                             </List_el>
