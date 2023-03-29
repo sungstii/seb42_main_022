@@ -121,6 +121,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [myPageIsOpen, myPageRef, myPageHandler] = useDetectClose(false);
   // const { authenticated } = useRecoilValue(sessionState);
+  const token = localStorage.token;
   const [session, setSession] = useRecoilState(sessionState);
   const logout = () => {
     axios
@@ -169,7 +170,7 @@ const Header = () => {
             ref={myPageRef}
           />
           <Menu<ComponentType<any>> isDropped={myPageIsOpen}>
-            {!session.authenticated ? (
+            {!token ? (
               <Ul>
                 <Li>
                   <LinkWrapper to="./signin">

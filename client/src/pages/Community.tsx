@@ -6,14 +6,14 @@ import nature from "../icon/nature.svg";
 import more from "../icon/expand_more.svg";
 import less from "../icon/expand_less.svg";
 import axios from "axios";
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import apiFetch from "../utils/useFetch";
 import { useRecoilState } from "recoil";
 import { postListState } from "../recoil/state";
 import { areaState } from "../recoil/state";
-import { usePosts } from "../react-query/usePosts"
-import PostModal from '../components/PostModal';
-import LoginModal from "../components/LoginModal"
+import { usePosts } from "../react-query/usePosts";
+import PostModal from "../components/PostModal";
+import LoginModal from "../components/LoginModal";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -669,7 +669,7 @@ function Community() {
     axios.get(`http://3.39.150.26:8080/boards/free?searchType=${elvalue}&searchValue=${searchValue}&page=&size=`)
     .then((response) => {
       const { data } = response;
-      setSearchPost(data)
+      setSearchPost(data);
       setSearchBoolean(true);
       console.log(data);
     })
@@ -684,7 +684,7 @@ function Community() {
     })
     .catch((error) => console.log(error));
   }
-  const membersearch = () => { // 멤버 검색, 이건 포인트 가져오는건데 로그인할때 같이 가져오면 좋을듯
+  const membersearch = () => {
     axios.get(`http://3.39.150.26:8080/members/${memberid}`, {headers: {Authorization: token, Refresh: ref}})
     .then((response) => {
       const { data } = response;
@@ -722,8 +722,8 @@ function Community() {
     }
   }
 
-  function activeEnter(e : any) {
-    if(e.key === "Enter") {
+  function activeEnter(e: any) {
+    if (e.key === "Enter") {
       postsearch();
     }
   }
@@ -741,7 +741,11 @@ function Community() {
     console.log("로그아웃 완료");
     console.log(token);
   }
-
+  // 시간 변환 관리
+  function setConvertTime(time: string) {
+    const formattedDate = dayjs(time).add(9, "h").tz("Asia/Seoul").fromNow();
+    return formattedDate;
+  }
   useEffect(() => {
     setPm25(data?.rxs.obs[0].msg.iaqi.pm25.v);
     setPm10(data?.rxs.obs[0].msg.iaqi.pm10.v);
@@ -785,44 +789,47 @@ function Community() {
               />
             )}
           </Posting>
-          {searchboolean ? (
-            searchpost?.map((el, index) => {
-              return (
-                <PostSection to={`/community/${el.board_id}`} key={index}>
-                  <Postuser>
-                    <Usericon src={user} alt="user" />
-                    <UserInfo>
-                      <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                      <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                    </UserInfo>
-                  </Postuser>
-                  <PostBody>{el.title}</PostBody>
-                  {el.delegate_image_path && (
-                    <img src={el.delegate_image_path} alt="picture" />
-                  )}
-                </PostSection>
-              );
-            })
-          ) : (
-            posts?.map((el, index) => {
-              return (
-                <PostSection to={`/community/${el.board_id}`} key={index}>
-                  <Postuser>
-                    <Usericon src={user} alt="user" />
-                    <UserInfo>
-                      <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                      <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                    </UserInfo>
-                  </Postuser>
-                  <PostBody>{el.title}</PostBody>
-                  {el.delegate_image_path && (
-                    <img src={el.delegate_image_path} alt="picture" />
-                  )}
-                </PostSection>
-              );
-            })
-          )
-          }
+          {searchboolean
+            ? searchpost?.map((el, index) => {
+                return (
+                  <PostSection to={`/community/${el.board_id}`} key={index}>
+                    <Postuser>
+                      <Usericon src={user} alt="user" />
+                      <UserInfo>
+                        <UserName>
+                          {el.board_creator}&nbsp;
+                          <UserLevel>Lv. {el.creator_level}</UserLevel>
+                        </UserName>
+                        <PostTime>{setConvertTime(el.created_at)}</PostTime>
+                      </UserInfo>
+                    </Postuser>
+                    <PostBody>{el.title}</PostBody>
+                    {el.delegate_image_path && (
+                      <img src={el.delegate_image_path} alt="picture" />
+                    )}
+                  </PostSection>
+                );
+              })
+            : posts?.map((el, index) => {
+                return (
+                  <PostSection to={`/community/${el.board_id}`} key={index}>
+                    <Postuser>
+                      <Usericon src={user} alt="user" />
+                      <UserInfo>
+                        <UserName>
+                          {el.board_creator}&nbsp;
+                          <UserLevel>Lv. {el.creator_level}</UserLevel>
+                        </UserName>
+                        <PostTime>{setConvertTime(el.created_at)}</PostTime>
+                      </UserInfo>
+                    </Postuser>
+                    <PostBody>{el.title}</PostBody>
+                    {el.delegate_image_path && (
+                      <img src={el.delegate_image_path} alt="picture" />
+                    )}
+                  </PostSection>
+                );
+              })}
         </SectionContainer>
         <AsideContainer>
           <SidebarContainer>

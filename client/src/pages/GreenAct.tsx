@@ -6,15 +6,15 @@ import nature from "../icon/nature.svg";
 import more from "../icon/expand_more.svg";
 import less from "../icon/expand_less.svg";
 import axios from "axios";
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import apiFetch from "../utils/useFetch";
 import { useRecoilState } from "recoil";
 import { areaState } from "../recoil/state";
-import { useGreenPosts } from "../react-query/useGreenPosts"
-import PostModal from '../components/PostModal';
-import LoginModal from "../components/LoginModal"
+import { useGreenPosts } from "../react-query/useGreenPosts";
+import PostModal from "../components/PostModal";
+import LoginModal from "../components/LoginModal";
 import { Link } from "react-router-dom";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
@@ -642,27 +642,33 @@ function GreenAct() {
     { id: 2, label: "내용", value: "CONTENTS" },
   ];
 
-  const token = localStorage.getItem('token') || '';
-  const ref = localStorage.getItem('ref') || '';
-  const memberid = localStorage.getItem('memberid') || '';
-  const point: any = localStorage.getItem('point') || '';
+  const token = localStorage.getItem("token") || "";
+  const ref = localStorage.getItem("ref") || "";
+  const memberid = localStorage.getItem("memberid") || "";
+  const point: any = localStorage.getItem("point") || "";
 
-  const postsearch = () => { // 게시글 검색
-    axios.get(`http://3.39.150.26:8080/boards/green?searchType=${elvalue}&searchValue=${searchValue}&page=&size=`)
-    .then((response) => {
-      const { data } = response;
-      setSearchPost(data)
-      setSearchBoolean(true);
-      console.log(data);
-    })
-    .catch((error) => console.log(error));
-  }
-  const mileagedone = () => { // 마일리지로 나무심기
-    axios.post(`http://3.39.150.26:8080/members/donation/${memberid}`,
-    {headers: {Authorization: token, Refresh: ref}}
-    )
-    .catch((error) => console.log(error));
-  }
+  const postsearch = () => {
+    // 게시글 검색
+    axios
+      .get(
+        `http://3.39.150.26:8080/boards/green?searchType=${elvalue}&searchValue=${searchValue}&page=&size=`,
+      )
+      .then((response) => {
+        const { data } = response;
+        setSearchPost(data);
+        setSearchBoolean(true);
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+  const mileagedone = () => {
+    // 마일리지로 나무심기
+    axios
+      .post(`http://3.39.150.26:8080/members/donation/${memberid}`, {
+        headers: { Authorization: token, Refresh: ref },
+      })
+      .catch((error) => console.log(error));
+  };
 
   const formData = new FormData();
   formData.append("memberId", "3");
@@ -682,20 +688,18 @@ function GreenAct() {
   function mileagebuttonhandle() {
     if (token === "") {
       setLoginModal(true);
-    } 
-    else {
-      if ( point < 300 ){
+    } else {
+      if (point < 300) {
         setPointlack(!pointlack);
-      }
-      else{
+      } else {
         mileagedone();
         setShowToast(true);
       }
     }
   }
 
-  function activeEnter(e : any) {
-    if(e.key === "Enter") {
+  function activeEnter(e: any) {
+    if (e.key === "Enter") {
       postsearch();
     }
   }
@@ -707,7 +711,11 @@ function GreenAct() {
       setShowModal(true);
     }
   }
-
+  // 시간 변환 관리
+  function setConvertTime(time: string) {
+    const formattedDate = dayjs(time).add(9, "h").tz("Asia/Seoul").fromNow();
+    return formattedDate;
+  }
   useEffect(() => {
     setPm25(data?.rxs.obs[0].msg.iaqi.pm25.v);
     setPm10(data?.rxs.obs[0].msg.iaqi.pm10.v);
@@ -750,44 +758,47 @@ function GreenAct() {
               />
             )}
           </Posting>
-          {searchboolean ? (
-            searchpost?.map((el, index) => {
-              return (
-                <PostSection to={`/greenact/${el.board_id}`} key={index}>
-                  <Postuser>
-                    <Usericon src={user} alt="user" />
-                    <UserInfo>
-                      <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                      <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                    </UserInfo>
-                  </Postuser>
-                  <PostBody>{el.title}</PostBody>
-                  {el.delegate_image_path && (
-                    <img src={el.delegate_image_path} alt="picture" />
-                  )}
-                </PostSection>
-              );
-            })
-          ) : (
-            posts?.map((el, index) => {
-              return (
-                <PostSection to={`/greenact/${el.board_id}`} key={index}>
-                  <Postuser>
-                    <Usericon src={user} alt="user" />
-                    <UserInfo>
-                      <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                      <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                    </UserInfo>
-                  </Postuser>
-                  <PostBody>{el.title}</PostBody>
-                  {el.delegate_image_path && (
-                    <img src={el.delegate_image_path} alt="picture" />
-                  )}
-                </PostSection>
-              );
-            })
-          )
-          }
+          {searchboolean
+            ? searchpost?.map((el, index) => {
+                return (
+                  <PostSection to={`/greenact/${el.board_id}`} key={index}>
+                    <Postuser>
+                      <Usericon src={user} alt="user" />
+                      <UserInfo>
+                        <UserName>
+                          {el.board_creator}&nbsp;
+                          <UserLevel>Lv. {el.creator_level}</UserLevel>
+                        </UserName>
+                        <PostTime>{setConvertTime(el.created_at)}</PostTime>
+                      </UserInfo>
+                    </Postuser>
+                    <PostBody>{el.title}</PostBody>
+                    {el.delegate_image_path && (
+                      <img src={el.delegate_image_path} alt="picture" />
+                    )}
+                  </PostSection>
+                );
+              })
+            : posts?.map((el, index) => {
+                return (
+                  <PostSection to={`/greenact/${el.board_id}`} key={index}>
+                    <Postuser>
+                      <Usericon src={user} alt="user" />
+                      <UserInfo>
+                        <UserName>
+                          {el.board_creator}&nbsp;
+                          <UserLevel>Lv. {el.creator_level}</UserLevel>
+                        </UserName>
+                        <PostTime>{setConvertTime(el.created_at)}</PostTime>
+                      </UserInfo>
+                    </Postuser>
+                    <PostBody>{el.title}</PostBody>
+                    {el.delegate_image_path && (
+                      <img src={el.delegate_image_path} alt="picture" />
+                    )}
+                  </PostSection>
+                );
+              })}
         </SectionContainer>
         <AsideContainer>
           <SidebarContainer>
@@ -826,7 +837,11 @@ function GreenAct() {
                 <DustDropdown>
                   <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
                     {selectedItem ? selectedItem.label : "서울"}
-                    {isOpen === false ? <DustExpandButton src={more} /> : <DustExpandButton src={less} />}
+                    {isOpen === false ? (
+                      <DustExpandButton src={more} />
+                    ) : (
+                      <DustExpandButton src={less} />
+                    )}
                   </DropdownHeader>
                   {isOpen && (
                     <DropdownMenu>
@@ -901,9 +916,7 @@ function GreenAct() {
         {showToast && (
           <Toast>회원님의 마일리지로 나무를 1그루 심었습니다.</Toast>
         )}
-        {pointlack && (
-          <Toast>마일리지가 부족합니다.</Toast>
-        )}
+        {pointlack && <Toast>마일리지가 부족합니다.</Toast>}
       </MainContainer>
     </>
   );
