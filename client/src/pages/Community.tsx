@@ -660,6 +660,7 @@ function Community() {
       localStorage.setItem('memberid', data.memberId);
       localStorage.setItem('name', data.name);
       localStorage.setItem('point', data.point);
+      localStorage.setItem("level", data.level);
       console.log(token);
     })
     .catch((error) => console.log(error));
@@ -682,6 +683,14 @@ function Community() {
       const { data } = response;
     })
     .catch((error) => console.log(error));
+  }
+  const membersearch = () => { // 멤버 검색, 이건 포인트 가져오는건데 로그인할때 같이 가져오면 좋을듯
+    axios.get(`http://3.39.150.26:8080/members/${memberid}`, {headers: {Authorization: token, Refresh: ref}})
+    .then((response) => {
+      const { data } = response;
+      localStorage.setItem('point', data.point);
+    })
+    .catch(() => console.log('로그인 해라'));
   }
 
   const formData = new FormData();
@@ -740,11 +749,14 @@ function Community() {
     setNo2(data?.rxs.obs[0].msg.iaqi.no2.v);
     setCo(data?.rxs.obs[0].msg.iaqi.co.v);
     setSo2(data?.rxs.obs[0].msg.iaqi.so2.v);
+    console.log(data?.rxs.obs[0].msg.iaqi.pm25.v);
   }, []);
   useEffect(() => {
     AQIhandle();
     //Optional Chaining
-  }, []);
+    membersearch();
+  }, [membersearch]);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowToast(false);
@@ -846,7 +858,7 @@ function Community() {
             </SearchBar>
             {/* {error && 'Error!'}
           {loading && 'Loading...'} */}
-            {data && (
+            {/* {data && (
               <DustBar>
                 <DustDropdown>
                   <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
@@ -914,7 +926,7 @@ function Community() {
                   </Row4>
                 </DustGraph>
               </DustBar>
-            )}
+            )} */}
             <MileageBar>
               <MileageInfo>
                 <MileageIcon src={saving} />
@@ -925,8 +937,8 @@ function Community() {
                 <TreeIcon src={nature} />내 마일리지로 나무 심기!
               </MileageButton>
 
-              <button onClick={login}>로그인 버튼</button>
-              <button onClick={logout}>로그아웃 버튼</button>
+              {/* <button onClick={login}>로그인 버튼</button>
+              <button onClick={logout}>로그아웃 버튼</button> */}
             </MileageBar>
           </SidebarContainer>
           <Aside />

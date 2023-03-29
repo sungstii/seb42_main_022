@@ -128,7 +128,7 @@ const SignIn = () => {
                     localStorage.setItem("refresh", ref);
                     localStorage.setItem("memberid", res.data.memberId);
                     localStorage.setItem("name", res.data.name);
-                    localStorage.setItem("point", res.data.point);
+                    localStorage.setItem("level", res.data.level);
                     navigate("../");
                   })
                   .catch((error) => {

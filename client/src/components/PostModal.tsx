@@ -34,6 +34,8 @@ const ModalContent = styled.div`
     /* height: 300px; */
     padding: 10px;
     text-align: center;
+    max-height: 800px;
+    overflow-y: auto;
 `;
 
 const CloseButton = styled.img`
@@ -169,6 +171,7 @@ function PostModal({ onClose, onConfirm }: modal) {
     const ref = localStorage.getItem('ref') || '';
     const id =localStorage.getItem('memberid') || '';
     const name =localStorage.getItem('name') || '';
+    const level =localStorage.getItem('level') || '';
 
     const formData = new FormData();
     formData.append('memberId', id);
@@ -213,7 +216,7 @@ function PostModal({ onClose, onConfirm }: modal) {
                     <Postuser>
                         <Usericon src={user} alt='user'/>
                         <UserInfo>
-                            <UserText style={{padding:"5px 0px 0px 0px"}}><b>{name}</b>&nbsp;Lv.{id}</UserText>
+                            <UserText style={{padding:"5px 0px 0px 0px"}}><b>{name}</b>&nbsp;Lv.{level}</UserText>
                             <UserText>{currentTime}</UserText>
                         </UserInfo>
                     </Postuser>
