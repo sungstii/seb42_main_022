@@ -831,7 +831,7 @@ function Review() {
               />
               <SearchButton src={search} onClick={() => postsearch()} />
             </SearchBar>
-            {data && (
+            {/* {data && (
               <DustBar>
                 <DustDropdown>
                   <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
@@ -898,7 +898,7 @@ function Review() {
                   </Row4>
                 </DustGraph>
               </DustBar>
-            )}
+            )} */}
             <MileageBar>
               <MileageInfo>
                 <MileageIcon src={saving} />

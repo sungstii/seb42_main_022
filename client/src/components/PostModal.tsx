@@ -24,18 +24,20 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-  /* justify-content: center; */
-  background-color: white;
-  border-radius: 10px;
-  border: 2px solid #609966;
-  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
-  width: 600px;
-  /* height: 300px; */
-  padding: 10px;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    /* justify-content: center; */
+    background-color: white;
+    border-radius: 10px;
+    border: 2px solid #609966;
+    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
+    width: 600px;
+    /* height: 300px; */
+    padding: 10px;
+    text-align: center;
+    max-height: 800px;
+    overflow-y: auto;
 `;
 
 const CloseButton = styled.img`
@@ -144,34 +146,35 @@ interface modal {
   onConfirm: any;
 }
 function PostModal({ onClose, onConfirm }: modal) {
-  const [imageSrc, setImageSrc] = useState<string | undefined>(undefined);
-  const [imageFile, setImageFile] = useState<File[]>([]);
-  const [title, setTitle] = useState("");
-  const [contents, setContents] = useState("");
-  const [currentTime, setCurrentTime] = useState<string>("");
-  const location = useLocation();
-  const currentUrl: string = location.pathname;
+    const [imageSrc, setImageSrc] = useState<string | undefined>(undefined);
+    const [imageFile, setImageFile] = useState<File[]>([]);
+    const [title, setTitle] = useState("");
+    const [contents, setContents] = useState("");
+    const [currentTime, setCurrentTime] = useState<string>("");
+    const location = useLocation();
+    const currentUrl: string = location.pathname;
 
-  const onUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files: FileList | null = e.target.files;
-    if (files) {
-      const fileList: File[] = Array.from(files);
-      console.log(fileList);
-      setImageFile(fileList);
-      const reader = new FileReader();
-      reader.readAsDataURL(fileList[0]);
-      return new Promise<void>((resolve) => {
-        reader.onload = () => {
-          setImageSrc(reader.result as string | undefined);
-          resolve();
-        };
-      });
+    const onUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const files: FileList | null = e.target.files;
+        if (files) {
+            const fileList: File[] = Array.from(files);
+            console.log(fileList);
+            setImageFile(fileList);
+            const reader = new FileReader();
+            reader.readAsDataURL(fileList[0]);
+            return new Promise<void>((resolve) => {
+                reader.onload = () => {
+                    setImageSrc(reader.result as string | undefined);
+                    resolve();
+                };
+            });
+        }
     }
-  };
-  const token = localStorage.getItem("token") || "";
-  const ref = localStorage.getItem("ref") || "";
-  const id = localStorage.getItem("memberid") || "";
-  const name = localStorage.getItem("name") || "";
+    const token = localStorage.getItem('token') || '';
+    const ref = localStorage.getItem('ref') || '';
+    const id =localStorage.getItem('memberid') || '';
+    const name =localStorage.getItem('name') || '';
+    const level =localStorage.getItem('level') || '';
 
   const formData = new FormData();
   formData.append("memberId", id);
@@ -203,63 +206,52 @@ function PostModal({ onClose, onConfirm }: modal) {
         // window.location.reload();
       })
       .catch((error) => console.log(error));
-  };
-  const handleSubmit = () => {
-    onConfirm();
-    submit();
-  };
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentTime(
-        dayjs().locale("ko").format("YYYY년 M월 D일 ddd HH:mm:ss"),
-      );
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <>
-      <ModalWrapper>
-        <ModalContent>
-          <TitleContainer>
-            <NoButton />
-            <ModalTitle>탄소 배출 줄이는 법 알리기</ModalTitle>
-            <CloseButton src={Cancel} onClick={onClose} />
-          </TitleContainer>
-          <Postuser>
-            <Usericon src={user} alt="user" />
-            <UserInfo>
-              <UserText style={{ padding: "5px 0px 0px 0px" }}>
-                <b>{name}</b>&nbsp;Lv.{id}
-              </UserText>
-              <UserText>{currentTime}</UserText>
-            </UserInfo>
-          </Postuser>
-          <ModalInput
-            placeholder="제목을 입력하세요"
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <ModalTextarea
-            placeholder="오늘 실천하신 회원님의 노력을 알려주세요!"
-            onChange={(e) => setContents(e.target.value)}
-          />
-          <img width={"100%"} src={imageSrc} />
-          <SubmitContainer>
-            <label htmlFor="fileUpload">
-              <PlusButton src={Add} />
-            </label>
-            <Testinput
-              type="file"
-              multiple={true}
-              id="fileUpload"
-              onChange={(e) => onUpload(e)}
-            />
-            <ModalButton onClick={handleSubmit}>알려주기</ModalButton>
-          </SubmitContainer>
-        </ModalContent>
-      </ModalWrapper>
-    </>
-  );
+    };
+    const handleSubmit = () => {
+        onConfirm();
+        submit();
+    };
+    useEffect(() => {
+        const interval = setInterval(() => {
+        setCurrentTime(
+            dayjs().locale("ko").format("YYYY년 M월 D일 ddd HH:mm:ss"),
+        );
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []); 
+    
+    return (
+        <>
+            <ModalWrapper>
+                <ModalContent>
+                    <TitleContainer>
+                        <NoButton/>
+                        <ModalTitle>탄소 배출 줄이는 법 알리기</ModalTitle>
+                        <CloseButton src={Cancel} onClick={onClose}/>
+                    </TitleContainer>
+                    <Postuser>
+                        <Usericon src={user} alt='user'/>
+                        <UserInfo>
+                            <UserText style={{padding:"5px 0px 0px 0px"}}><b>{name}</b>&nbsp;Lv.{level}</UserText>
+                            <UserText>{currentTime}</UserText>
+                        </UserInfo>
+                    </Postuser>
+                    <ModalInput placeholder="제목을 입력하세요" onChange={(e) => setTitle(e.target.value)}/>
+                    <ModalTextarea
+                        placeholder="오늘 실천하신 회원님의 노력을 알려주세요!"
+                        onChange={(e) => setContents(e.target.value)}
+                    />
+                    <img width={'100%'} src={imageSrc}/>
+                    <SubmitContainer>
+                    <label htmlFor="fileUpload">
+                        <PlusButton src={Add}/>
+                    </label>
+                    <Testinput type="file" multiple={true} id="fileUpload" onChange={e => onUpload(e)}/>
+                        <ModalButton onClick={handleSubmit}>알려주기</ModalButton>
+                    </SubmitContainer>
+                </ModalContent>
+            </ModalWrapper>
+        </>
+    );
 }
 export default PostModal;
