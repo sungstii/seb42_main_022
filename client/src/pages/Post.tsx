@@ -633,7 +633,7 @@ function Post() {
     console.log("clicked FeatPost", `postid :${id}`);
   }
   // 시간 변환 관리
-  function handleConvertTimezone(time: string) {
+  function setConvertTime(time: string) {
     // console.log(time);
     const formattedDate = dayjs(time)
       .add(9, "h")
@@ -719,7 +719,7 @@ function Post() {
               <Info_container>
                 <Info_wrapper>
                   <Info_wrapper1>
-                    <Date>{handleConvertTimezone(boardData.created_at)}</Date>
+                    <Date>{setConvertTime(boardData.created_at)}</Date>
                     <View>조회수 {boardData.view_count}</View>
                   </Info_wrapper1>
                   <Info_wrapper2>

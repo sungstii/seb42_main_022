@@ -744,7 +744,7 @@ function Community() {
     console.log(token);
   }
   // 시간 변환 관리
-  function handleConvertTime(time: string) {
+  function setConvertTime(time: string) {
     const formattedDate = dayjs(time).add(9, "h").tz("Asia/Seoul").fromNow();
     return formattedDate;
   }
@@ -799,7 +799,7 @@ function Community() {
                           {el.board_creator}&nbsp;
                           <UserLevel>Lv. {el.creator_level}</UserLevel>
                         </UserName>
-                        <PostTime>{handleConvertTime(el.created_at)}</PostTime>
+                        <PostTime>{setConvertTime(el.created_at)}</PostTime>
                       </UserInfo>
                     </Postuser>
                     <PostBody>{el.title}</PostBody>
@@ -819,7 +819,7 @@ function Community() {
                           {el.board_creator}&nbsp;
                           <UserLevel>Lv. {el.creator_level}</UserLevel>
                         </UserName>
-                        <PostTime>{handleConvertTime(el.created_at)}</PostTime>
+                        <PostTime>{setConvertTime(el.created_at)}</PostTime>
                       </UserInfo>
                     </Postuser>
                     <PostBody>{el.title}</PostBody>
