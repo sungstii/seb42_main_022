@@ -2,24 +2,11 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useMemberInfo } from "../react-query/useMemberInfo";
+import { useMyPost } from "../react-query/useMyPost";
+import Deleteaccount from "../components/Deleteaccount";
+import { ReactComponent as SproutIcon } from "../icon/sprout.svg";
 import { ReactComponent as LikeIcon } from "../icon/thumbup.svg";
 import accountCircle from "../icon/account_circle.svg";
-import { ReactComponent as SproutIcon } from "../icon/sprout.svg";
-interface MemberData {
-  email: string;
-  name: string;
-  phone: string;
-  point: string;
-  tree_count: string;
-  level_dto: {
-    user_name: string;
-    level: number;
-    level_exp: number;
-    total_exp: number;
-  };
-  member_id: number;
-  member_status: string;
-}
 
 interface LevelProp {
   exp: number;
@@ -44,6 +31,9 @@ const User_wrapper = styled.div`
   width: 600px;
   height: 250px;
   margin: 40px auto 0 auto;
+  @media screen and (max-width: 610px) {
+    width: 100%;
+  }
 `;
 // 위쪽 두개항목
 const User_Top = styled.div`
@@ -90,24 +80,24 @@ const User_Button = styled.div`
 const User_box2 = styled.div`
   display: flex;
   height: 30%;
+  width: 100%;
 `;
 const User_name = styled.div`
   display: flex;
   height: 100%;
-  width: 84px;
-  font-size: 18px;
+  width: 20%;
+  font-size: 1.125rem;
   font-weight: 700;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
 `;
 const User_mileage = styled.div`
   display: flex;
-  height: 100%;
-  width: auto;
-  margin: 0 25px;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
-  font-size: 15px;
+  height: 100%;
+  width: 20%;
+  font-size: 0.938rem;
 `;
 // 아래 두개항목
 const User_Bottom = styled.div`
@@ -128,9 +118,7 @@ const User_level = styled.div`
   justify-content: space-between;
   width: 40%;
   height: 35%;
-  font-size: 15px;
-  span {
-  }
+  font-size: 0.938rem;
 `;
 const User_levelbar = styled.div`
   width: 40%;
@@ -178,8 +166,8 @@ const User_box4 = styled.div`
   display: flex;
   height: 50%;
   align-items: center;
-  margin-left: 11px;
   button {
+    padding: 0;
     border: none;
     background: transparent;
     cursor: pointer;
@@ -210,6 +198,9 @@ const Post_Container = styled.div`
   height: auto;
   margin: 0 auto;
   padding-top: 20px;
+  @media screen and (max-width: 610px) {
+    width: 100%;
+  }
 `;
 const NoPostBox = styled.div`
   display: flex;
@@ -220,11 +211,11 @@ const NoPostBox = styled.div`
   h1 {
     margin-top: 20px;
     text-align: center;
-    font-size: 50px;
+    font-size: 2rem;
     color: #808080;
   }
 `;
-const Post_wrapper = styled.div`
+const Post_wrapper = styled(Link)`
   display: flex;
   height: 100px;
   width: 100%;
@@ -232,6 +223,7 @@ const Post_wrapper = styled.div`
   margin-top: 30px;
   border-radius: 15px;
   background: #f6f6f6;
+  text-decoration: none;
 `;
 const Postbox = styled.div`
   display: flex;
@@ -243,6 +235,7 @@ const Postbox = styled.div`
 const Post_Left = styled.div`
   height: 100%;
   width: 70%;
+  color: black;
 `;
 const Post_title = styled.div`
   display: flex;
@@ -256,61 +249,57 @@ const Post_info = styled.div`
   width: 100%;
   height: 45%;
   color: #878484;
-  span {
-    display: flex;
-    align-items: center;
-  }
 `;
 //
 const Post_Right = styled.div`
   height: 80%;
   width: 20%;
-  border: 1px solid green;
+  /* border: 1px solid green; */
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    object-fit: cover;
+    border: 0;
+  }
 `;
 
 function MyPage() {
-  const [memberdata, setMemberdata] = useState<MemberData | undefined>(
-    undefined,
-  );
   const token = localStorage.token;
+
   const {
     data: member,
-    isLoading: postLoading,
-    isError: postError,
+    isLoading: memberLoading,
+    isError: memberError,
   } = useMemberInfo();
-  useEffect(() => {
-    if (member) {
-      setMemberdata(member);
-    }
-  }, [member]);
-  // console.log(memberdata);
+  const {
+    data: posts,
+    isLoading: postsLoading,
+    isError: postsError,
+  } = useMyPost();
+  const [ismodalopen, setIsmodalopen] = useState(false);
 
   if (!token) {
     return <div>로그인 해주세요</div>;
   }
-  console.log(memberdata);
-  // memberdata 데이터 형식
-  //   {
-  //     "email": "esoo@gmail.com",
-  //     "name": "이수",
-  //     "phone": "010-1234-1234",
-  //     "point": "8550",
-  //     "tree_count": "5",
-  //     "level_dto": {
-  //         "user_name": "이수",
-  //         "level": 2,
-  //         "level_exp": 0,
-  //         "total_exp": 100
-  //     },
-  //     "member_id": 3,
-  //     "member_status": "활동중"
-  // }
+  function handleModalOpen() {
+    setIsmodalopen(!ismodalopen);
+  }
+  console.log(posts);
   return (
     <Container>
-      {postLoading ? (
-        "loading..."
-      ) : memberdata ? (
+      {memberLoading ? (
+        "회원정보를 불러오고 있습니다..."
+      ) : member ? (
         <>
+          {ismodalopen && (
+            <Deleteaccount
+            // onClose={handleClose}
+            // onConfirm={handleConfirm}
+            // onSubmit={submit}
+            />
+          )}
           <White_Container>
             <User_wrapper>
               <User_Top>
@@ -330,27 +319,23 @@ function MyPage() {
                   </User_ButtonBox>
                 </User_box1>
                 <User_box2>
-                  <User_name>{memberdata.name}</User_name>
-                  <User_mileage>
-                    마일리지 {memberdata.point}
-                    {/* 경험치퍼센트 {memberdata.level_dto.level_exp} */}
-                  </User_mileage>
+                  <User_name>{member.name}</User_name>
+                  <User_mileage>마일리지 {member.point}</User_mileage>
                 </User_box2>
               </User_Top>
               <User_Bottom>
                 <User_box3>
                   <User_level>
-                    <span>Lv.{memberdata.level_dto.level}</span>
-                    {/* <span>누적 경험치 {memberdata.level_dto.total_exp}</span> */}
+                    <span>Lv.{member.level_dto.level}</span>
                   </User_level>
                   <User_levelbar>
                     <TotalExp>
-                      <CurExp exp={memberdata.level_dto.level_exp}></CurExp>
+                      <CurExp exp={member.level_dto.level_exp}></CurExp>
                     </TotalExp>
                   </User_levelbar>
                 </User_box3>
                 <User_box4>
-                  <button>회원탈퇴</button>
+                  <button onClick={handleModalOpen}>회원탈퇴</button>
                 </User_box4>
               </User_Bottom>
             </User_wrapper>
@@ -358,45 +343,41 @@ function MyPage() {
           </White_Container>
           <Gray_Container>
             <Post_Container>
-              <NoPostBox>
-                <SproutIcon></SproutIcon>
-                <h1>준비중입니다.</h1>
-              </NoPostBox>
-
-              {/* <Post_wrapper>
-                <Postbox>
-                  <Post_Left>
-                    <Post_title>
-                      친환경 물품 사용 후기 ( 커피 원두 자루, 풀빨대, 천연 밀랍
-                      캔들)
-                    </Post_title>
-                    <Post_info>
-                      <span>
-                        <LikeIcon width="20px" height="20px" fill="#878484" />
-                      </span>
-                      <span style={{ marginLeft: "5px" }}>좋아요 42</span>
-                    </Post_info>
-                  </Post_Left>
-                  <Post_Right></Post_Right>
-                </Postbox>
-              </Post_wrapper>
-              <Post_wrapper>
-                <Postbox>
-                  <Post_Left>
-                    <Post_title>
-                      친환경 물품 사용 후기 ( 커피 원두 자루, 풀빨대, 천연 밀랍
-                      캔들)
-                    </Post_title>
-                    <Post_info>
-                      <span>
-                        <LikeIcon width="20px" height="20px" fill="#878484" />
-                      </span>
-                      <span style={{ marginLeft: "5px" }}>좋아요 42</span>
-                    </Post_info>
-                  </Post_Left>
-                  <Post_Right></Post_Right>
-                </Postbox>
-              </Post_wrapper> */}
+              {posts && posts.length > 0 ? (
+                posts.map((el, idx: number) => {
+                  return (
+                    <Post_wrapper key={idx} to={`../community/${el.board_id}`}>
+                      <Postbox>
+                        <Post_Left>
+                          <Post_title>{el.title}</Post_title>
+                          <Post_info>
+                            <span>
+                              <LikeIcon
+                                width="20px"
+                                height="20px"
+                                fill="#878484"
+                              />
+                            </span>
+                            <span style={{ marginLeft: "5px" }}>
+                              {el.like_count}
+                            </span>
+                          </Post_info>
+                        </Post_Left>
+                        <Post_Right>
+                          {el.delegate_image_path ? (
+                            <img src={el.delegate_image_path} />
+                          ) : null}
+                        </Post_Right>
+                      </Postbox>
+                    </Post_wrapper>
+                  );
+                })
+              ) : (
+                <NoPostBox>
+                  <SproutIcon></SproutIcon>
+                  <h1>게시글을 작성해주세요</h1>
+                </NoPostBox>
+              )}
             </Post_Container>
           </Gray_Container>
         </>
