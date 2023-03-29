@@ -3,8 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useFeatList } from "../react-query/useFeatList";
 import styled from "styled-components";
 import { useOnePost } from "../react-query/useOnePost";
-import axios from "axios";
-import { authInstance, defaultInstance } from "../utils/api";
+import { authInstance } from "../utils/api";
 import dayjs from "dayjs";
 import "dayjs/locale/ko"; // import the locale for Korean language
 import utc from "dayjs/plugin/utc";
@@ -61,7 +60,7 @@ const Wrapper = styled.div`
 const Left_wrapper = styled.div`
   display: flex;
   flex-direction: column;
-  margin: 0px 60px 0px 0px;
+  align-items: center;
 `;
 
 // * 상세게시글
@@ -71,6 +70,9 @@ const Post_wrapper = styled.div`
   border-radius: 15px;
   background-color: #f6f6f6;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  @media screen and (max-width: 635px) {
+    width: 100%;
+  }
 `;
 const User_container = styled.div`
   display: flex;
@@ -255,25 +257,34 @@ const DeleteButton = styled.button`
 // -------------------------------------------------------------------------------------------------------------- //
 
 // * 추천게시글
+const RightBox = styled.div`
+  height: 100%;
+`;
 const Featured_container = styled.div`
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  /* top: 0; */
   width: 357px;
-  height: 500px;
+  height: 400px;
   border-radius: 15px;
   background-color: #f6f6f6;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  margin-left: 60px;
 
   @media screen and (max-width: 1024px) {
     display: none;
   }
 `;
 const Featured_wrapper = styled.div`
-  position: sticky;
-  margin: 50px 10px;
+  margin: 0 10px;
+  width: 100%;
 `;
 const Featured_title = styled.div`
   text-align: center;
   margin-bottom: 50px;
-  font-size: 30px;
+  font-size: 1.875rem;
 `;
 const List_wrapper = styled.div``;
 const List = styled.ul``;
@@ -309,7 +320,7 @@ const List_likecnt = styled.span`
   align-items: center;
   height: 100%;
   width: 50px;
-  font-size: 18px;
+  font-size: 1.125rem;
 `;
 const Featlink = styled(Link)`
   text-decoration: none;
@@ -323,7 +334,7 @@ const TitleBox = styled.div`
 `;
 const List_title = styled.span`
   flex-grow: 2;
-  font-size: 20px;
+  font-size: 1.25rem;
   margin-left: 15px;
 `;
 
@@ -339,11 +350,15 @@ const CommentCnt = styled.div`
 // -------------------------------------------------------------------------------------------------------------- //
 
 // * 댓글창
+
 const Comment_container = styled.div`
   width: 630px;
   background-color: #f6f6f6;
   border-radius: 15px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  @media screen and (max-width: 635px) {
+    width: 100%;
+  }
 `;
 // 댓글입력창
 const Input_container = styled.div`
@@ -362,7 +377,7 @@ const InputBox = styled.div`
   flex-grow: 8;
 `;
 const Comment_Input = styled.input`
-  font-size: 20px;
+  font-size: 1.25rem;
   width: 95%;
   border: none;
   background: transparent;
@@ -408,7 +423,7 @@ const Comments_contents_wrapper = styled.div`
   margin: 0 18px 15px 18px;
 `;
 const Comments_contents = styled.div`
-  line-height: 1.3em;
+  line-height: 1.3;
 `;
 
 //!-------------------------------------------------------------------------------------------------------------- //
@@ -618,7 +633,7 @@ function Post() {
     console.log("clicked FeatPost", `postid :${id}`);
   }
   // 시간 변환 관리
-  function handleConvertTimezone(time: string) {
+  function setConvertTime(time: string) {
     // console.log(time);
     const formattedDate = dayjs(time)
       .add(9, "h")
@@ -704,7 +719,7 @@ function Post() {
               <Info_container>
                 <Info_wrapper>
                   <Info_wrapper1>
-                    <Date>{handleConvertTimezone(boardData.created_at)}</Date>
+                    <Date>{setConvertTime(boardData.created_at)}</Date>
                     <View>조회수 {boardData.view_count}</View>
                   </Info_wrapper1>
                   <Info_wrapper2>
@@ -812,44 +827,46 @@ function Post() {
           </Left_wrapper>
 
           {/* 추천게시글 부분 */}
-          <Featured_container>
-            <Featured_wrapper>
-              <Featured_title>추천게시글</Featured_title>
-              <List_wrapper>
-                <List>
-                  {feat
-                    ? feat.map((el, idx) => {
-                        return (
-                          <List_el key={idx}>
-                            <LikeBox>
-                              <List_like>
-                                <List_likeicon>
-                                  <LikeIcon
-                                    width="18px"
-                                    height="18px"
-                                    fill="#ffffff"
-                                  />
-                                </List_likeicon>
-                                <List_likecnt>{el.like_count}</List_likecnt>
-                              </List_like>
-                            </LikeBox>
+          <RightBox>
+            <Featured_container>
+              <Featured_wrapper>
+                <Featured_title>추천게시글</Featured_title>
+                <List_wrapper>
+                  <List>
+                    {feat
+                      ? feat.map((el, idx) => {
+                          return (
+                            <List_el key={idx}>
+                              <LikeBox>
+                                <List_like>
+                                  <List_likeicon>
+                                    <LikeIcon
+                                      width="18px"
+                                      height="18px"
+                                      fill="#ffffff"
+                                    />
+                                  </List_likeicon>
+                                  <List_likecnt>{el.like_count}</List_likecnt>
+                                </List_like>
+                              </LikeBox>
 
-                            <TitleBox>
-                              <Featlink
-                                onClick={handleFeatClick}
-                                to={`../${category}/${el.board_id}`}
-                              >
-                                <List_title>{el.title}</List_title>
-                              </Featlink>
-                            </TitleBox>
-                          </List_el>
-                        );
-                      })
-                    : null}
-                </List>
-              </List_wrapper>
-            </Featured_wrapper>
-          </Featured_container>
+                              <TitleBox>
+                                <Featlink
+                                  onClick={handleFeatClick}
+                                  to={`../${category}/${el.board_id}`}
+                                >
+                                  <List_title>{el.title}</List_title>
+                                </Featlink>
+                              </TitleBox>
+                            </List_el>
+                          );
+                        })
+                      : null}
+                  </List>
+                </List_wrapper>
+              </Featured_wrapper>
+            </Featured_container>
+          </RightBox>
         </Wrapper>
       ) : (
         <p>Loading board data...</p>

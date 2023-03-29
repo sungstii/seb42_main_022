@@ -1,8 +1,7 @@
 import styled from "styled-components";
-import React,{ useState, useEffect } from "react";
-import { useRecoilValue } from 'recoil';
-import { electricChargesState } from "../recoil/state";
-import { totalUsageState } from "../recoil/state";
+import React from "react";
+import { useRecoilValue } from "recoil";
+import { electricChargesState, totalUsageState } from "../recoil/state";
 import { Link } from "react-router-dom";
 
 const MainContainer = styled.div`
@@ -20,7 +19,6 @@ const SectionContainer = styled.div`
   align-items: center;
   margin: 0 auto;
   width: 700px;
-
 `;
 const Title = styled.div`
   display: flex;
@@ -64,23 +62,26 @@ const CalculatorBtn = styled(Link)`
   text-decoration-line: none;
 `;
 
-
 function GreenCalResult() {
-    const electricCharges = useRecoilValue(electricChargesState).toLocaleString();
-    const totalUsage = useRecoilValue(totalUsageState).toLocaleString();
+  const electricCharges = useRecoilValue(electricChargesState).toLocaleString();
+  const totalUsage = useRecoilValue(totalUsageState).toLocaleString();
 
-    return (
-        <>
-            <MainContainer>
-                <SectionContainer>
-                    <Title>전력량 측정 결과</Title>
-                    <ResultContents>예상 전력량 <KWH>{totalUsage}</KWH>KWh 입니다.</ResultContents>
-                    <ResultContents>예상 전기요금 <Money>{electricCharges}</Money>원 입니다.</ResultContents>
-                    <CalculatorBtn to={'/'}>홈으로 가기</CalculatorBtn>
-                </SectionContainer>
-            </MainContainer>
-        </>
-    );
+  return (
+    <>
+      <MainContainer>
+        <SectionContainer>
+          <Title>전력량 측정 결과</Title>
+          <ResultContents>
+            예상 전력량 <KWH>{totalUsage}</KWH>KWh 입니다.
+          </ResultContents>
+          <ResultContents>
+            예상 전기요금 <Money>{electricCharges}</Money>원 입니다.
+          </ResultContents>
+          <CalculatorBtn to={"/"}>홈으로 가기</CalculatorBtn>
+        </SectionContainer>
+      </MainContainer>
+    </>
+  );
 }
 
 export default GreenCalResult;

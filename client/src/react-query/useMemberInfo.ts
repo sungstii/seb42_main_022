@@ -1,6 +1,5 @@
-import axios from "axios";
 import { useQuery } from "react-query";
-
+import { authInstance } from "../utils/api";
 interface MemberData {
   email: string;
   name: string;
@@ -19,15 +18,10 @@ interface MemberData {
 
 export const useMemberInfo = () => {
   const id = localStorage.memberid;
-  const headers = {
-    Authorization: localStorage.token,
-    // "Content-Type": "multipart/form-data",
-  };
+  const url = `/members/${id}`;
+
   const fetchPost = async () => {
-    const response = await axios.get<MemberData>(
-      `http://3.39.150.26:8080/members/${id}`,
-      { headers },
-    );
+    const response = await authInstance.get<MemberData>(url);
     return response.data;
   };
 

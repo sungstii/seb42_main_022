@@ -6,14 +6,14 @@ import nature from "../icon/nature.svg";
 import more from "../icon/expand_more.svg";
 import less from "../icon/expand_less.svg";
 import axios from "axios";
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import apiFetch from "../utils/useFetch";
 import { useRecoilState } from "recoil";
 import { postListState } from "../recoil/state";
 import { areaState } from "../recoil/state";
-import { usePosts } from "../react-query/usePosts"
-import PostModal from '../components/PostModal';
-import LoginModal from "../components/LoginModal"
+import { usePosts } from "../react-query/usePosts";
+import PostModal from "../components/PostModal";
+import LoginModal from "../components/LoginModal";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
@@ -651,38 +651,49 @@ function Community() {
   const memberid = localStorage.getItem("memberid") || "";
   const point: any = localStorage.getItem("point") || "";
 
-  const login = () => { // 로그인 요청
-    axios.post('http://3.39.150.26:8080/members/login', { "email" : "jeong@gmail.com", "password" : "qwer1234" })
-    .then((response) => {
-      localStorage.setItem('token', response.headers.authorization);
-      localStorage.setItem('ref', response.headers.refresh);
-      const { data } = response;
-      localStorage.setItem('memberid', data.memberId);
-      localStorage.setItem('name', data.name);
-      localStorage.setItem('point', data.point);
-      console.log(token);
-    })
-    .catch((error) => console.log(error));
-  }
-  const postsearch = () => { // 게시글 검색
-    axios.get(`http://3.39.150.26:8080/boards/free?searchType=${elvalue}&searchValue=${searchValue}&page=&size=`)
-    .then((response) => {
-      const { data } = response;
-      setSearchPost(data)
-      setSearchBoolean(true);
-      console.log(data);
-    })
-    .catch((error) => console.log(error));
-  }
-  const mileagedone = () => { // 마일리지로 나무심기
-    axios.post(`http://3.39.150.26:8080/members/donation/${memberid}`,
-    {headers: {Authorization: token, Refresh: ref}}
-    )
-    .then((response) => {
-      const { data } = response;
-    })
-    .catch((error) => console.log(error));
-  }
+  const login = () => {
+    // 로그인 요청
+    axios
+      .post("http://3.39.150.26:8080/members/login", {
+        email: "jeong@gmail.com",
+        password: "qwer1234",
+      })
+      .then((response) => {
+        localStorage.setItem("token", response.headers.authorization);
+        localStorage.setItem("ref", response.headers.refresh);
+        const { data } = response;
+        localStorage.setItem("memberid", data.memberId);
+        localStorage.setItem("name", data.name);
+        localStorage.setItem("point", data.point);
+        console.log(token);
+      })
+      .catch((error) => console.log(error));
+  };
+  const postsearch = () => {
+    // 게시글 검색
+    axios
+      .get(
+        `http://3.39.150.26:8080/boards/free?searchType=${elvalue}&searchValue=${searchValue}&page=&size=`,
+      )
+      .then((response) => {
+        const { data } = response;
+        setSearchPost(data);
+        setSearchBoolean(true);
+        console.log(data);
+      })
+      .catch((error) => console.log(error));
+  };
+  const mileagedone = () => {
+    // 마일리지로 나무심기
+    axios
+      .post(`http://3.39.150.26:8080/members/donation/${memberid}`, {
+        headers: { Authorization: token, Refresh: ref },
+      })
+      .then((response) => {
+        const { data } = response;
+      })
+      .catch((error) => console.log(error));
+  };
 
   const formData = new FormData();
   formData.append("memberId", "3");
@@ -713,8 +724,8 @@ function Community() {
     }
   }
 
-  function activeEnter(e : any) {
-    if(e.key === "Enter") {
+  function activeEnter(e: any) {
+    if (e.key === "Enter") {
       postsearch();
     }
   }
@@ -732,7 +743,11 @@ function Community() {
     console.log("로그아웃 완료");
     console.log(token);
   }
-
+  // 시간 변환 관리
+  function setConvertTime(time: string) {
+    const formattedDate = dayjs(time).add(9, "h").tz("Asia/Seoul").fromNow();
+    return formattedDate;
+  }
   useEffect(() => {
     setPm25(data?.rxs.obs[0].msg.iaqi.pm25.v);
     setPm10(data?.rxs.obs[0].msg.iaqi.pm10.v);
@@ -773,44 +788,47 @@ function Community() {
               />
             )}
           </Posting>
-          {searchboolean ? (
-            searchpost?.map((el, index) => {
-              return (
-                <PostSection to={`/community/${el.board_id}`} key={index}>
-                  <Postuser>
-                    <Usericon src={user} alt="user" />
-                    <UserInfo>
-                      <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                      <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                    </UserInfo>
-                  </Postuser>
-                  <PostBody>{el.title}</PostBody>
-                  {el.delegate_image_path && (
-                    <img src={el.delegate_image_path} alt="picture" />
-                  )}
-                </PostSection>
-              );
-            })
-          ) : (
-            posts?.map((el, index) => {
-              return (
-                <PostSection to={`/community/${el.board_id}`} key={index}>
-                  <Postuser>
-                    <Usericon src={user} alt="user" />
-                    <UserInfo>
-                      <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                      <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                    </UserInfo>
-                  </Postuser>
-                  <PostBody>{el.title}</PostBody>
-                  {el.delegate_image_path && (
-                    <img src={el.delegate_image_path} alt="picture" />
-                  )}
-                </PostSection>
-              );
-            })
-          )
-          }
+          {searchboolean
+            ? searchpost?.map((el, index) => {
+                return (
+                  <PostSection to={`/community/${el.board_id}`} key={index}>
+                    <Postuser>
+                      <Usericon src={user} alt="user" />
+                      <UserInfo>
+                        <UserName>
+                          {el.board_creator}&nbsp;
+                          <UserLevel>Lv. {el.creator_level}</UserLevel>
+                        </UserName>
+                        <PostTime>{setConvertTime(el.created_at)}</PostTime>
+                      </UserInfo>
+                    </Postuser>
+                    <PostBody>{el.title}</PostBody>
+                    {el.delegate_image_path && (
+                      <img src={el.delegate_image_path} alt="picture" />
+                    )}
+                  </PostSection>
+                );
+              })
+            : posts?.map((el, index) => {
+                return (
+                  <PostSection to={`/community/${el.board_id}`} key={index}>
+                    <Postuser>
+                      <Usericon src={user} alt="user" />
+                      <UserInfo>
+                        <UserName>
+                          {el.board_creator}&nbsp;
+                          <UserLevel>Lv. {el.creator_level}</UserLevel>
+                        </UserName>
+                        <PostTime>{setConvertTime(el.created_at)}</PostTime>
+                      </UserInfo>
+                    </Postuser>
+                    <PostBody>{el.title}</PostBody>
+                    {el.delegate_image_path && (
+                      <img src={el.delegate_image_path} alt="picture" />
+                    )}
+                  </PostSection>
+                );
+              })}
         </SectionContainer>
         <AsideContainer>
           <SidebarContainer>

@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
+import { defaultInstance } from "../utils/api";
 
 interface BoardData {
   title: string;
@@ -34,10 +34,9 @@ interface BoardData {
 
 export const useOnePost = () => {
   const { id } = useParams();
+  const url = `/boards/${id}`;
   const fetchPost = async () => {
-    const response = await axios.get<BoardData>(
-      `http://3.39.150.26:8080/boards/${id}`,
-    );
+    const response = await defaultInstance.get<BoardData>(url);
     return response.data;
   };
 
