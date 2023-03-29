@@ -1,21 +1,17 @@
-import React from "react";
 import styled, { keyframes } from "styled-components";
 import user from "../icon/user.svg";
-import picture from "../icon/picture.png";
 import search from "../icon/search.svg";
 import saving from "../icon/savings.svg";
 import nature from "../icon/nature.svg";
 import more from "../icon/expand_more.svg";
 import less from "../icon/expand_less.svg";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import apiFetch from "../utils/useFetch";
-import { useQuery } from "react-query";
-import { atom, useRecoilState } from "recoil";
+import { useRecoilState } from "recoil";
 import { postListState } from "../recoil/state";
 import { areaState } from "../recoil/state";
 import { usePosts } from "../react-query/usePosts";
-import { useWeatherInfo } from "../react-query/useWeatherInfo";
 import PostModal from "../components/PostModal";
 import LoginModal from "../components/LoginModal";
 import { Link } from "react-router-dom";
@@ -42,9 +38,11 @@ const SectionContainer = styled.div`
   width: 630px;
   @media screen and (max-width: 819px) {
     width: 80%;
+    margin: 0 auto;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 500px) {
     width: 100%;
+    margin: 0 auto;
   }
 `;
 const AsideContainer = styled.div`
@@ -52,8 +50,12 @@ const AsideContainer = styled.div`
   margin: 20px 0px 20px 0px;
   width: 357px;
   @media screen and (max-width: 1000px) {
+    width: 80%;
+    /* margin: 20px 0px 0px 0px; */
+    margin: 0 auto;
+  }
+  @media screen and (max-width: 500px) {
     width: 100%;
-    margin: 20px 0px 0px 0px;
   }
 `;
 const SidebarContainer = styled.div`
@@ -133,7 +135,8 @@ const PostTime = styled.div`
 `;
 const PostBody = styled.div`
   padding: 10px 0px 10px 0px;
-  font-weight: bolder;
+  /* font-weight: bolder; */
+  font-size: 20px;
 `;
 const SearchBar = styled.div`
   display: flex;
@@ -149,7 +152,7 @@ const SearchBar = styled.div`
   @media screen and (max-width: 1000px) {
     font-size: 10px;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 640px) {
     font-size: 18px;
   }
 `;
@@ -197,6 +200,9 @@ const DustBar = styled.div`
   flex-direction: column;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   z-index: 0;
+  @media screen and (max-width: 1000px) {
+    display: none;
+  }
 `;
 const MileageBar = styled.div`
   display: flex;
@@ -230,7 +236,7 @@ const MileageTitle = styled.div`
     align-items: center;
     /* margin: 0px 10px 0px 10px; */
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 640px) {
     display: flex;
     font-size: 20px;
     align-items: center;
@@ -244,7 +250,7 @@ const MileageNum = styled.div`
     align-items: center;
     margin: 0px 10px 0px 10px;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 640px) {
     font-size: 20px;
   }
 `;
@@ -257,7 +263,7 @@ const MileageIcon = styled.img`
     width: 20px;
     height: 20px;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 640px) {
     width: 30px;
     height: 30px;
   }
@@ -277,7 +283,7 @@ const MileageButton = styled.button`
   @media screen and (max-width: 1000px) {
     font-size: 10px;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 640px) {
     font-size: 13px;
   }
 `;
@@ -294,7 +300,7 @@ const DustTitle = styled.div`
   @media screen and (max-width: 1000px) {
     font-size: 12px;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 640px) {
     font-size: 16px;
   }
 `;
@@ -305,7 +311,7 @@ const DustGraph = styled.div`
   @media screen and (max-width: 1000px) {
     font-size: 12px;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 640px) {
     font-size: 16px;
   }
 `;
@@ -658,21 +664,10 @@ function Community() {
         const { data } = response;
         localStorage.setItem("memberid", data.memberId);
         localStorage.setItem("name", data.name);
+        localStorage.setItem("point", data.point);
         console.log(token);
       })
       .catch((error) => console.log(error));
-  };
-  const membersearch = () => {
-    // 멤버 검색, 이건 포인트 가져오는건데 로그인할때 같이 가져오면 좋을듯
-    axios
-      .get(`http://3.39.150.26:8080/members/${memberid}`, {
-        headers: { Authorization: token, Refresh: ref },
-      })
-      .then((response) => {
-        const { data } = response;
-        localStorage.setItem("point", data.point);
-      })
-      .catch(() => console.log("로그인 해라"));
   };
   const postsearch = () => {
     // 게시글 검색
@@ -729,6 +724,12 @@ function Community() {
     }
   }
 
+  function activeEnter(e: any) {
+    if (e.key === "Enter") {
+      postsearch();
+    }
+  }
+
   function loginhandle() {
     if (token === "") {
       setLoginModal(true);
@@ -742,7 +743,11 @@ function Community() {
     console.log("로그아웃 완료");
     console.log(token);
   }
-
+  // 시간 변환 관리
+  function handleConvertTime(time: string) {
+    const formattedDate = dayjs(time).add(9, "h").tz("Asia/Seoul").fromNow();
+    return formattedDate;
+  }
   useEffect(() => {
     setPm25(data?.rxs.obs[0].msg.iaqi.pm25.v);
     setPm10(data?.rxs.obs[0].msg.iaqi.pm10.v);
@@ -754,7 +759,6 @@ function Community() {
   useEffect(() => {
     AQIhandle();
     //Optional Chaining
-    membersearch();
   }, []);
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -787,7 +791,7 @@ function Community() {
           {searchboolean
             ? searchpost?.map((el, index) => {
                 return (
-                  <PostSection to={`/category/${el.board_id}`} key={index}>
+                  <PostSection to={`/community/${el.board_id}`} key={index}>
                     <Postuser>
                       <Usericon src={user} alt="user" />
                       <UserInfo>
@@ -795,7 +799,7 @@ function Community() {
                           {el.board_creator}&nbsp;
                           <UserLevel>Lv. {el.creator_level}</UserLevel>
                         </UserName>
-                        <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
+                        <PostTime>{handleConvertTime(el.created_at)}</PostTime>
                       </UserInfo>
                     </Postuser>
                     <PostBody>{el.title}</PostBody>
@@ -807,7 +811,7 @@ function Community() {
               })
             : posts?.map((el, index) => {
                 return (
-                  <PostSection to={`/category/${el.board_id}`} key={index}>
+                  <PostSection to={`/community/${el.board_id}`} key={index}>
                     <Postuser>
                       <Usericon src={user} alt="user" />
                       <UserInfo>
@@ -815,7 +819,7 @@ function Community() {
                           {el.board_creator}&nbsp;
                           <UserLevel>Lv. {el.creator_level}</UserLevel>
                         </UserName>
-                        <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
+                        <PostTime>{handleConvertTime(el.created_at)}</PostTime>
                       </UserInfo>
                     </Postuser>
                     <PostBody>{el.title}</PostBody>
@@ -825,42 +829,6 @@ function Community() {
                   </PostSection>
                 );
               })}
-
-          {/* {searchpost?.map((el, index) => {
-              return (
-                <PostSection to={`/category/${el.board_id}`} key={index}>
-                  <Postuser>
-                    <Usericon src={user} alt="user" />
-                    <UserInfo>
-                      <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                      <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                    </UserInfo>
-                  </Postuser>
-                  <PostBody>{el.title}</PostBody>
-                  {el.delegate_image_path && (
-                    <img src={el.delegate_image_path} alt="picture" />
-                  )}
-                </PostSection>
-              );
-            })} */}
-
-          {/* {posts?.map((el, index) => {
-            return (
-              <PostSection to={`/category/${el.board_id}`} key={index}>
-                <Postuser>
-                  <Usericon src={user} alt="user" />
-                  <UserInfo>
-                    <UserName>{el.board_creator}&nbsp;<UserLevel>Lv. {el.creator_level}</UserLevel></UserName>
-                    <PostTime>{dayjs(el.created_at).fromNow()}</PostTime>
-                  </UserInfo>
-                </Postuser>
-                <PostBody>{el.title}</PostBody>
-                {el.delegate_image_path && (
-                  <img src={el.delegate_image_path} alt="picture" />
-                )}
-              </PostSection>
-            );
-          })} */}
         </SectionContainer>
         <AsideContainer>
           <SidebarContainer>
@@ -890,6 +858,7 @@ function Community() {
                 placeholder="검색"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
+                onKeyDown={(e) => activeEnter(e)}
               />
               <SearchButton src={search} onClick={() => postsearch()} />
             </SearchBar>

@@ -6,9 +6,8 @@ import styled, { css } from "styled-components";
 import useHideHeader from "../utils/useHideHeader";
 import useDetectClose from "../utils/useDetectClose";
 import axios from "axios";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { sessionState } from "../recoil/state";
-import { replace } from "formik";
 
 const Container = styled.div`
   width: 100%;

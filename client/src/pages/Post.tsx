@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useFeatList } from "../react-query/useFeatList";
 import styled from "styled-components";
 import { useOnePost } from "../react-query/useOnePost";
-import { authInstance, defaultInstance } from "../utils/api";
+import { authInstance } from "../utils/api";
 import dayjs from "dayjs";
 import "dayjs/locale/ko"; // import the locale for Korean language
 import utc from "dayjs/plugin/utc";

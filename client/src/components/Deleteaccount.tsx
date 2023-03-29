@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import bigError from '../icon/bigError.svg'
+import React, { useState } from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import bigError from "../icon/bigError.svg";
 import axios from "axios";
+import { authInstance, defaultInstance } from "../utils/api";
 
 const ModalContainer = styled.div`
   position: fixed;
@@ -46,7 +47,7 @@ const ModalMessage = styled.p`
 const ModalButton = styled(Link)`
   margin-top: 5px;
   padding: 10px;
-  background-color: #FF0000;
+  background-color: #ff0000;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -56,16 +57,16 @@ const ModalButton = styled(Link)`
   cursor: pointer;
 
   &:hover {
-      background-color: #9b0000;
+    background-color: #9b0000;
   }
   &:active {
-      background-color: #ff2626;
+    background-color: #ff2626;
   }
 `;
 const ModalInput = styled.input`
   width: 80%;
   padding: 10px 10px 10px 10px;
-  background-color: #D9D9D9;
+  background-color: #d9d9d9;
   margin: 20px 0px 5px 0px;
   border-radius: 5px;
   text-align: center;
@@ -73,27 +74,28 @@ const ModalInput = styled.input`
   border: 1px;
 `;
 const ErrorMessage = styled.div`
-  color: #FF0000;
+  color: #ff0000;
   font-size: 15px;
 `;
 
 function Deleteaccount() {
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [textvalue, setTextValue] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [textvalue, setTextValue] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
 
-  const token = localStorage.getItem('token') || '';
-  const fresh = localStorage.getItem('fresh') || '';
-  const Id = localStorage.getItem('Id') || '';
+  const Id = localStorage.getItem("memberid") || "";
 
-  const deletefetch = () => { // 멤버 삭제
-    axios.delete(`http://3.39.150.26:8080/members/${Id}`, {headers: {Authorization: token, Refresh: fresh}})
-    .then(() => {
-      // const { data } = response;
-      console.log('탈퇴 성공')
-    })
-    .catch(() => console.log('탈퇴 실패'));
-  }
+  const deletefetch = () => {
+    // 멤버 삭제
+    const url = `/members/${Id}`;
+    authInstance
+      .delete(url)
+      .then(() => {
+        // const { data } = response;
+        console.log("탈퇴 성공");
+      })
+      .catch(() => console.log("탈퇴 실패"));
+  };
 
   const handleShowModal = () => {
     setShowModal(true);
@@ -104,32 +106,37 @@ function Deleteaccount() {
   };
 
   const deletehandle = () => {
-    if(textvalue === '탈퇴합니다'){
-      setErrorMessage('');
+    if (textvalue === "탈퇴합니다") {
+      setErrorMessage("");
       deletefetch();
       window.localStorage.clear();
       window.location.reload();
-    }
-    else{
+    } else {
       setErrorMessage('잘못된 메시지입니다! "탈퇴합니다"를 입력하세요!');
     }
-  }
+  };
 
   return (
     <div>
-      <button onClick={handleShowModal}>회원탈퇴 버튼(이건 나중에 바꾸면 됨)</button>
+      <button onClick={handleShowModal}>
+        회원탈퇴 버튼(이건 나중에 바꾸면 됨)
+      </button>
       {showModal && (
         <ModalContainer>
           <ModalContent>
-              <img src={bigError}/>
+            <img src={bigError} />
             <ModalTitle>정말 탈퇴하시겠습니까?</ModalTitle>
-            <ModalMessage>탈퇴하시려면 “탈퇴합니다” 라고 입력해 주세요.</ModalMessage>
+            <ModalMessage>
+              탈퇴하시려면 “탈퇴합니다” 라고 입력해 주세요.
+            </ModalMessage>
             <ModalInput
-              placeholder='탈퇴합니다'
+              placeholder="탈퇴합니다"
               onChange={(e) => setTextValue(e.target.value)}
             />
             <ErrorMessage>{errorMessage}</ErrorMessage>
-            <ModalButton type='text' to="/Ranking" onClick={deletehandle}>회원탈퇴</ModalButton>
+            <ModalButton type="text" to="/Ranking" onClick={deletehandle}>
+              회원탈퇴
+            </ModalButton>
             <button onClick={handleCloseModal}>닫기(이건 나중에 없앨거)</button>
           </ModalContent>
         </ModalContainer>
