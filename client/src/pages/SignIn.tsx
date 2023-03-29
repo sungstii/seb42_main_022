@@ -87,6 +87,8 @@ const signInSchema = object({
   password: string().required("비밀번호를 입력해주세요"),
 });
 
+const offset = new Date().getTimezoneOffset() * 60000;
+const today = new Date(Date.now() - offset + 60000 * 30);
 const SignIn = () => {
   const navigate = useNavigate();
   const setSession = useSetRecoilState(sessionState);
@@ -123,6 +125,7 @@ const SignIn = () => {
                     const ref = res.headers.refresh;
                     console.log(token);
                     localStorage.setItem("token", token);
+                    localStorage.setItem("expiretime", today.toISOString());
                     setSession({ authenticated: true, token: token });
                     axios.defaults.headers.common["Authorization"] = token;
                     localStorage.setItem("refresh", ref);
