@@ -46,23 +46,7 @@ function useCheckAuth() {
       });
   };
 
-  const renew = useBeforeUnload((e) => e.preventDefault);
-  const navigate = useNavigate();
-  const timerRef = useRef<any>(null);
-  const clearSession = () => {
-    console.log("10분뒤 세션이 만료됩니다.");
-    timerRef.current = setTimeout(() => {
-      axios
-        .post("http://3.39.150.26:8080/members/logout")
-        .then((res) => console.log(res));
-      setSession({ authenticated: false, token: null });
-      delete axios.defaults.headers.common["Authorization"];
-      localStorage.clear();
-      navigate("/");
-      alert("세션이 만료되었습니다");
-    }, 60000 * 10);
-  };
-  if (today.toISOString() > localtime) {
+  const sessionExpire = () => {
     axios
       .post("http://3.39.150.26:8080/members/logout")
       .then((res) => console.log(res));
@@ -70,6 +54,20 @@ function useCheckAuth() {
     delete axios.defaults.headers.common["Authorization"];
     localStorage.clear();
     navigate("/");
+  };
+
+  const renew = useBeforeUnload((e) => e.preventDefault);
+  const navigate = useNavigate();
+  const timerRef = useRef<any>(null);
+  const clearSession = () => {
+    console.log("10분뒤 세션이 만료됩니다.");
+    timerRef.current = setTimeout(() => {
+      sessionExpire();
+      alert("세션이 만료되었습니다");
+    }, 60000 * 10);
+  };
+  if (today.toISOString() > localtime) {
+    sessionExpire();
   }
 
   useEffect(() => {
