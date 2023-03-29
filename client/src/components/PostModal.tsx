@@ -24,7 +24,6 @@ const ModalWrapper = styled.div`
 `;
 
 const ModalContent = styled.div`
-<<<<<<< HEAD
     display: flex;
     flex-direction: column;
     /* align-items: center; */
@@ -39,20 +38,6 @@ const ModalContent = styled.div`
     text-align: center;
     max-height: 800px;
     overflow-y: auto;
-=======
-  display: flex;
-  flex-direction: column;
-  /* align-items: center; */
-  /* justify-content: center; */
-  background-color: white;
-  border-radius: 10px;
-  border: 2px solid #609966;
-  box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.2);
-  width: 600px;
-  /* height: 300px; */
-  padding: 10px;
-  text-align: center;
->>>>>>> 179086abdbc86d4ce972408950e5f748a5b1b454
 `;
 
 const CloseButton = styled.img`
