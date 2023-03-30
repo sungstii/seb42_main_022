@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useMemberInfo } from "../react-query/useMemberInfo";
 import { useMyPost } from "../react-query/useMyPost";
+import { useRecoilValue } from "recoil";
+import { memberInfoAtom } from "../recoil/state";
 import Deleteaccount from "../components/Deleteaccount";
 import { ReactComponent as SproutIcon } from "../icon/sprout.svg";
 import { ReactComponent as LikeIcon } from "../icon/thumbup.svg";
@@ -274,7 +276,8 @@ const Post_Right = styled.div`
 
 function MyPage() {
   const token = localStorage.token;
-
+  const memberInfo = useRecoilValue(memberInfoAtom);
+  console.log(memberInfo);
   const {
     data: member,
     isLoading: memberLoading,

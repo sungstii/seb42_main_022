@@ -8,6 +8,9 @@ interface postList {
   title: string;
   contents: string;
   created_at: string;
+  member: {
+    profile_url: string;
+  };
 }
 
 export const usePosts = () => {
