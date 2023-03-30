@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { authInstance } from "../utils/api";
+import { defaultInstance } from "../utils/api";
 interface MemberData {
   email: string;
   name: string;
@@ -22,7 +22,7 @@ export const useMemberInfo = () => {
   const url = `/members/${id}`;
 
   const fetchPost = async () => {
-    const response = await authInstance.get<MemberData>(url);
+    const response = await defaultInstance.get<MemberData>(url);
     return response.data;
   };
 
