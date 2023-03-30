@@ -24,7 +24,6 @@ import useCheckAuth from "./utils/useCheckAuth";
 function App() {
   // const { authenticated } = useRecoilValue(sessionState);
   const token = localStorage.token;
-  console.log("앱입니다!");
   useCheckAuth();
   return (
     <Fragment>

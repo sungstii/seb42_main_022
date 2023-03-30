@@ -652,49 +652,47 @@ function Community() {
   const memberid = localStorage.getItem("memberid") || "";
   const point: any = localStorage.getItem("point") || "";
 
-  const login = () => {
-    // 로그인 요청
-    axios
-      .post("http://3.39.150.26:8080/members/login", {
-        email: "jeong@gmail.com",
-        password: "qwer1234",
-      })
-      .then((response) => {
-        localStorage.setItem("token", response.headers.authorization);
-        localStorage.setItem("ref", response.headers.refresh);
-        const { data } = response;
-        localStorage.setItem("memberid", data.memberId);
-        localStorage.setItem("name", data.name);
-        localStorage.setItem("point", data.point);
-        console.log(token);
-      })
-      .catch((error) => console.log(error));
-  };
-  const postsearch = () => {
-    // 게시글 검색
-    axios
-      .get(
-        `http://3.39.150.26:8080/boards/free?searchType=${elvalue}&searchValue=${searchValue}&page=&size=`,
-      )
-      .then((response) => {
-        const { data } = response;
-        setSearchPost(data);
-        setSearchBoolean(true);
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
-  };
-  const mileagedone = () => {
-    // 마일리지로 나무심기
-    axios
-      .post(`http://3.39.150.26:8080/members/donation/${memberid}`, {
-        headers: { Authorization: token, Refresh: ref },
-      })
-      .then((response) => {
-        const { data } = response;
-      })
-      .catch((error) => console.log(error));
-  };
+  const login = () => { // 로그인 요청
+    axios.post('http://3.39.150.26:8080/members/login', { "email" : "jeong@gmail.com", "password" : "qwer1234" })
+    .then((response) => {
+      localStorage.setItem('token', response.headers.authorization);
+      localStorage.setItem('ref', response.headers.refresh);
+      const { data } = response;
+      localStorage.setItem('memberid', data.memberId);
+      localStorage.setItem('name', data.name);
+      localStorage.setItem('point', data.point);
+      localStorage.setItem("level", data.level);
+      console.log(token);
+    })
+    .catch((error) => console.log(error));
+  }
+  const postsearch = () => { // 게시글 검색
+    axios.get(`http://3.39.150.26:8080/boards/free?searchType=${elvalue}&searchValue=${searchValue}&page=&size=`)
+    .then((response) => {
+      const { data } = response;
+      setSearchPost(data);
+      setSearchBoolean(true);
+      console.log(data);
+    })
+    .catch((error) => console.log(error));
+  }
+  const mileagedone = () => { // 마일리지로 나무심기
+    axios.post(`http://3.39.150.26:8080/members/donation/${memberid}`,
+    {headers: {Authorization: token, Refresh: ref}}
+    )
+    .then((response) => {
+      const { data } = response;
+    })
+    .catch((error) => console.log(error));
+  }
+  const membersearch = () => {
+    axios.get(`http://3.39.150.26:8080/members/${memberid}`, {headers: {Authorization: token, Refresh: ref}})
+    .then((response) => {
+      const { data } = response;
+      localStorage.setItem('point', data.point);
+    })
+    .catch(() => console.log('로그인 해라'));
+  }
 
   const formData = new FormData();
   formData.append("memberId", "3");
@@ -756,11 +754,14 @@ function Community() {
     setNo2(data?.rxs.obs[0].msg.iaqi.no2.v);
     setCo(data?.rxs.obs[0].msg.iaqi.co.v);
     setSo2(data?.rxs.obs[0].msg.iaqi.so2.v);
+    console.log(data?.rxs.obs[0].msg.iaqi.pm25.v);
   }, []);
   useEffect(() => {
     AQIhandle();
     //Optional Chaining
-  }, []);
+    membersearch();
+  }, [membersearch]);
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowToast(false);
@@ -865,7 +866,7 @@ function Community() {
             </SearchBar>
             {/* {error && 'Error!'}
           {loading && 'Loading...'} */}
-            {data && (
+            {/* {data && (
               <DustBar>
                 <DustDropdown>
                   <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
@@ -933,7 +934,7 @@ function Community() {
                   </Row4>
                 </DustGraph>
               </DustBar>
-            )}
+            )} */}
             <MileageBar>
               <MileageInfo>
                 <MileageIcon src={saving} />
@@ -944,8 +945,8 @@ function Community() {
                 <TreeIcon src={nature} />내 마일리지로 나무 심기!
               </MileageButton>
 
-              <button onClick={login}>로그인 버튼</button>
-              <button onClick={logout}>로그아웃 버튼</button>
+              {/* <button onClick={login}>로그인 버튼</button>
+              <button onClick={logout}>로그아웃 버튼</button> */}
             </MileageBar>
           </SidebarContainer>
           <Aside />

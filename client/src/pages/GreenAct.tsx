@@ -832,7 +832,7 @@ function GreenAct() {
               />
               <SearchButton src={search} onClick={() => postsearch()} />
             </SearchBar>
-            {data && (
+            {/* {data && (
               <DustBar>
                 <DustDropdown>
                   <DropdownHeader onClick={() => setIsOpen(!isOpen)}>
@@ -899,7 +899,7 @@ function GreenAct() {
                   </Row4>
                 </DustGraph>
               </DustBar>
-            )}
+            )} */}
             <MileageBar>
               <MileageInfo>
                 <MileageIcon src={saving} />

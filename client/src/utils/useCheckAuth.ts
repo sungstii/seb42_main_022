@@ -1,10 +1,14 @@
 import axios from "axios";
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useEffect, useRef } from "react";
+import { useBeforeUnload, useLocation, useNavigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
 import { sessionState } from "../recoil/state";
 
 function useCheckAuth() {
+  /**
+   * react-router-dom에서 제공하는 Link엘리먼트는 a태그와는 다르게
+   * 페이지 새로고침을 트리거하지 않기때문에 useLocation을 통해 url변경을 감지
+   */
   const location = useLocation();
   const refresh = localStorage.refresh;
   /**
@@ -13,24 +17,27 @@ function useCheckAuth() {
    * 유저 로그인 여부만 전역 상태관리를 이용하고 accessToken은 localStorage에 저장하여 관리
    */
   const [session, setSession] = useRecoilState(sessionState);
+  const offset = new Date().getTimezoneOffset() * 60000;
+  const today = new Date(Date.now() - offset);
+  const expire = new Date(Date.now() - offset + 60000 * 30);
+
+  const localtime = localStorage.expiretime;
+
   const getAccessToken = () => {
     axios
       .get("http://3.39.150.26:8080/auth/reissue", {
         headers: { Refresh: refresh },
       })
       .then((res) => {
-        // console.log("새로운 토큰 값: ", res.headers.authorization);
-        // console.log("새로운 리프레쉬 값: ", res.headers.refresh);
         const token = res.headers.authorization;
-        const refresh = res.headers.refresh;
         setSession({ authenticated: true, token });
-        localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = token;
 
         //! 서버에서 리프레쉬 토큰으로 액세스토큰 재 요청시 새로운 리프레쉬 토큰을 발급해줘서 같이 저장한다.
+        const refresh = res.headers.refresh;
+        localStorage.setItem("token", token);
+        localStorage.setItem("expiretime", expire.toISOString());
         localStorage.setItem("refresh", refresh);
-
-        console.log(localStorage.token);
-        axios.defaults.headers.common["Authorization"] = token;
         console.log("세션있음", session);
       })
       .catch((error) => {
@@ -38,10 +45,36 @@ function useCheckAuth() {
         // setSession({ ...session, authenticated: true });
       });
   };
+
+  const sessionExpire = () => {
+    axios
+      .post("http://3.39.150.26:8080/members/logout")
+      .then((res) => console.log(res));
+    setSession({ authenticated: false, token: null });
+    delete axios.defaults.headers.common["Authorization"];
+    localStorage.clear();
+    navigate("/");
+  };
+
+  const renew = useBeforeUnload((e) => e.preventDefault);
+  const navigate = useNavigate();
+  const timerRef = useRef<any>(null);
+  const clearSession = () => {
+    console.log("10분뒤 세션이 만료됩니다.");
+    timerRef.current = setTimeout(() => {
+      sessionExpire();
+      alert("세션이 만료되었습니다");
+    }, 60000 * 10);
+  };
+  if (today.toISOString() > localtime) {
+    sessionExpire();
+  }
+
   useEffect(() => {
-    console.log("asdfsdfsdfssdfsdfds");
     refresh && getAccessToken();
-  }, [location]);
+    refresh && clearSession();
+    return () => clearTimeout(timerRef.current);
+  }, [location, renew]);
 }
 
 export default useCheckAuth;
