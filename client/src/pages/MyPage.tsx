@@ -338,7 +338,7 @@ function MyPage() {
         const myData = await axios.get(url);
         setMemberInfo(myData.data);
 
-        const myPost = await axios.post(url2);
+        const myPost = await axios.get(url2);
         setMemberPost(myPost.data);
       } catch (error) {
         console.error("Error:", error);
