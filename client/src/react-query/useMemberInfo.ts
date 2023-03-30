@@ -14,6 +14,7 @@ interface MemberData {
   };
   member_id: number;
   member_status: string;
+  profile_url: string;
 }
 
 export const useMemberInfo = () => {
@@ -26,6 +27,6 @@ export const useMemberInfo = () => {
   };
 
   return useQuery<MemberData, Error>("member", fetchPost, {
-    refetchOnWindowFocus: true, // Add this option to refetch data on window focus
+    refetchOnWindowFocus: false,
   });
 };

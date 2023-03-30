@@ -17,5 +17,7 @@ export const usePosts = () => {
     return response.data;
   };
 
-  return useQuery<postList[], Error>("posts", fetchPosts);
+  return useQuery<postList[], Error>("posts", fetchPosts, {
+    refetchOnWindowFocus: false,
+  });
 };

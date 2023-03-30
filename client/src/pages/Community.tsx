@@ -83,6 +83,7 @@ const Usericon = styled.img`
   padding: 2px 17px 2px 2px;
   width: 50px;
   height: 50px;
+  border-radius: 50%;
 `;
 const PostButton = styled.button`
   background-color: #ebebeb;

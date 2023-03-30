@@ -51,6 +51,13 @@ const User_box1 = styled.div`
 const User_ImgBox = styled.div`
   width: 84px;
   height: 100%;
+  border-radius: 50%;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 `;
 const User_ButtonBox = styled.div`
   display: flex;
@@ -144,7 +151,7 @@ const CurExp = styled.div<LevelProp>`
   animation-duration: 1s;
   animation-direction: alternate;
   animation-iteration-count: 1;
-  animation-timing-function: linear;
+  animation-timing-function: ease;
   box-shadow: 0 0 4px rgb(96, 153, 102);
   @keyframes my-animation {
     from {
@@ -286,7 +293,7 @@ function MyPage() {
   function handleModalOpen() {
     setIsmodalopen(!ismodalopen);
   }
-  console.log(posts);
+
   return (
     <Container>
       {memberLoading ? (
@@ -306,7 +313,7 @@ function MyPage() {
                 <User_box1>
                   <User_ImgBox>
                     <img
-                      src={accountCircle}
+                      src={member.profile_url}
                       style={{ width: "84px", height: "84px" }}
                     />
                   </User_ImgBox>
