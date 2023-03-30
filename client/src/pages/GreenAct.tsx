@@ -552,18 +552,14 @@ const Toast = styled.div`
 
 function GreenAct() {
   const [itemvalue, setItemvalue] = useRecoilState(areaState); // 지역 상태 (서울, 부산 등)
-  const [memberinfo, setMemberinfo] = useRecoilState(memberInfoAtom); // 멤버 정보(Post 모달에서 활용)
+  const [memberinfo, setMemberInfo] = useRecoilState(memberInfoAtom); // 멤버 정보(Post 모달에서 활용)
   const { data, loading, error } = apiFetch(
     `https://api.waqi.info/v2/feed/${itemvalue}/?token=a85f9e4ea2f2e1efa4cecb4806a6909e520368df`,
     // `https://cors-anywhere.herokuapp.com/https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`,
   );
   // const { data: dusts, isLoading: dustLoading, error } = useWeatherInfo();
   const { data: posts, isLoading, isError } = useGreenPosts();
-  const {
-    data: member,
-    isLoading: memberLoading,
-    isError: memberError,
-  } = useMemberInfo();
+
   const [pm25, setPm25] = useState(0);
   const [pm10, setPm10] = useState(0);
   const [o3, setO3] = useState(0);
@@ -759,10 +755,20 @@ function GreenAct() {
   }, [showToast, pointlack]);
 
   useEffect(() => {
-    if (member) {
-      setMemberinfo(member);
-    }
-  }, [member, setMemberinfo]);
+    const id = localStorage.memberid;
+    const url = `http://3.39.150.26:8080/members/${id}`;
+
+    const fetchData = async () => {
+      try {
+        const myData = await axios.get(url);
+        setMemberInfo(myData.data);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -772,12 +778,11 @@ function GreenAct() {
         <SectionContainer>
           <Posting>
             <UserImgBox>
-              {member &&
-                (member.profile_url ? (
-                  <Usericon src={member.profile_url} alt="user" />
-                ) : (
-                  <Usericon src={user} alt="user" />
-                ))}
+              {token && memberinfo && memberinfo.profile_url ? (
+                <Usericon src={memberinfo.profile_url} alt="user" />
+              ) : (
+                <Usericon src={user} alt="user" />
+              )}
             </UserImgBox>
             <PostButton onClick={() => loginhandle()}>
               오늘 실천하신 녹색활동을 알려주세요!
