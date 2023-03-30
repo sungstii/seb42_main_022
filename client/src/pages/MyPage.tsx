@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useMemberInfo } from "../react-query/useMemberInfo";
 import { useMyPost } from "../react-query/useMyPost";
+import { useRecoilValue } from "recoil";
+import { memberInfoAtom } from "../recoil/state";
 import Deleteaccount from "../components/Deleteaccount";
 import { ReactComponent as SproutIcon } from "../icon/sprout.svg";
 import { ReactComponent as LikeIcon } from "../icon/thumbup.svg";
@@ -51,6 +53,13 @@ const User_box1 = styled.div`
 const User_ImgBox = styled.div`
   width: 84px;
   height: 100%;
+  border-radius: 50%;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 `;
 const User_ButtonBox = styled.div`
   display: flex;
@@ -144,7 +153,7 @@ const CurExp = styled.div<LevelProp>`
   animation-duration: 1s;
   animation-direction: alternate;
   animation-iteration-count: 1;
-  animation-timing-function: linear;
+  animation-timing-function: ease;
   box-shadow: 0 0 4px rgb(96, 153, 102);
   @keyframes my-animation {
     from {
@@ -267,7 +276,8 @@ const Post_Right = styled.div`
 
 function MyPage() {
   const token = localStorage.token;
-
+  const memberInfo = useRecoilValue(memberInfoAtom);
+  console.log(memberInfo);
   const {
     data: member,
     isLoading: memberLoading,
@@ -286,7 +296,7 @@ function MyPage() {
   function handleModalOpen() {
     setIsmodalopen(!ismodalopen);
   }
-  console.log(posts);
+
   return (
     <Container>
       {memberLoading ? (
@@ -306,7 +316,7 @@ function MyPage() {
                 <User_box1>
                   <User_ImgBox>
                     <img
-                      src={accountCircle}
+                      src={member.profile_url}
                       style={{ width: "84px", height: "84px" }}
                     />
                   </User_ImgBox>

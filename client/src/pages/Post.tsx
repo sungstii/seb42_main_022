@@ -128,6 +128,9 @@ const Content_title = styled.div<{ disabled: boolean }>`
       outline: 1px solid #609966;
     }
     ${(props) => !props.disabled && "outline: 2px solid #609966"};
+    :disabled {
+      color: black;
+    }
   }
 `;
 
@@ -177,7 +180,11 @@ const Content_detail = styled.div<{ disabled: boolean }>`
     border-radius: 15px;
     background-color: transparent;
     margin-bottom: 10px;
+    overflow-y: hidden;
     ${(props) => !props.disabled && "outline: 2px solid #609966"};
+    :disabled {
+      color: black;
+    }
   }
 `;
 const Info_container = styled.div`
@@ -582,6 +589,7 @@ function Post() {
         alert("본인 게시글만 수정 가능합니다!");
       } else {
         const response = await authInstance.patch(url, formData);
+        window.location.reload();
         console.log(response.data);
         console.log("게시글을 수정하였습니다");
       }

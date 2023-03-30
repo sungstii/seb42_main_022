@@ -1,23 +1,43 @@
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import { useGreenPosts } from "../react-query/useGreenPosts";
+import { useMemberInfo } from "../react-query/useMemberInfo";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { areaState, memberInfoAtom } from "../recoil/state";
+import apiFetch from "../utils/useFetch";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import PostModal from "../components/PostModal";
+import LoginModal from "../components/LoginModal";
 import user from "../icon/user.svg";
 import search from "../icon/search.svg";
 import saving from "../icon/savings.svg";
 import nature from "../icon/nature.svg";
 import more from "../icon/expand_more.svg";
 import less from "../icon/expand_less.svg";
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import apiFetch from "../utils/useFetch";
-import { useRecoilState } from "recoil";
-import { areaState } from "../recoil/state";
-import { useGreenPosts } from "../react-query/useGreenPosts";
-import PostModal from "../components/PostModal";
-import LoginModal from "../components/LoginModal";
-import { Link } from "react-router-dom";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
+
+export interface Item {
+  id: number;
+  label: string;
+  value: string;
+}
+
+interface postList {
+  board_creator: string;
+  creator_level: number;
+  delegate_image_path: string;
+  title: string;
+  contents: string;
+  board_id: number;
+  created_at: string;
+  member: {
+    profile_url: string;
+  };
+}
 
 const MainContainer = styled.div`
   display: flex;
@@ -72,6 +92,7 @@ const Aside = styled.div`
 `;
 const Posting = styled.div`
   display: flex;
+  align-items: center;
   background-color: rgb(246, 246, 246);
   border-radius: 15px;
   padding: 15px;
@@ -79,9 +100,10 @@ const Posting = styled.div`
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 `;
 const Usericon = styled.img`
-  padding: 2px 17px 2px 2px;
-  width: 50px;
-  height: 50px;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
 `;
 const PostButton = styled.button`
   background-color: #ebebeb;
@@ -110,6 +132,14 @@ const PostSection = styled(Link)`
 const Postuser = styled.div`
   display: flex;
   flex-direction: row;
+`;
+const UserImgBox = styled.div`
+  width: 48px;
+  height: 48px;
+  margin-right: 10px;
+  img {
+    border-radius: 50%;
+  }
 `;
 const UserInfo = styled.div`
   display: flex;
@@ -520,30 +550,20 @@ const Toast = styled.div`
   animation: ${toastmove} 1s linear;
 `;
 
-export interface Item {
-  id: number;
-  label: string;
-  value: string;
-}
-
-interface postList {
-  board_creator: string;
-  creator_level: number;
-  delegate_image_path: string;
-  title: string;
-  contents: string;
-  board_id: number;
-  created_at: string;
-}
-
 function GreenAct() {
   const [itemvalue, setItemvalue] = useRecoilState(areaState); // 지역 상태 (서울, 부산 등)
+  const [memberinfo, setMemberinfo] = useRecoilState(memberInfoAtom); // 멤버 정보(Post 모달에서 활용)
   const { data, loading, error } = apiFetch(
     `https://api.waqi.info/v2/feed/${itemvalue}/?token=a85f9e4ea2f2e1efa4cecb4806a6909e520368df`,
     // `https://cors-anywhere.herokuapp.com/https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`,
   );
   // const { data: dusts, isLoading: dustLoading, error } = useWeatherInfo();
   const { data: posts, isLoading, isError } = useGreenPosts();
+  const {
+    data: member,
+    isLoading: memberLoading,
+    isError: memberError,
+  } = useMemberInfo();
   const [pm25, setPm25] = useState(0);
   const [pm10, setPm10] = useState(0);
   const [o3, setO3] = useState(0);
@@ -738,6 +758,12 @@ function GreenAct() {
     return () => clearTimeout(timer);
   }, [showToast, pointlack]);
 
+  useEffect(() => {
+    if (member) {
+      setMemberinfo(member);
+    }
+  }, [member, setMemberinfo]);
+
   return (
     <>
       {isLoading && "Error!"}
@@ -745,7 +771,14 @@ function GreenAct() {
       <MainContainer>
         <SectionContainer>
           <Posting>
-            <Usericon src={user} alt="user" />
+            <UserImgBox>
+              {member &&
+                (member.profile_url ? (
+                  <Usericon src={member.profile_url} alt="user" />
+                ) : (
+                  <Usericon src={user} alt="user" />
+                ))}
+            </UserImgBox>
             <PostButton onClick={() => loginhandle()}>
               오늘 실천하신 녹색활동을 알려주세요!
             </PostButton>
@@ -763,7 +796,14 @@ function GreenAct() {
                 return (
                   <PostSection to={`/greenact/${el.board_id}`} key={index}>
                     <Postuser>
-                      <Usericon src={user} alt="user" />
+                      <UserImgBox>
+                        {el.member &&
+                          (el.member.profile_url ? (
+                            <Usericon src={el.member.profile_url} alt="user" />
+                          ) : (
+                            <Usericon src={user} alt="user" />
+                          ))}
+                      </UserImgBox>
                       <UserInfo>
                         <UserName>
                           {el.board_creator}&nbsp;
@@ -783,7 +823,14 @@ function GreenAct() {
                 return (
                   <PostSection to={`/greenact/${el.board_id}`} key={index}>
                     <Postuser>
-                      <Usericon src={user} alt="user" />
+                      <UserImgBox>
+                        {el.member &&
+                          (el.member.profile_url ? (
+                            <Usericon src={el.member.profile_url} alt="user" />
+                          ) : (
+                            <Usericon src={user} alt="user" />
+                          ))}
+                      </UserImgBox>
                       <UserInfo>
                         <UserName>
                           {el.board_creator}&nbsp;

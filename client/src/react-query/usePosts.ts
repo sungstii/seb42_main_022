@@ -8,6 +8,9 @@ interface postList {
   title: string;
   contents: string;
   created_at: string;
+  member: {
+    profile_url: string;
+  };
 }
 
 export const usePosts = () => {
@@ -17,5 +20,7 @@ export const usePosts = () => {
     return response.data;
   };
 
-  return useQuery<postList[], Error>("posts", fetchPosts);
+  return useQuery<postList[], Error>("posts", fetchPosts, {
+    refetchOnWindowFocus: false,
+  });
 };

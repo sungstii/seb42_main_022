@@ -10,7 +10,7 @@ import Ranking from "./pages/Ranking";
 import { RecoilRoot, useRecoilValue } from "recoil";
 import Post from "./pages/Post";
 import MyPage from "./pages/MyPage";
-import MypageEdit from "./pages/MypageEdit";
+import MyPageEdit from "./pages/MyPageEdit";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import { Reset } from "styled-reset";
@@ -45,7 +45,7 @@ function App() {
           />
           <Route
             path="/mypageedit"
-            element={<Protected auth={token}>{<MypageEdit />}</Protected>}
+            element={<Protected auth={token}>{<MyPageEdit />}</Protected>}
           />
           <Route
             path="/signup"

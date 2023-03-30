@@ -41,6 +41,6 @@ export const useOnePost = () => {
   };
 
   return useQuery<BoardData, Error>("post", fetchPost, {
-    refetchOnWindowFocus: true, // Add this option to refetch data on window focus
+    refetchOnWindowFocus: false,
   });
 };
