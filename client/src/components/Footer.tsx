@@ -15,7 +15,11 @@ const FooterContainer = styled.div`
   width: 100%;
   height: 200px;
   background-color: white;
-  border-top: 1px solid #f6f6f6; ;
+  border-top: 1px solid #f6f6f6;
+  @media screen and (max-width: 1200px) {
+    padding: 4px 0;
+    height: 160px;
+  }
 `;
 const FooterTopWrapper = styled.div`
   display: flex;
@@ -24,14 +28,28 @@ const FooterTopWrapper = styled.div`
   align-items: flex-start;
   width: 50%;
   height: 65px;
-  /* border: 1px solid gray; */
+  @media screen and (max-width: 1200px) {
+    width: 60%;
+    height: 55px;
+  }
+  @media screen and (max-width: 800px) {
+    width: 70%;
+    height: 45px;
+  }
 `;
 const FooterBottomWrapper = styled.div`
   text-align: left;
   margin-top: 20px;
   width: 50%;
   height: 30px;
-  /* border: 1px solid gray; */
+  @media screen and (max-width: 1200px) {
+    width: 60%;
+    height: 25px;
+  }
+  @media screen and (max-width: 800px) {
+    width: 70%;
+    height: 20px;
+  }
 `;
 const TopLeftContentsWrapper = styled.div`
   margin-right: 30px;
@@ -40,6 +58,10 @@ const TopLeftContentsWrapper = styled.div`
   /* border: 1px solid gray; */
   width: 80px;
   height: 92%;
+  @media screen and (max-width: 800px) {
+    width: 70px;
+    height: 88%;
+  }
 `;
 const TopCenterContentsWrapper = styled.div`
   margin-right: 20px;
@@ -79,6 +101,28 @@ const RightTextWrapper = styled.div`
 `;
 const Text = styled.span`
   font-size: 16px;
+  @media screen and (max-width: 1200px) {
+    font-size: 14px;
+  }
+  @media screen and (max-width: 1000px) {
+    font-size: 12px;
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 10px;
+  }
+`;
+const BoldText = styled.span`
+  font-size: 23px;
+  font-weight: bold;
+  @media screen and (max-width: 1200px) {
+    font-size: 16px;
+  }
+  @media screen and (max-width: 1000px) {
+    font-size: 14px;
+  }
+  @media screen and (max-width: 800px) {
+    font-size: 12px;
+  }
 `;
 
 const Footer = () => {
@@ -87,19 +131,17 @@ const Footer = () => {
       <FooterTopWrapper>
         <TopLeftContentsWrapper>
           <LeftTopTextWrapper>
-            <Text style={{ fontSize: "23px", fontWeight: "bold" }}>
-              고객센터
-            </Text>
+            <BoldText>고객센터</BoldText>
           </LeftTopTextWrapper>
           <LeftBottomTextWrapper>
             <a href="https://github.com/" target="blank">
-              <GithubIcon width="22" height="22" />
+              <GithubIcon width="20" height="20" />
             </a>
             <a
               href="https://www.notion.so/ko-kr/product?utm_source=google&utm_campaign=10805039169&utm_medium=104440699817&utm_content=455555244419&utm_term=%EB%85%B8%EC%85%98&targetid=kwd-827502875973&gclid=CjwKCAjw_YShBhAiEiwAMomsEGPW6JPzZ2PuYzm0ttCbWnQcKxH21ilhRDnxUDEzE-159i7Ga0zkUBoCjqgQAvD_BwE"
               target="blank"
             >
-              <NotionIcon width="22" height="22" />
+              <NotionIcon width="20" height="20" />
             </a>
           </LeftBottomTextWrapper>
         </TopLeftContentsWrapper>
