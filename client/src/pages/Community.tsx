@@ -67,7 +67,7 @@ const SectionContainer = styled.div`
 const AsideContainer = styled.div`
   flex-direction: column;
   margin: 20px 0px 20px 0px;
-  width: 357px;
+  width: 387px;
   @media screen and (max-width: 1000px) {
     width: 80%;
     /* margin: 20px 0px 0px 0px; */
@@ -116,6 +116,10 @@ const PostButton = styled.button`
   padding: 0px 0px 0px 20px;
   text-align: start;
   cursor: pointer;
+  &:hover{  
+    background-color: #bdbdbd;
+    color: #ebebeb;
+  }
 `;
 const PostSection = styled(Link)`
   display: flex;
@@ -213,6 +217,7 @@ const SearchButton = styled.img`
   right: 0px;
   width: 28px;
   height: 28px;
+  cursor: pointer;
 `;
 
 const DustBar = styled.div`
@@ -309,6 +314,12 @@ const MileageButton = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  &:hover{  
+    background-color: #4F8255;
+  }
+  &:active{  
+    border: 5px solid #66A16D;
+  }
   @media screen and (max-width: 1000px) {
     font-size: 10px;
   }
@@ -551,29 +562,29 @@ const Toast = styled.div`
 `;
 
 function Community() {
-  const [itemvalue, setItemvalue] = useRecoilState(areaState); // 지역 상태 (서울, 부산 등)
+  // const [itemvalue, setItemvalue] = useRecoilState(areaState); // 지역 상태 (서울, 부산 등)
   const [memberinfo, setMemberInfo] = useRecoilState(memberInfoAtom); // 멤버 정보(Post 모달에서 활용)
-  const { data, loading, error } = apiFetch(
-    `https://api.waqi.info/v2/feed/${itemvalue}/?token=a85f9e4ea2f2e1efa4cecb4806a6909e520368df`,
-    // `https://cors-anywhere.herokuapp.com/https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`,
-  );
+  // const { data, loading, error } = apiFetch(
+  //   `https://api.waqi.info/v2/feed/${itemvalue}/?token=a85f9e4ea2f2e1efa4cecb4806a6909e520368df`,
+  //   // `https://cors-anywhere.herokuapp.com/https://api.waqi.info/v2/feed/${itemvalue}/?token=apikey`,
+  // );
   // const { data: dusts, isLoading: dustLoading, error } = useWeatherInfo();
   const { data: posts, isLoading, isError } = usePosts();
 
-  const [pm25, setPm25] = useState(0);
-  const [pm10, setPm10] = useState(0);
-  const [o3, setO3] = useState(0);
-  const [no2, setNo2] = useState(0);
-  const [co, setCo] = useState(0);
-  const [so2, setSo2] = useState(0);
-  const [isOpen, setIsOpen] = useState(false); // 지역 드롭다운 open
-  const [selectedItem, setSelectedItem] = useState<Item | null>(null); // 지역 드롭다운 현재값 (label)
-  const [pm25info, setPm25info] = useState("");
-  const [pm10info, setPm10info] = useState("");
-  const [o3info, setO3info] = useState("");
-  const [no2info, setNo2info] = useState("");
-  const [coinfo, setCoinfo] = useState("");
-  const [so2info, setSo2info] = useState("");
+  // const [pm25, setPm25] = useState(0);
+  // const [pm10, setPm10] = useState(0);
+  // const [o3, setO3] = useState(0);
+  // const [no2, setNo2] = useState(0);
+  // const [co, setCo] = useState(0);
+  // const [so2, setSo2] = useState(0);
+  // const [isOpen, setIsOpen] = useState(false); // 지역 드롭다운 open
+  // const [selectedItem, setSelectedItem] = useState<Item | null>(null); // 지역 드롭다운 현재값 (label)
+  // const [pm25info, setPm25info] = useState("");
+  // const [pm10info, setPm10info] = useState("");
+  // const [o3info, setO3info] = useState("");
+  // const [no2info, setNo2info] = useState("");
+  // const [coinfo, setCoinfo] = useState("");
+  // const [so2info, setSo2info] = useState("");
   const [isSearchOpen, setIsSearchOpen] = useState(false); // 검색 드롭다운 open
   const [isSearchbox, setIsSearchbox] = useState<Item | null>(null); // 검색 드롭다운 현재값 (label)
   const [searchValue, setSearchValue] = useState(""); // 검색 input 값
@@ -585,77 +596,78 @@ function Community() {
   const [searchboolean, setSearchBoolean] = useState(false);
   const [showToast, setShowToast] = useState(false);
   const [pointlack, setPointlack] = useState(false);
+  const [milageState, setMilageState] = useState(localStorage.point);
 
-  if (posts) setPostList(posts); // 서버에서 데이터 가져왔으면 리코일 상태에 넣기
+  // if (posts) setPostList(posts); // 서버에서 데이터 가져왔으면 리코일 상태에 넣기
 
-  const handleItemClick = (item: Item) => {
-    setSelectedItem(item);
-    setIsOpen(false); // 드롭다운 텍스트 클릭하면 드롭다운 닫기
-    setItemvalue(item.value);
-    // console.log(selectedItem)
-  };
+  // const handleItemClick = (item: Item) => {
+  //   setSelectedItem(item);
+  //   setIsOpen(false); // 드롭다운 텍스트 클릭하면 드롭다운 닫기
+  //   setItemvalue(item.value);
+  //   // console.log(selectedItem)
+  // };
   const searchbarClick = (el: Item) => {
     setIsSearchbox(el);
     setIsSearchOpen(false); // 드롭다운 텍스트 클릭하면 드롭다운 닫기
     setElvalue(el.value);
     // console.log(isSearchbox)
   };
-  const AQIhandle = () => {
-    pm25 < 50
-      ? setPm25info("좋음")
-      : pm25 < 100
-      ? setPm25info("보통")
-      : pm25 < 150
-      ? setPm25info("나쁨")
-      : setPm25info("매우나쁨");
-    pm10 < 30
-      ? setPm10info("좋음")
-      : pm10 < 80
-      ? setPm10info("보통")
-      : pm10 < 150
-      ? setPm10info("나쁨")
-      : setPm10info("매우나쁨");
-    o3 < 50
-      ? setO3info("좋음")
-      : o3 < 100
-      ? setO3info("보통")
-      : o3 < 100
-      ? setO3info("나쁨")
-      : setO3info("매우나쁨");
-    no2 < 50
-      ? setNo2info("좋음")
-      : no2 < 100
-      ? setNo2info("보통")
-      : no2 < 100
-      ? setNo2info("나쁨")
-      : setNo2info("매우나쁨");
-    co < 50
-      ? setCoinfo("좋음")
-      : co < 100
-      ? setCoinfo("보통")
-      : co < 100
-      ? setCoinfo("나쁨")
-      : setCoinfo("매우나쁨");
-    so2 < 50
-      ? setSo2info("좋음")
-      : so2 < 100
-      ? setSo2info("보통")
-      : so2 < 100
-      ? setSo2info("나쁨")
-      : setSo2info("매우나쁨");
-  };
+  // const AQIhandle = () => {
+  //   pm25 < 50
+  //     ? setPm25info("좋음")
+  //     : pm25 < 100
+  //     ? setPm25info("보통")
+  //     : pm25 < 150
+  //     ? setPm25info("나쁨")
+  //     : setPm25info("매우나쁨");
+  //   pm10 < 30
+  //     ? setPm10info("좋음")
+  //     : pm10 < 80
+  //     ? setPm10info("보통")
+  //     : pm10 < 150
+  //     ? setPm10info("나쁨")
+  //     : setPm10info("매우나쁨");
+  //   o3 < 50
+  //     ? setO3info("좋음")
+  //     : o3 < 100
+  //     ? setO3info("보통")
+  //     : o3 < 100
+  //     ? setO3info("나쁨")
+  //     : setO3info("매우나쁨");
+  //   no2 < 50
+  //     ? setNo2info("좋음")
+  //     : no2 < 100
+  //     ? setNo2info("보통")
+  //     : no2 < 100
+  //     ? setNo2info("나쁨")
+  //     : setNo2info("매우나쁨");
+  //   co < 50
+  //     ? setCoinfo("좋음")
+  //     : co < 100
+  //     ? setCoinfo("보통")
+  //     : co < 100
+  //     ? setCoinfo("나쁨")
+  //     : setCoinfo("매우나쁨");
+  //   so2 < 50
+  //     ? setSo2info("좋음")
+  //     : so2 < 100
+  //     ? setSo2info("보통")
+  //     : so2 < 100
+  //     ? setSo2info("나쁨")
+  //     : setSo2info("매우나쁨");
+  // };
 
-  const items: Item[] = [
-    { id: 1, label: "서울", value: "seoul" },
-    { id: 2, label: "대구", value: "daegu" },
-    { id: 3, label: "성남", value: "Seongnam" },
-    { id: 4, label: "수원", value: "Suwon" },
-    { id: 5, label: "시흥", value: "siheung" },
-    { id: 6, label: "고양", value: "Goyang" },
-    { id: 7, label: "부천", value: "bucheon" },
-    { id: 8, label: "인천", value: "Incheon" },
-    { id: 9, label: "부산", value: "busan" },
-  ];
+  // const items: Item[] = [
+  //   { id: 1, label: "서울", value: "seoul" },
+  //   { id: 2, label: "대구", value: "daegu" },
+  //   { id: 3, label: "성남", value: "Seongnam" },
+  //   { id: 4, label: "수원", value: "Suwon" },
+  //   { id: 5, label: "시흥", value: "siheung" },
+  //   { id: 6, label: "고양", value: "Goyang" },
+  //   { id: 7, label: "부천", value: "bucheon" },
+  //   { id: 8, label: "인천", value: "Incheon" },
+  //   { id: 9, label: "부산", value: "busan" },
+  // ];
   const searchbox: Item[] = [
     { id: 1, label: "제목", value: "TITLE" },
     { id: 2, label: "내용", value: "CONTENTS" },
@@ -666,25 +678,25 @@ function Community() {
   const memberid = localStorage.getItem("memberid") || "";
   const point: any = localStorage.getItem("point") || "";
 
-  const login = () => {
-    // 로그인 요청
-    axios
-      .post("http://3.39.150.26:8080/members/login", {
-        email: "jeong@gmail.com",
-        password: "qwer1234",
-      })
-      .then((response) => {
-        localStorage.setItem("token", response.headers.authorization);
-        localStorage.setItem("ref", response.headers.refresh);
-        const { data } = response;
-        localStorage.setItem("memberid", data.memberId);
-        localStorage.setItem("name", data.name);
-        localStorage.setItem("point", data.point);
-        localStorage.setItem("level", data.level);
-        console.log(token);
-      })
-      .catch((error) => console.log(error));
-  };
+  // const login = () => {
+  //   // 로그인 요청
+  //   axios
+  //     .post("http://3.39.150.26:8080/members/login", {
+  //       email: "jeong@gmail.com",
+  //       password: "qwer1234",
+  //     })
+  //     .then((response) => {
+  //       localStorage.setItem("token", response.headers.authorization);
+  //       localStorage.setItem("ref", response.headers.refresh);
+  //       const { data } = response;
+  //       localStorage.setItem("memberid", data.memberId);
+  //       localStorage.setItem("name", data.name);
+  //       localStorage.setItem("point", data.point);
+  //       localStorage.setItem("level", data.level);
+  //       console.log(token);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }
   const postsearch = () => {
     // 게시글 검색
     axios
@@ -718,6 +730,8 @@ function Community() {
       .then((response) => {
         const { data } = response;
         localStorage.setItem("point", data.point);
+        console.log(localStorage.point)
+        setMilageState(localStorage.point)
       })
       .catch(() => console.log("로그인 해라"));
   };
@@ -746,6 +760,7 @@ function Community() {
         setPointlack(!pointlack);
       } else {
         mileagedone();
+        membersearch();
         setShowToast(true);
       }
     }
@@ -764,12 +779,12 @@ function Community() {
       setShowModal(true);
     }
   }
-  function logout() {
-    //로그아웃
-    window.localStorage.clear();
-    console.log("로그아웃 완료");
-    console.log(token);
-  }
+  // function logout() {
+  //   //로그아웃
+  //   window.localStorage.clear();
+  //   console.log("로그아웃 완료");
+  //   console.log(token);
+  // }
   // 시간 변환 관리
   function setConvertTime(time: string) {
     const formattedDate = dayjs(time).add(9, "h").tz("Asia/Seoul").fromNow();
@@ -1004,7 +1019,7 @@ function Community() {
               <MileageInfo>
                 <MileageIcon src={saving} />
                 <MileageTitle>나의 마일리지</MileageTitle>
-                <MileageNum>{token ? point : 0}P</MileageNum>
+                <MileageNum>{token ? milageState : 0}P</MileageNum>
               </MileageInfo>
               <MileageButton onClick={mileagebuttonhandle}>
                 <TreeIcon src={nature} />내 마일리지로 나무 심기!
