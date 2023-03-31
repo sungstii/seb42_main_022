@@ -10,7 +10,7 @@ import Ranking from "./pages/Ranking";
 import { RecoilRoot, useRecoilValue } from "recoil";
 import Post from "./pages/Post";
 import MyPage from "./pages/MyPage";
-import MyPageEdit from "./pages/MyPageEdit";
+import MyPageEdit from "./pages/MypageEdit";
 import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import { Reset } from "styled-reset";
