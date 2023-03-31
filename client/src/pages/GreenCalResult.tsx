@@ -60,6 +60,9 @@ const CalculatorBtn = styled(Link)`
   font-size: 20px;
   font-weight: 600;
   text-decoration-line: none;
+  &:hover{  
+    background-color: #4F8255;
+  }
 `;
 
 function GreenCalResult() {
