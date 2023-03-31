@@ -53,8 +53,8 @@ const RankIndex = styled.div`
   }
 `;
 const RankName = styled.div`
-  font-size: 30px;
-  /* width: 140px; */
+  font-size: 25px;
+  width: 180px;
   font-weight: bold;
   /* margin: 0px 80px 0px 50px; */
   @media screen and (max-width: 920px) {
