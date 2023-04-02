@@ -16,6 +16,8 @@ import saving from "../icon/savings.svg";
 import nature from "../icon/nature.svg";
 import more from "../icon/expand_more.svg";
 import less from "../icon/expand_less.svg";
+import InfoModal from "../components/InfoModal"
+import ScrollToTop from '../components/ScrollToTop';
 dayjs.extend(relativeTime);
 dayjs.locale("ko");
 
@@ -114,6 +116,7 @@ const PostButton = styled.button`
   height: 55px;
   padding: 0px 0px 0px 20px;
   text-align: start;
+  transition: background-color 0.3s ease;
   cursor: pointer;
   &:hover{  
     background-color: #bdbdbd;
@@ -313,6 +316,7 @@ const MileageButton = styled.button`
   color: #ffffff;
   justify-content: center;
   align-items: center;
+  transition: background-color 0.3s ease;
   cursor: pointer;
   &:hover{  
     background-color: #4F8255;
@@ -560,6 +564,24 @@ const Toast = styled.div`
   opacity: 0.8;
   animation: ${toastmove} 1s linear;
 `;
+const InfoButton = styled.button`
+  position: fixed;
+  bottom: 88px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #609966;
+  color: #fff;
+  border: none;
+  padding: 0px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  &:hover {
+    background-color: #4F8255;
+  }
+`;
 
 function Review() {
   // const [itemvalue, setItemvalue] = useRecoilState(areaState); // 지역 상태 (서울, 부산 등)
@@ -596,6 +618,7 @@ function Review() {
   const [showToast, setShowToast] = useState(false);
   const [pointlack, setPointlack] = useState(false);
   const [milageState, setMilageState] = useState(localStorage.point);
+  const [infoToggle, setInfoToggle] = useState(false);
 
   // const handleItemClick = (item: Item) => {
   //   setSelectedItem(item);
@@ -752,6 +775,11 @@ function Review() {
       setShowModal(true);
     }
   }
+
+  function infoOpenhandle() {
+    setInfoToggle(!infoToggle);
+  }
+
   // 시간 변환 관리
   function setConvertTime(time: string) {
     const formattedDate = dayjs(time).add(9, "h").tz("Asia/Seoul").fromNow();
@@ -995,6 +1023,12 @@ function Review() {
         )}
         {pointlack && <Toast>마일리지가 부족합니다.</Toast>}
       </MainContainer>
+      <InfoButton onClick={infoOpenhandle}>P</InfoButton>
+      {infoToggle && (
+        <InfoModal
+        onClose={infoOpenhandle}/>
+      )}
+      <ScrollToTop />
     </>
   );
 }
