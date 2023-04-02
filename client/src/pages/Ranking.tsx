@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import treeIcon from "../image/treeIcon.png";
 import { useRanking } from "../react-query/useRanking"
+import ScrollToTop from '../components/ScrollToTop';
 
 const MainContainer = styled.div`
   display: flex;
@@ -124,6 +125,7 @@ function Ranking() {
           </RankContainer>
         </SectionContainer>
       </MainContainer>
+      <ScrollToTop />
     </>
   );
 }

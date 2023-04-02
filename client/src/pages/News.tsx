@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from "styled-components";
 import { useNews } from "../react-query/useNews"
+import ScrollToTop from '../components/ScrollToTop';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko'
 
@@ -103,6 +104,7 @@ function News () {
           </NewsContainer>
         </SectionContainer>
       </MainContainer>
+      <ScrollToTop />
     </>
   );
 }
