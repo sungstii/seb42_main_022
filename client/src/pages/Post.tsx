@@ -562,7 +562,7 @@ function Post() {
       } else {
         setIsSubmitting(true);
         await defaultInstance.post(url, body);
-        console.log("좋아요를 보냈습니다");
+        // console.log("좋아요를 보냈습니다");
         setIsSubmitting(false);
         window.location.reload();
       }
@@ -585,7 +585,7 @@ function Post() {
       } else {
         setIsSubmitting(true);
         await defaultInstance.delete(url);
-        console.log("게시글이 삭제되었습니다");
+        // console.log("게시글이 삭제되었습니다");
         alert("게시글이 삭제되었습니다!");
         setIsSubmitting(false);
         navigate(`../${category}`);
@@ -621,7 +621,7 @@ function Post() {
         setIsSubmitting(false);
         window.location.reload();
         console.log(response.data);
-        console.log("게시글을 수정하였습니다");
+        // console.log("게시글을 수정하였습니다");
       }
     } catch (error) {
       console.log("게시글 수정을 실패하였습니다", error);
@@ -639,7 +639,8 @@ function Post() {
       setIsSubmitting(true);
       const response = await defaultInstance.post(url, body);
       setIsSubmitting(false);
-      console.log("Comment posted:", response.data);
+      // console.log("Comment posted:", response.data);
+      window.location.reload();
     } catch (error) {
       console.error("Error posting comment:", error);
     }
@@ -650,7 +651,7 @@ function Post() {
     try {
       setIsSubmitting(true);
       const response = await defaultInstance.delete(url);
-      console.log("댓글이 삭제되었습니다:", response.data);
+      // console.log("댓글이 삭제되었습니다:", response.data);
       setIsSubmitting(false);
       window.location.reload();
     } catch (error) {
