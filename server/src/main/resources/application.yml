@@ -1,0 +1,70 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId: ENC(u1zdiidtXl1V/KBoFZBC+iry0xtve8IK/ZRy7aNPR2G6E/Jl8rrToCVLyukM6cmawA2kznBPUQ0muhgdThScTatI4JCn9/Mx81KM0HEM/90qS+qXoVZwTw==)
+            clientSecret: ENC(QRkPau+fOA3BAbHqebhdfbo2EPrp7bxDgjGjIosraNw42YGCyeHhN89LwmZuKs5X)
+            scope:
+              - email
+              - profile
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+  datasource:
+    url: ENC(ImRNgs/uESNrQ01QEDXsp7wzt00GeiVmhnZhEvjtGniC1yEvZ4TKq5U+kRCGu45QpAJ512hAOuUhXZ6k0k9KO8PWEWQrYKo9WSLmSF6RX71WP8Irldl1QY7KyEw345WG3Jrgv+3Fv5Eqlf+mldNdQw==)
+    username: ENC(FANnAPp1m+SsIgLyBF6Yug==)
+    password: ENC(TpumaLOo9HiikrzIQ66yY4ah/HwXKq3X)
+#    url: jdbc:mysql://localhost:3306/community?autoReconnect=true
+#    username: root
+#    password: 1234
+  redis:
+    host: localhost
+    port: 6379
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data: # spring data rest - 관련 설정
+    rest:
+      base-path: /api  #endpoint start path
+      detection-strategy: annotated
+  profiles:
+    include: api-key   #key가 저장된 yml 연동
+
+mail:
+  address:
+    admin: admin@gmail.com
+
+jwt:
+  secret-key: ENC(QTKjempCn+a9nX+/g7yPL4cjydlx3H++BoqZvdD8hnQbs2A7jwmhG48/6S179LF5XSxEkLNakdwsXbcJtg5/Uw==)
+  access-token-expiration-minutes: 60
+  refresh-token-expiration-minutes: 420
+
+cloud: # AWS 계정 설정
+  aws:
+    region:
+      static: ap-northeast-2
+    s3:
+      credentials:
+        access-key: ENC(xFO5USJEzJjHL8RB+a7IREpyQOoHp4HZhL2OFzzKIBs=)
+        secret-key: ENC(PtaZU3cqX2thf4/AeCsoMF+XCJRo3WR8q3U1iGexhAqLXaFIQ5JKn8CKkO3uRyKipF9cb/Qy4W8=)
+    stack:
+      auto: false
+
+naver:  #naver API 설정
+  url:
+    search:
+      news: https://openapi.naver.com/v1/search/news.json   #뉴스검색
+      image: https://openapi.naver.com/v1/search/image    #이미지검색
+  client:
+    id: ENC(rbiCFlHAp11UusOi/ypq9EDX4NTmpRvEJewabaeqvZM=)
+    secret: ENC(CbkdopKojXkFiY2OuQOLpMbvCTJkKN9/)
+
+jasypt: #패스워드 암호화/복호화 키
+  encryptor:
+    password: ${my_password} # 배포자동화  환경변수 사용
+
