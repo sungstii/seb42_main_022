@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { useFeatList } from "../react-query/useFeatList";
 import styled from "styled-components";
 import { useOnePost } from "../react-query/useOnePost";
-import { authInstance } from "../utils/api";
+import { defaultInstance } from "../utils/api";
 import dayjs from "dayjs";
 import "dayjs/locale/ko"; // import the locale for Korean language
 import utc from "dayjs/plugin/utc";
@@ -34,6 +34,7 @@ interface BoardData {
     };
     member_id: number;
     member_status: string;
+    profile_url: string;
   };
   creator_level: number;
   upload_dto: {
@@ -77,11 +78,10 @@ const Post_wrapper = styled.div`
 const User_container = styled.div`
   display: flex;
   align-items: center;
-  height: 80px;
+  height: 70px;
 `;
 const User_wrapper = styled.div`
   display: flex;
-  margin: 30px;
 `;
 const User_img_wrapper = styled.div`
   display: flex;
@@ -89,19 +89,36 @@ const User_img_wrapper = styled.div`
   align-items: center;
   width: 50px;
   height: 50px;
+  margin-left: 20px;
+`;
+const User_img_wrapper2 = styled(User_img_wrapper)`
+  width: 10%;
+  min-width: 50px;
+  max-width: 50px;
+  margin-left: 0;
+`;
+const UserImgBox = styled.div`
+  width: 48px;
+  height: 48px;
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+  }
 `;
 const User_name_wrapper = styled.div`
   display: flex;
   align-items: center;
   margin-left: 10px;
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: 700;
 `;
 const User_level_wrapper = styled.div`
   display: flex;
   align-items: center;
-  font-size: 15px;
-  margin-left: 10px;
+  font-size: 0.75rem;
+  margin: 5px 0 0 5px;
 `;
 const Content_container = styled.div`
   height: auto;
@@ -297,13 +314,14 @@ const List_wrapper = styled.div``;
 const List = styled.ul``;
 const List_el = styled.li`
   display: flex;
+  justify-content: center;
   align-items: center;
   margin-top: 30px;
 `;
 const LikeBox = styled.div`
   display: flex;
   justify-content: center;
-  width: 20%;
+  width: 10%;
 `;
 const List_like = styled.button`
   display: flex;
@@ -378,10 +396,12 @@ const Input_container = styled.div`
 const Input_wrapper = styled.div`
   display: flex;
   align-items: center;
-  flex-grow: 1;
+  width: 100%;
+  margin: 0 10px 0 20px;
 `;
 const InputBox = styled.div`
-  flex-grow: 8;
+  width: 80%;
+  margin: 0 5px 0 10px;
 `;
 const Comment_Input = styled.input`
   font-size: 1.25rem;
@@ -391,7 +411,10 @@ const Comment_Input = styled.input`
   outline: none;
 `;
 const ButtonBox = styled.div`
-  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  width: 10%;
+  min-width: 50px;
 `;
 const Comment_Button = styled.button`
   height: 30px;
@@ -455,6 +478,7 @@ function Post() {
   const [comment, setComment] = useState("");
   const [isFixed, setisFixed] = useState<boolean>(false);
   const [clicked, setClicked] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const totalSlides = boardData ? boardData.upload_dto.length : null;
   const textarea = useRef<HTMLTextAreaElement>(null);
@@ -536,8 +560,10 @@ function Post() {
       ) {
         alert("본인 게시글은 추천할 수 없습니다!");
       } else {
-        await authInstance.post(url, body);
+        setIsSubmitting(true);
+        await defaultInstance.post(url, body);
         console.log("좋아요를 보냈습니다");
+        setIsSubmitting(false);
         window.location.reload();
       }
     } catch (error) {
@@ -557,9 +583,11 @@ function Post() {
       ) {
         alert("본인 게시글만 삭제 가능합니다!");
       } else {
-        await authInstance.delete(url);
+        setIsSubmitting(true);
+        await defaultInstance.delete(url);
         console.log("게시글이 삭제되었습니다");
         alert("게시글이 삭제되었습니다!");
+        setIsSubmitting(false);
         navigate(`../${category}`);
         window.location.reload();
       }
@@ -588,7 +616,9 @@ function Post() {
       ) {
         alert("본인 게시글만 수정 가능합니다!");
       } else {
-        const response = await authInstance.patch(url, formData);
+        setIsSubmitting(true);
+        const response = await defaultInstance.patch(url, formData);
+        setIsSubmitting(false);
         window.location.reload();
         console.log(response.data);
         console.log("게시글을 수정하였습니다");
@@ -606,9 +636,10 @@ function Post() {
       contents: comment,
     };
     try {
-      const response = await authInstance.post(url, body);
+      setIsSubmitting(true);
+      const response = await defaultInstance.post(url, body);
+      setIsSubmitting(false);
       console.log("Comment posted:", response.data);
-      window.location.reload();
     } catch (error) {
       console.error("Error posting comment:", error);
     }
@@ -617,8 +648,10 @@ function Post() {
   async function handleDeleteComment(commentid: number) {
     const url = `/comments/${commentid}`;
     try {
-      const response = await authInstance.delete(url);
+      setIsSubmitting(true);
+      const response = await defaultInstance.delete(url);
       console.log("댓글이 삭제되었습니다:", response.data);
+      setIsSubmitting(false);
       window.location.reload();
     } catch (error) {
       console.error("댓글 삭제 실패:", error);
@@ -653,6 +686,7 @@ function Post() {
     if (title.length > 18) return title.slice(0, 18) + "...";
     return title;
   }
+
   return (
     <Container>
       {boardData ? (
@@ -663,7 +697,13 @@ function Post() {
               <User_container>
                 <User_wrapper>
                   <User_img_wrapper>
-                    <UserIcon />
+                    <UserImgBox>
+                      {boardData.member.profile_url ? (
+                        <img src={boardData.member.profile_url} />
+                      ) : (
+                        <UserIcon />
+                      )}
+                    </UserImgBox>
                   </User_img_wrapper>
                   <User_name_wrapper>{boardData.member.name}</User_name_wrapper>
                   <User_level_wrapper>
@@ -768,9 +808,16 @@ function Post() {
               {/* 댓글입력부분 */}
               <Input_container>
                 <Input_wrapper>
-                  <User_img_wrapper style={{ flexGrow: "1" }}>
-                    <UserIcon />
-                  </User_img_wrapper>
+                  <User_img_wrapper2>
+                    <UserImgBox>
+                      {/*//Todo 내 프로필 사진 띄우게 수정해야함 */}
+                      {/* {boardData.member.profile_url ? (
+                      <img src={boardData.member.profile_url} />
+                      ) : ( */}
+                      <UserIcon />
+                      {/* )} */}
+                    </UserImgBox>
+                  </User_img_wrapper2>
                   <InputBox>
                     <Comment_Input
                       placeholder={
@@ -799,9 +846,15 @@ function Post() {
                     <Comments_wrapper key={el.comment_id}>
                       {/* 유저정보표시 */}
                       <User_container>
-                        <User_wrapper style={{ margin: "0 0 0 18px" }}>
+                        <User_wrapper>
                           <User_img_wrapper>
-                            <UserIcon />
+                            <UserImgBox>
+                              {el.member.profile_url ? (
+                                <img src={el.member.profile_url} />
+                              ) : (
+                                <UserIcon />
+                              )}
+                            </UserImgBox>
                           </User_img_wrapper>
                           <User_name_wrapper style={{ fontSize: "1.125rem" }}>
                             {el.member.name}

@@ -8,7 +8,6 @@ import { memberInfoAtom } from "../recoil/state";
 import Deleteaccount from "../components/Deleteaccount";
 import { ReactComponent as SproutIcon } from "../icon/sprout.svg";
 import { ReactComponent as LikeIcon } from "../icon/thumbup.svg";
-import accountCircle from "../icon/account_circle.svg";
 import { defaultInstance, authInstance } from "../utils/api";
 import axios from "axios";
 
@@ -310,7 +309,6 @@ function MyPage() {
   const token = localStorage.token;
   const [memberInfo, setMemberInfo] = useState<memberData | null>(null);
   const [memberPost, setMemberPost] = useState<MyPost[] | null>(null);
-  console.log(memberInfo);
   // const {
   //   data: member,
   //   isLoading: memberLoading,
@@ -332,13 +330,17 @@ function MyPage() {
     const id = localStorage.memberid;
     const url = `http://3.39.150.26:8080/members/${id}`;
     const url2 = `http://3.39.150.26:8080/boards/myBoards/${id}`;
-
+    const header = {
+      Authorization: token,
+    };
     const fetchData = async () => {
       try {
-        const myData = await axios.get(url);
-        setMemberInfo(myData.data);
+        const [myData, myPost] = await Promise.all([
+          axios.get(url, { headers: header }),
+          axios.get(url2, { headers: header }),
+        ]);
 
-        const myPost = await axios.get(url2);
+        setMemberInfo(myData.data);
         setMemberPost(myPost.data);
       } catch (error) {
         console.error("Error:", error);
@@ -445,7 +447,7 @@ function MyPage() {
           </Gray_Container>
         </>
       ) : (
-        "회원정보 데이터를 불러오지 못했습니다"
+        "Loading..."
       )}
     </Container>
   );
