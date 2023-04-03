@@ -828,11 +828,9 @@ function Community() {
   //   setSo2(data?.rxs.obs[0].msg.iaqi.so2.v);
   //   console.log(data?.rxs.obs[0].msg.iaqi.pm25.v);
   // }, []);
-  // useEffect(() => {
-  //   AQIhandle();
-  //   //Optional Chaining
-  //   membersearch();
-  // }, [membersearch]);
+  useEffect(() => {
+    membersearch();
+  }, [membersearch]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
