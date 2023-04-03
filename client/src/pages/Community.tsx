@@ -139,6 +139,7 @@ const PostSection = styled(Link)`
 const Postuser = styled.div`
   display: flex;
   flex-direction: row;
+  margin-bottom: 10px;
 `;
 const UserImgBox = styled.div`
   width: 48px;

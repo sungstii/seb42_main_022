@@ -24,7 +24,6 @@ const MiddleText = styled.div`
   margin: 0px 0px 20px 0px;
 `;
 
-
 const Main = () => {
   return (
     <Container>
