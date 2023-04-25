@@ -72,6 +72,7 @@ public class CommentService {
     
     /*작성자들의 레벨정보 업데이트*/
     public void creatorLevelUpdate() {
+        //todo: 없에야함 다른방법으로
         List<Comment> comments = commentRepository.findAll();
         for(Comment comment : comments){
             comment.setCreatorLevel(comment.getMember().getLevel().getLevel());

@@ -24,9 +24,9 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final community.config.QAuditingFields _super = new community.config.QAuditingFields(this);
 
-    public final StringPath boardCreator = createString("boardCreator");
-
     public final NumberPath<Long> boardId = createNumber("boardId", Long.class);
+
+    public final ListPath<community.like.entity.BoardLike, community.like.entity.QBoardLike> boardLikes = this.<community.like.entity.BoardLike, community.like.entity.QBoardLike>createList("boardLikes", community.like.entity.BoardLike.class, community.like.entity.QBoardLike.class, PathInits.DIRECT2);
 
     public final ListPath<community.comment.entity.Comment, community.comment.entity.QComment> comments = this.<community.comment.entity.Comment, community.comment.entity.QComment>createList("comments", community.comment.entity.Comment.class, community.comment.entity.QComment.class, PathInits.DIRECT2);
 
@@ -34,8 +34,6 @@ public class QBoard extends EntityPathBase<Board> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
-
-    public final NumberPath<Integer> creatorLevel = createNumber("creatorLevel", Integer.class);
 
     public final StringPath delegateImagePath = createString("delegateImagePath");
 

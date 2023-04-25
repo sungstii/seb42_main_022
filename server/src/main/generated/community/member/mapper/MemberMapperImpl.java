@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-03-27T19:31:58+0900",
-    comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 11.0.17 (Azul Systems, Inc.)"
+    date = "2023-04-25T16:10:09+0900",
+    comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 11.0.19 (Azul Systems, Inc.)"
 )
 @Component
 public class MemberMapperImpl implements MemberMapper {
@@ -62,6 +62,7 @@ public class MemberMapperImpl implements MemberMapper {
         String phone = null;
         String point = null;
         String treeCount = null;
+        String profileUrl = null;
         Member.MemberStatus memberStatus = null;
         if ( member != null ) {
             memberId = member.getMemberId();
@@ -70,12 +71,13 @@ public class MemberMapperImpl implements MemberMapper {
             phone = member.getPhone();
             point = String.valueOf( member.getPoint() );
             treeCount = String.valueOf( member.getTreeCount() );
+            profileUrl = member.getProfileUrl();
             memberStatus = member.getMemberStatus();
         }
         LevelDto levelDto1 = null;
         levelDto1 = levelDto;
 
-        MemberDto.Response response = new MemberDto.Response( memberId, email, name, phone, point, treeCount, memberStatus, levelDto1 );
+        MemberDto.Response response = new MemberDto.Response( memberId, email, name, phone, point, treeCount, profileUrl, memberStatus, levelDto1 );
 
         return response;
     }
@@ -149,6 +151,7 @@ public class MemberMapperImpl implements MemberMapper {
         String phone = null;
         String point = null;
         String treeCount = null;
+        String profileUrl = null;
         Member.MemberStatus memberStatus = null;
 
         memberId = member.getMemberId();
@@ -157,11 +160,12 @@ public class MemberMapperImpl implements MemberMapper {
         phone = member.getPhone();
         point = String.valueOf( member.getPoint() );
         treeCount = String.valueOf( member.getTreeCount() );
+        profileUrl = member.getProfileUrl();
         memberStatus = member.getMemberStatus();
 
         LevelDto levelDto = null;
 
-        MemberDto.Response response = new MemberDto.Response( memberId, email, name, phone, point, treeCount, memberStatus, levelDto );
+        MemberDto.Response response = new MemberDto.Response( memberId, email, name, phone, point, treeCount, profileUrl, memberStatus, levelDto );
 
         return response;
     }

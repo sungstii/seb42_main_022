@@ -48,6 +48,8 @@ public class QMember extends EntityPathBase<Member> {
 
     public final NumberPath<Integer> point = createNumber("point", Integer.class);
 
+    public final StringPath profileUrl = createString("profileUrl");
+
     public final ListPath<String, StringPath> roles = this.<String, StringPath>createList("roles", String.class, StringPath.class, PathInits.DIRECT2);
 
     public final NumberPath<Integer> treeCount = createNumber("treeCount", Integer.class);

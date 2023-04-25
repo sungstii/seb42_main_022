@@ -8,6 +8,7 @@ import community.comment.dto.CommentDto;
 import community.comment.entity.Comment;
 import community.member.dto.LevelDto;
 import community.member.dto.MemberDto;
+import community.member.entity.Level;
 import community.member.entity.Member;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +17,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-03-27T19:31:58+0900",
-    comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 11.0.17 (Azul Systems, Inc.)"
+    date = "2023-04-25T16:10:09+0900",
+    comments = "version: 1.5.3.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 11.0.19 (Azul Systems, Inc.)"
 )
 @Component
 public class BoardMapperImpl implements BoardMapper {
@@ -65,7 +66,6 @@ public class BoardMapperImpl implements BoardMapper {
             detailPageResponse.setLikeCount( board.getLikeCount() );
             detailPageResponse.setViewCount( board.getViewCount() );
             detailPageResponse.setMember( memberToResponse( board.getMember() ) );
-            detailPageResponse.setCreatorLevel( board.getCreatorLevel() );
             detailPageResponse.setComments( commentListToInfoResponseList( board.getComments() ) );
             detailPageResponse.setCreatedAt( board.getCreatedAt() );
             detailPageResponse.setModifiedAt( board.getModifiedAt() );
@@ -174,6 +174,7 @@ public class BoardMapperImpl implements BoardMapper {
         String phone = null;
         String point = null;
         String treeCount = null;
+        String profileUrl = null;
         Member.MemberStatus memberStatus = null;
 
         memberId = member.getMemberId();
@@ -182,11 +183,12 @@ public class BoardMapperImpl implements BoardMapper {
         phone = member.getPhone();
         point = String.valueOf( member.getPoint() );
         treeCount = String.valueOf( member.getTreeCount() );
+        profileUrl = member.getProfileUrl();
         memberStatus = member.getMemberStatus();
 
         LevelDto levelDto = null;
 
-        MemberDto.Response response = new MemberDto.Response( memberId, email, name, phone, point, treeCount, memberStatus, levelDto );
+        MemberDto.Response response = new MemberDto.Response( memberId, email, name, phone, point, treeCount, profileUrl, memberStatus, levelDto );
 
         return response;
     }
@@ -222,6 +224,39 @@ public class BoardMapperImpl implements BoardMapper {
         return list1;
     }
 
+    protected LevelDto levelToLevelDto(Level level) {
+        if ( level == null ) {
+            return null;
+        }
+
+        LevelDto levelDto = new LevelDto();
+
+        levelDto.setUserName( level.getUserName() );
+        levelDto.setLevel( level.getLevel() );
+        levelDto.setLevelExp( level.getLevelExp() );
+        levelDto.setTotalExp( level.getTotalExp() );
+
+        return levelDto;
+    }
+
+    protected MemberDto.simpleProfile memberTosimpleProfile(Member member) {
+        if ( member == null ) {
+            return null;
+        }
+
+        String name = null;
+        LevelDto level = null;
+        String profileUrl = null;
+
+        name = member.getName();
+        level = levelToLevelDto( member.getLevel() );
+        profileUrl = member.getProfileUrl();
+
+        MemberDto.simpleProfile simpleProfile = new MemberDto.simpleProfile( name, level, profileUrl );
+
+        return simpleProfile;
+    }
+
     protected BoardDto.TotalPageListResponse boardToTotalPageListResponse(Board board) {
         if ( board == null ) {
             return null;
@@ -232,8 +267,7 @@ public class BoardMapperImpl implements BoardMapper {
         totalPageListResponse.setBoardId( board.getBoardId() );
         totalPageListResponse.setTitle( board.getTitle() );
         totalPageListResponse.setContents( board.getContents() );
-        totalPageListResponse.setBoardCreator( board.getBoardCreator() );
-        totalPageListResponse.setCreatorLevel( String.valueOf( board.getCreatorLevel() ) );
+        totalPageListResponse.setMember( memberTosimpleProfile( board.getMember() ) );
         totalPageListResponse.setLikeCount( board.getLikeCount() );
         totalPageListResponse.setViewCount( board.getViewCount() );
         totalPageListResponse.setDelegateImagePath( board.getDelegateImagePath() );

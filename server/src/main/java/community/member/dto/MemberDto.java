@@ -80,9 +80,9 @@ public class MemberDto {
 
     @AllArgsConstructor
     @Getter
-    public static class creatorProfile { //전체게시글 유저 프로필
+    public static class simpleProfile { //전체게시글 유저 프로필
+        String name;
+        LevelDto level;
         String profileUrl;
     }
-
 }
-

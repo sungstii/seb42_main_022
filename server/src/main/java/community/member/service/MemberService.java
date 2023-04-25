@@ -42,6 +42,7 @@ public class MemberService {
         Member savedMember = memberRepository.save(member);
 
         // 레벨관련 로직
+        // todo: 레벨 생성 로직이 memberService 에 있음? levelService 로 이동필요
         Level level = new Level(); // 회원이 생성되면 레벨테이블을 만든다.
         level.setMember(savedMember); // 레벨 - 생성된회원 테이블 연결
         level.setUserName(savedMember.getName()); // 회원이름 연결
